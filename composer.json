@@ -1,0 +1,23 @@
+{
+    "name": "intratum/facturas",
+    "description": "Intratum",
+    "keywords": ["intratum"],
+    "license": "Private",
+    "authors": [
+        {
+            "name": "Carmelo",
+            "email": "carmelo.intratum@gmail.com"
+        }
+    ],
+    "repositories": [
+    ],
+    "type": "project",
+    "autoload": {
+        "psr-4": {
+            "Intratum\\Facturas\\": "lib/"
+        }
+    },
+    "require": {
+        "mikehaertl/phpwkhtmltopdf": "^2.5"
+    }
+}
