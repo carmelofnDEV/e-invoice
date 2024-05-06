@@ -25,6 +25,13 @@ Si deseas contribuir a e-invoice, ¡eres bienvenido! Por favor, sigue estos paso
 4. Sube tus cambios al repositorio (`git push origin feature/nueva-funcionalidad`).
 5. Crea un nuevo Pull Request.
 
+## Créditos
+
+Este proyecto utiliza las siguientes librerías de GitHub:
+
+- [pdo-database-class](https://github.com/tommyknocker/pdo-database-class) - Una clase PDO de base de datos PHP simple pero poderosa, creada por Tommy Knocker.
+- [phpwkhtmltopdf](https://github.com/mikehaertl/phpwkhtmltopdf) - Una librería PHP para convertir HTML a PDF utilizando wkhtmltopdf, creada por Mike Haertl.
+
 ## Licencia
 
 e-invoice está licenciado bajo la [Licencia MIT](LICENSE).
