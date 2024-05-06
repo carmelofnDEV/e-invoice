@@ -4,7 +4,8 @@ Intratum\Facturas\Util::checkSession()
 
 <?php
 
-
+$acc_id = Intratum\Facturas\Util::getUserAccountID();
+Intratum\Facturas\Environment::$db->where('account_id',$acc_id);
 $all = Intratum\Facturas\Environment::$db->get('tax');
 $all = array_reverse($all)
 

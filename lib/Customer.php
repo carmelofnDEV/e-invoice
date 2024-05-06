@@ -9,9 +9,13 @@ class Customer
     {
         //$all = Environment::$db->get('customer');
 
+        if  (!isset($data['last_name']) ) {
+            $data['last_name'] = "";
+        }
+
         $search = $data['first_name'] . ' ' . $data['last_name'] . '
 ' . $data['NIF'] . '
-' . $data['address1'] . '
+' . $data['address_1'] . '
 ' . $data['zip'] . ' ' . $data['city'] . '
 ' . $data['country'] . '
 ';
@@ -19,7 +23,7 @@ class Customer
         $data = [
 
             'id2' => Util::genUUID(),
-            'account_id' => Util::getSessionUser()["id"],
+            'account_id' => User::getUserAccount(Util::getSessionUser()["id"])["id"],
             'user_id' => Util::getSessionUser()["id"],
             'created' => Util::getDate(),
             'updated' => null,
@@ -31,7 +35,7 @@ class Customer
             'email' => $data['email'],
             'phone' => $data['phone'],
             'search' => $search,
-            'address1' => $data['address1'],
+            'address1' => $data['address_1'],
             'address2' => $data['address2'] ?? "",
             'country' => $data['country'],
             'state' => $data['state'],

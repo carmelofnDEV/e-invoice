@@ -133,4 +133,27 @@ class Util
 		}
     }
 
+
+    public static function getUserAccountID(){
+        $id = self::getSessionUser();
+
+
+        if ($id != null) {
+            
+            $db2 = Environment::$db;
+            $db2->where('user_id', $id["id"]);
+            $acc_id = $db2->getOne('accountuser');
+    
+    
+            $db2 = Environment::$db;
+            $db2->where('id', $acc_id["account_id"]);
+            $acc = $db2->getOne('account');
+            return $acc["id"];
+
+        }else {
+            return null;
+        }
+
+    }
+
 }

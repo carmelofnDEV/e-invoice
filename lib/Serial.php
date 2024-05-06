@@ -11,6 +11,7 @@ class Serial{
 	
 		$data = [
 			'id2' => Util::genUUID(),
+			'account_id' => User::getUserAccount(Util::getSessionUser()["id"])["id"],
 			'user_id' => Util::getSessionUser()["id"],
 			'serial_tag' => $data['serial_tag'] ,
 			'serial_number' => $data['serial_number'] ,

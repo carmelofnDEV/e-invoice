@@ -2,7 +2,6 @@
 -- version 5.2.1
 -- https://www.phpmyadmin.net/
 --
--- Servidor: localhost:3307
 -- Tiempo de generación: 06-05-2024 a las 11:20:18
 -- Versión del servidor: 11.3.2-MariaDB
 -- Versión de PHP: 8.2.12

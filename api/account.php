@@ -1,11 +1,17 @@
 <?php
 
 switch ($_SERVER["REQUEST_METHOD"]) {
-    case 'UPDATE':
+    case 'POST':
         $data = Intratum\Facturas\Traffic::getEntryPOST();
 
+        if(!empty($_POST['action']) && $_POST['action'] == 'upload_logo'){
+            if(isset($_FILES["imagen"])){
+                echo Intratum\Facturas\Account::saveLogo($_FILES["imagen"]);
 
-        echo json_encode(Intratum\Facturas\Account::update($data));
+            }
+        }else{
+            echo json_encode(Intratum\Facturas\Account::update($data));
+        }
 
         break;
 

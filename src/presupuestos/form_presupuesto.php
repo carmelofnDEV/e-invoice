@@ -680,6 +680,7 @@ $(document).ready(function() {
         data["invoice_total"] = invoice_total
 
         data["invoice_subtotal"] = invoice_subtotal
+        data.invoice_date = moment(data.invoice_date, 'MM/DD/YYYY').format('YYYY-MM-DD');
 
 
 

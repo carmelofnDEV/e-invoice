@@ -1,6 +1,9 @@
 <?php
 Intratum\Facturas\Util::checkSession();
-$user = Intratum\Facturas\Util::getSessionUser()
+$user = Intratum\Facturas\Util::getSessionUser();
+
+
+$acc = Intratum\Facturas\User::getUserAccount($user["id"]);
 ?>
 
     <h1 class="text-[30px] text-center">
@@ -35,7 +38,19 @@ $user = Intratum\Facturas\Util::getSessionUser()
 
             </div>
             <div class="flex flex-col items-center pb-10">
-                <img class="w-24 h-24 mb-3 rounded-full" src="/static/logo.png " alt="Logo" />
+            <?php if ($_SERVER['SERVER_PORT'] == '80') {?>
+                <img class="w-[50%] h-[50%] mb-3 " src="http://<?= $_SERVER['HTTP_HOST'] ?>/static/images/<?=$acc["hash_logo"]?>" alt="Logo" />
+
+              <div class="tm_logo"><img  alt="Logo"></div>
+
+            <?php }else if ($_SERVER['SERVER_PORT'] == '443') {?>
+                <img class="w-[50%] h-[50%] mb-3 " src="https://<?= $_SERVER['HTTP_HOST'] ?>/static/images/<?=$acc["hash_logo"]?>" alt="Logo" />
+
+            
+            <?php }else if ($_SERVER['SERVER_PORT'] == '8086') {?>
+                <img class="w-[50%] h-[50%] mb-3 " src="http://<?= $_SERVER['HTTP_HOST'] ?>/static/images/<?=$acc["hash_logo"]?>" alt="Logo" />
+
+            <?php }?>
                 <h3 class="mb-1 text-xl font-medium text-gray-900 dark:text-white">
                     <?= $user["first_name"]?>,
                         <?= $user["last_name"]?>

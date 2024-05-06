@@ -6,6 +6,8 @@ Intratum\Facturas\Util::checkSession()
 
 
 $db2 = Intratum\Facturas\Environment::$db;
+$acc_id = Intratum\Facturas\Util::getUserAccountID();
+Intratum\Facturas\Environment::$db->where('account_id',$acc_id);
 $db2->where('type', 0 );
 $all = $db2->get('invoice');
 

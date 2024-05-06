@@ -210,8 +210,8 @@ class User
         $db2->where('id', $acc_id["account_id"]);
         $acc = $db2->getOne('account');
         return $acc;
-        
-
 
     }
+
+
 }

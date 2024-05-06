@@ -9,11 +9,11 @@ e-invoice es una aplicación de software de facturación que te permite gestiona
 - Gestión de gastos: Registra y controla tus gastos de manera organizada.
 - Presupuestos: Crea presupuestos para tus proyectos y clientes.
 - Exportación de facturas a PDF: Genera archivos PDF de tus facturas para compartir o archivar.
-- Autenticación de usuarios: Funciones de inicio de sesión y registro para proteger tus datos.
+- Autenticación de usuarios: Funciones de inicio de sesión y registro totalmente personalizado.
 
 ## Despliegue
 
-La aplicación está desplegada y disponible en el siguiente enlace: [e-invoice](#)
+La aplicación está desplegada y disponible en el siguiente enlace: [e-invoice](#)  _(desplegado próximamente)_.
 
 ## Contribución
 
@@ -31,6 +31,10 @@ Este proyecto utiliza las siguientes librerías de GitHub:
 
 - [pdo-database-class](https://github.com/tommyknocker/pdo-database-class) - Una clase PDO de base de datos PHP simple pero poderosa, creada por Tommy Knocker.
 - [phpwkhtmltopdf](https://github.com/mikehaertl/phpwkhtmltopdf) - Una librería PHP para convertir HTML a PDF utilizando wkhtmltopdf, creada por Mike Haertl.
+- [Tailwind CSS](https://tailwindcss.com/) - Un framework de CSS utilitario para crear diseños rápidos y personalizables.
+- [Flowbite](https://flowbite.com/) - Una colección de componentes y estilos de UI basados en Tailwind CSS.
+- [Datepicker](https://flowbite.com/) - Un componente de selección de fecha para formularios web.
+- [Moment.js](https://momentjs.com/) - Una librería de JavaScript para el manejo de fechas y horas.
 
 ## Licencia
 

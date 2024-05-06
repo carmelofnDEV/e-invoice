@@ -3,8 +3,16 @@ Intratum\Facturas\Util::checkSession()
 ?>
 
 <?php
+
+$user = Intratum\Facturas\Util::getSessionUser();
+
+$acc_id = Intratum\Facturas\Util::getUserAccountID();
+Intratum\Facturas\Environment::$db->where('account_id',$acc_id);
 Intratum\Facturas\Environment::$db->where('type','p');
+
 $all = Intratum\Facturas\Environment::$db->get('customer');
+
+
 $all = array_reverse($all)
 
 ?>

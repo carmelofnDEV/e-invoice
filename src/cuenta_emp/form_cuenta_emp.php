@@ -1,31 +1,7 @@
 <?php
 Intratum\Facturas\Util::checkSession();
 $user = Intratum\Facturas\Util::getSessionUser();
-
 $acc = Intratum\Facturas\User::getUserAccount($user["id"]);
-
-
-
-// if($acc == false){
-    
-// $acc =[
-//     "id2" => "",
-    
-//     "NIF" => "",
-//     "address1" => "",
-//     "address2" => "",
-//     "category" => "",
-//     "city" => "",
-//     "country" => "",
-//     "email" => "",
-//     "first_name" => "",
-//     "last_name" => "",
-//     "phone" => "",
-//     "state" => "",
-//     "zip" => "",
-// ];    
-// }
-
 
 ?>
 
@@ -33,7 +9,7 @@ $acc = Intratum\Facturas\User::getUserAccount($user["id"]);
 
     <h2 class="text-center font-[600] text-[20px] mb-5">Mi empresa </h2>
 
-    <form action="" id="form" method="post" class="max-w-[50%] mx-auto grid grid-cols-1 md:grid-cols-2 gap-5">
+    <form action="" id="form" method="post" class="max-w-[50%] mx-auto grid grid-cols-1 md:grid-cols-2 gap-5" enctype="multipart/form-data">
 
                 <input type="hidden" name="acc_id2" value="<?=$acc["id2"]?>">
 
@@ -108,21 +84,23 @@ $acc = Intratum\Facturas\User::getUserAccount($user["id"]);
             placeholder="Ciudad" required value="<?=$acc["city"]?>"/>
     </div>
 
-
-
     <div class="mb-5">
-                    <label for="category" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Tipo de
-                    empresa</label>
+                    <label for="category" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Tipo de empresa</label>
                     <select name="category" onchange="selectCategory(this)" id="category" class="block w-full p-2 border border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500" required>
                         <option value="f" <?php if ($acc["category"] === "f") echo 'selected="selected"'; ?>>Empresa Fiscal</option>
                         <option value="p" <?php if (empty($acc["category"]) || $acc["category"] === "p") echo 'selected="selected"'; ?>>Empresa Particular</option>
                     </select>
-                </div>
+    </div>
 
     <div class="mb-5">
         <label for="NIF" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">NIF</label>
         <input type="text" id="NIF" name="NIF" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
             placeholder="CIF / DNI" required value="<?=$acc["NIF"]?>"/>
+    </div>
+
+    <div class="col-span-2 mb-5">
+    <label class="block mb-2 text-sm font-medium text-gray-900 dark:text-white" for="logo">Logo</label>
+    <input name="logo" class="block w-full text-sm text-gray-900 border border-gray-300 rounded-lg cursor-pointer bg-gray-50 dark:text-gray-400 focus:outline-none dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400" id="logo" type="file">
     </div>
 
     <button type="submit" class=" col-span-2 text-white text-[20px] font-[700] bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300  rounded-lg  w-full sm:w-auto px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">Guardar</button>
@@ -137,9 +115,26 @@ $acc = Intratum\Facturas\User::getUserAccount($user["id"]);
 
                 var data = $(this).serializeJSON();
 
+                
+                var fileInput = document.getElementById('logo');
+                            var formData = new FormData();
+                            formData.append('imagen', fileInput.files[0]);
+                            formData.append('action', 'upload_logo');
+
+                            $.ajax({
+                                type: 'POST',
+                                url: '/ajax/account',
+                                dataType: 'json',
+                                processData: false,
+                                contentType: false,
+                        
+                                data: formData,
+                                success: function(d) {
+                                }
+                            });
 
                 $.ajax({
-                    type: 'UPDATE',
+                    type: 'POST',
                     url: '/ajax/account',
                     dataType: 'json',
                     contentType: 'application/json',
@@ -147,9 +142,8 @@ $acc = Intratum\Facturas\User::getUserAccount($user["id"]);
                     success: function(d) {
                         console.log(d)
                         if (d == true) {
-                            window.location.href = '/';
-
-
+                            window.location.href = '/';   
+                            
                         }
                     }
                 });

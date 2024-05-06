@@ -960,11 +960,12 @@ $(document).ready(function() {
 
         data["invoice_subtotal"] = invoice_subtotal
 
+        data.invoice_date = moment(data.invoice_date, 'MM/DD/YYYY').format('YYYY-MM-DD');
 
 
         $.ajax({
 
-            type: 'UPDATE',
+            type: 'UPDATE',             
 
             url: '/ajax/facturas',
 

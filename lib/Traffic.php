@@ -80,7 +80,12 @@ class Traffic{
 
 
 		if($urlpath2[1] == 'static'){
-			$res  = 'assets/'.end($urlpath2);
+			if(!empty($urlpath2[3])){
+				$res  = 'assets/'.$urlpath2[2].'/'.end($urlpath2);
+			}else{
+				$res  = 'assets/'.end($urlpath2);
+			}
+			
 		}
 
 		if($urlpath2[1] == 'ajax'){

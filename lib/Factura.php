@@ -68,6 +68,7 @@ class Factura
 
         $data = [
             'id2' => Util::genUUID(),
+			'account_id' => User::getUserAccount(Util::getSessionUser()["id"])["id"],
             'user_id' => Util::getSessionUser()["id"],
             'issuer_id' => Util::getSessionUser()["id"],
             'created' => Util::getDate(),
@@ -126,6 +127,7 @@ class Factura
 
             $invoice_item = [
                 "id2" => Util::genUUID(),
+			    'account_id' => User::getUserAccount(Util::getSessionUser()["id"])["id"],
                 'user_id' => Util::getSessionUser()["id"],
                 'created' => Util::getDate(),
                 'updated' => Util::getDate(),

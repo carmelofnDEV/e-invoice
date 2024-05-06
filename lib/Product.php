@@ -13,6 +13,8 @@ class Product{
 	
 		$data = [
 			'id2' => Util::genUUID(),
+			'account_id' => User::getUserAccount(Util::getSessionUser()["id"])["id"],
+
 			'user_id' => Util::getSessionUser()["id"],
 			'title' => $data['title'] ?? '',
 			'created' => Util::getDate(),

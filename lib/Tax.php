@@ -14,6 +14,8 @@ class Tax
 
         $data = [
             'id2' => Util::genUUID(),
+            
+            'account_id' => User::getUserAccount(Util::getSessionUser()["id"])["id"],
             'user_id' => Util::getSessionUser()["id"],
             'type' => $data['type'],
             'created' => Util::getDate(),

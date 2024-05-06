@@ -9,11 +9,11 @@ Intratum\Facturas\Util::checkSession()
     <form action="lib/add_producto.php" id="form" method="post" class="max-w-md mx-auto grid grid-cols-1 md:grid-cols-2 gap-5">
                 <div id="div-responsive-1" class="mb-5 relative ">
                     <!-- nombre particular  -->
-                    <label id="nombre-particular" for="name" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Nombre</label>
+                    <label id="nombre-particular" for="first_name" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Nombre</label>
                     <!-- nombre fiscal  -->
-                    <label for="name" id="nombre-fiscal" class=" hidden block mb-2 text-sm font-medium text-gray-900 dark:text-white">Nombre Fiscal</label>
+                    <label for="first_name" id="nombre-fiscal" class=" hidden block mb-2 text-sm font-medium text-gray-900 dark:text-white">Nombre Fiscal</label>
 
-                    <input type="text" id="searchAccount" name="name" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                    <input type="text" id="searchAccount" name="first_name" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
                         placeholder="Nombre" required />
 
                     <div class="absolute top- left-0 ">
@@ -113,7 +113,7 @@ Intratum\Facturas\Util::checkSession()
                     contentType: 'application/json',
                     data: JSON.stringify(data),
                     success: function(d) {
-                        if (d.success == true) {
+                        if (d != false) {
                             console.log("trueeeee")
                             window.location.href = '/clientes/';
 
@@ -123,7 +123,6 @@ Intratum\Facturas\Util::checkSession()
                 });
 
 
-                exit();
             });
         });
 

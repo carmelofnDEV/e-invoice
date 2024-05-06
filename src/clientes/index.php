@@ -4,7 +4,9 @@ Intratum\Facturas\Util::checkSession()
 
 <?php
 
-Intratum\Facturas\Environment::$db->where('type','1');
+$acc_id = Intratum\Facturas\Util::getUserAccountID();
+Intratum\Facturas\Environment::$db->where('account_id',$acc_id);
+Intratum\Facturas\Environment::$db->where('type','c');
 $all = Intratum\Facturas\Environment::$db->get('customer');
 $all = array_reverse($all)
 
@@ -13,7 +15,7 @@ $all = array_reverse($all)
 <div class=" flex items-center flex-col relative overflow-x-auto">
 <h1 class="mb-4 text-2xl font-extrabold leading-none tracking-tight text-gray-900 md:text-5xl lg:text-5xl dark:text-white">CLIENTES</h1>
 
-<a class="m-5 px-[5%] py-[20px] rounded " href="nuevo/">
+<a class="m-5 px-[5%] py-[20px] rounded bg-[#5c9096] " href="nuevo/">
 <svg fill="#000000" version="1.1" id="Capa_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" 
 	 width="15px" height="15px" viewBox="0 0 45.402 45.402"
 	 xml:space="preserve">

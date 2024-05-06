@@ -5,50 +5,28 @@ namespace Intratum\Facturas;
 class Account
 {
 
-//     public static function insert(array $data)
-//     {
-//         //$all = Environment::$db->get('account');
+    public static function saveLogo($data){
+        $account = Util::getSessionUser();
 
-//         $search = $data['first_name'] . ' ' . $data['last_name'] . '
-// ' . $data['NIF'] . '
-// ' . $data['address1'] . '
-// ' . $data['zip'] . ' ' . $data['city'] . '
-// ' . $data['country'] . '
-// ';
+        $file_info = pathinfo($data["name"]);
 
-//         $data = [
+        $id = $account["id"];
 
-//             'id2' => Util::genUUID(),
-//             'account_id' => Util::getSessionUser()["id"],
-//             'user_id' => Util::getSessionUser()["id"],
-//             'created' => Util::getDate(),
-//             'updated' => null,
-//             'NIF' => $data['NIF'],
-//             'first_name' => $data['first_name'],
-//             'last_name' => $data['last_name'],
-//             'type' => $data['type'],
-//             'category' => $data['category'],
-//             'email' => $data['email'],
-//             'phone' => $data['phone'],
-//             'search' => $search,
-//             'address1' => $data['address1'],
-//             'address2' => $data['address2'] ?? "",
-//             'country' => $data['country'],
-//             'state' => $data['state'],
-//             'city' => $data['city'],
-//             'zip' => $data['zip'],
+        if(move_uploaded_file($data['tmp_name'], './assets/images/'.self::setLogo($id=$id,$extension=$file_info['extension']))) {
+            $response = true;
+        }else{
+            $response = false;
+        }
 
-//         ];
-
-//         $id = Environment::$db->insert('account', $data);
-     
-//         return $id ;
-//     }
+        return $response;
+    }
 
     public static function update(array $data)
     {
 
+
         $db2 = Environment::$db;
+
 
 
 
@@ -79,38 +57,28 @@ class Account
         return true;
     }
 
-    // public static function delete(array $data)
-    // {
-    //     $db2 = Environment::$db;
-    //     $db2->where('id2', $data["id2"]);
-    //     if ($db2->delete('account')) {
-    //         echo 'successfully deleted';
-    //     }
+    public static function setLogo($id,$extension){
 
-    //     return ['success' => true];
-    // }
+        $hash_logo = "jjj6d9qus,%z8@;|km#bp9".$id;
 
-    // public static function all($parms = [])
-    // {
-    //     $db2 = Environment::$db;
+        $hash_logo = hash("sha256",$hash_logo);
 
-    //     if (!empty($parms['q'])) {
-    //         $db2->where('search', '%' . $parms['q'] . '%', 'LIKE');
-    //     }
+        $hash_logo = $hash_logo.'.'.$extension;
 
-    //     $all = $db2->get('account', 10, 'id, id2 as _id, email');
 
-    //     foreach ($all as $k => $a) {
-    //         $all[$k]['_id'] = ['cust', 0, $a['_id']];
-    //     }
+        $newData=[
+            "hash_logo"=>$hash_logo,
 
-    //     $res = [
-    //         'data' => $all,
-    //     ];
+        ];
 
-    //     return $all;
-    // }
+        $db2 = Environment::$db;
+        $db2->where('id', $id);
+        $db2->update('account', $newData);
 
+
+        return $hash_logo;
+    }
+    
     public static function get(array $parms = [])
     {
 
