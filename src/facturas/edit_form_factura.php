@@ -732,7 +732,7 @@ foreach ($results as $i) {
 
             <div class="mb-10">
 
-                <label for="message" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Fecha de
+                <label for="invoice_date" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Fecha de
                     facturación</label>
 
                 <div class="relative max-w-sm">
@@ -749,7 +749,7 @@ foreach ($results as $i) {
 
                     </div>
 
-                    <input datepicker datepicker-title="Fecha de facturación" value="<?=$invoice["invoice_date"]?>"
+                    <input datepicker datepicker-title="Fecha de facturación" value="<?= date('d/m/Y', strtotime($invoice["invoice_date"]))?>"
                         name="invoice_date" type="text"
                         class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full ps-10 p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
                         placeholder="Selecciona una fecha">

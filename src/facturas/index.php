@@ -18,6 +18,9 @@ $acc_id = Intratum\Facturas\Util::getUserAccountID();
 Intratum\Facturas\Environment::$db->where('account_id',$acc_id);
 $db2->where('type', 1 );
 
+if(!empty($_GET['q']))
+    $db2->where('search', '%'.$_GET['q'].'%', 'LIKE');
+
 $all = $db2->get('invoice');
 
 
