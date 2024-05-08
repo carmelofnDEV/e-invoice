@@ -44,6 +44,7 @@ class Factura
         $invoice_items = $data["items"];
 
         $search = $data['first_name'] . ' ' . $data['last_name'] . '
+' . $data['email'] . '
 ' . $data['NIF'] . '
 ' . $data['address_1'] . '
 ' . $data['zip'] . ' ' . $data['city'] . '
@@ -531,7 +532,6 @@ class Factura
         $db->where('i.invoice_date', [date('Y-m-d', strtotime("{$year}-10-01")), date('Y-m-d', strtotime("{$year}-12-31"))], 'BETWEEN');
         $db->groupBy('o.tax_value');
         $trimestre4_gastos = $db->get('invoice_item_tax o', null, 'SUM(o.value) AS total_iva, tax_value, SUM(ii.subtotal) AS subtotal');
-
         //irpf
 
         //modalidad 1
