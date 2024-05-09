@@ -78,6 +78,9 @@ class Traffic{
 		if(!empty($paths[$urlpath[0]]))
 			$res = $paths[$urlpath[0]];
 
+		if($urlpath2[1] == 'passwordrecovery'){
+			$res  = 'src/passwordrecovery/index.php';
+		}
 
 		if($urlpath2[1] == 'static'){
 			if(!empty($urlpath2[3])){

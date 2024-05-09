@@ -6,6 +6,10 @@ class User
 {
 
     public static function insert(array $data){
+
+        
+
+
         $password = hash("sha256", $data["password"]);
         $email = $data['email'];
 
@@ -116,7 +120,7 @@ class User
 
     public static function checksession()
     {
-        $cookie = $_COOKIE['SSID'];
+        $cookie = isset($_COOKIE['SSID']) ? $_COOKIE['SSID'] : null;
         return $cookie;
     }
 
@@ -125,8 +129,14 @@ class User
         $db2 = Environment::$db;
         $db2->where('id2', $uuid);
         $session_user_id = $db2->getOne('access_token', "user_id");
-        $db2->where('id', $session_user_id["user_id"]);
-        $user = $db2->getOne('user');
+
+        if ($session_user_id != false) {
+            $db2->where('id', $session_user_id["user_id"]);
+            $user = $db2->getOne('user');
+        }else{
+            $user = null;
+
+        }
 
         return $user;
     }
@@ -213,5 +223,25 @@ class User
 
     }
 
+    public static function forgotPassword($user_id){
+
+        $enc = new \Intratum\Facturas\Encryption();
+
+
+        $enc->setKey('private');
+        $codi = $enc->encode(json_encode([$user_id,time()]));
+
+        $urlExp = end(explode('/', $url));
+        if ($_SERVER['HTTPS'] == "on") {
+            return 'https://'.$_SERVER['HTTP_HOST'].'/passwordrecovery/'.$codi;
+        }else{
+            return 'http://'.$_SERVER['HTTP_HOST'].'/passwordrecovery/'.$codi;
+        }
+       
+    }
+
+
 
 }
+
+

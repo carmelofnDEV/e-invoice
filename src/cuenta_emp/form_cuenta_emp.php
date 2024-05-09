@@ -2,6 +2,7 @@
 Intratum\Facturas\Util::checkSession();
 $user = Intratum\Facturas\Util::getSessionUser();
 $acc = Intratum\Facturas\User::getUserAccount($user["id"]);
+$title = 'Cuenta';
 
 ?>
 

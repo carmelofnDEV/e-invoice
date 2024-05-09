@@ -1,77 +1,18 @@
 <?php
-    Intratum\Facturas\Util::checkSession();
+    $isLoggin = Intratum\Facturas\Util::checkSession();
     $user = Intratum\Facturas\Util::getSessionUser();
     $acc = Intratum\Facturas\User::getUserAccount($user["id"]);
 ?>
 
 
-<h1 class="text-[30px] text-center">
+<h1 class="text-[30px] text-center mt-10">
     Bienvinido <?= $user["first_name"]?>.
 </h1>
 
 <div class="flex flex-col justify-center items-center m-10">
-    <div class="flex w-full  justify-around items-end ">
-
-
-        <div class="w-[50%] text-[20px] justify-start items-end font-medium text-center text-gray-500 border-b border-gray-200 dark:text-gray-400 dark:border-gray-700">
-            <ul class=" grid grid-cols-4  items-end flex-wrap -mb-px">
-                <li class="me-2">
-                <button data-target="t1"  class=" w-full inline-block p-4 border-b-2 border-transparent rounded-t-lg hover:bg-[#6e717f] hover:text-white">T1</button>
-
-                </li>
-                <li class="me-2">
-                <button data-target="t2"  class="w-full inline-block p-4 border-b-2 border-transparent rounded-t-lg hover:bg-[#6e717f] hover:text-white">T2</button>
-
-                </li>
-                <li class="me-2">
-                    <button data-target="t3" class="w-full inline-block p-4 border-b-2 border-transparent rounded-t-lg hover:bg-[#6e717f] hover:text-white">T3</button>
-
-                </li>
-                <li class="me-2">
-                    <button data-target="t4" class="w-full inline-block p-4 border-b-2 border-transparent rounded-t-lg hover:bg-[#6e717f] hover:text-white">T4</button>
-                </li>
-
-            </ul>
-        </div>
-
-
-        <div class=" max-w-sm bg-white border border-gray-200 rounded-lg shadow dark:bg-gray-800 dark:border-gray-700">
-            <h3 class="mb-1 text-xl text-center font-medium text-gray-900 dark:text-white p-3">
-                Tu perfil
-            </h3>
-            <hr class="w-full h-[2px] bg-red">
-            <div class="flex justify-end px-4 pt-4">
-                <button class="inline-block text-gray-500 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-700 focus:ring-4 focus:outline-none focus:ring-gray-200 dark:focus:ring-gray-700 rounded-lg text-sm p-1.5" type="button">
-                    <svg class="w-5 h-5" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentBASE IMPONIBLE" viewBox="0 0 16 3">
-                        <path d="M2 0a1.5 1.5 0 1 1 0 3 1.5 1.5 0 0 1 0-3Zm6.041 0a1.5 1.5 0 1 1 0 3 1.5 1.5 0 0 1 0-3ZM14 0a1.5 1.5 0 1 1 0 3 1.5 1.5 0 0 1 0-3Z" />
-                    </svg>
-                </button>
-            </div>
-            <div class="flex flex-col items-center pb-10">
-                <?php if ($_SERVER['SERVER_PORT'] == '80') {?>
-                    <img class="w-[50%] h-[50%] mb-3 " src="http://<?= $_SERVER['HTTP_HOST'] ?>/static/images/<?=$acc["hash_logo"]?>" alt="Logo" />
-                    <div class="tm_logo"><img alt="Logo"></div>
-                <?php } else if ($_SERVER['SERVER_PORT'] == '443') {?>
-                    <img class="w-[50%] h-[50%] mb-3 " src="https://<?= $_SERVER['HTTP_HOST'] ?>/static/images/<?=$acc["hash_logo"]?>" alt="Logo" />
-                <?php } else if ($_SERVER['SERVER_PORT'] == '8086') {?>
-                    <img class="w-[50%] h-[50%] mb-3 " src="http://<?= $_SERVER['HTTP_HOST'] ?>/static/images/<?=$acc["hash_logo"]?>" alt="Logo" />
-                <?php }?>
-                <h3 class="mb-1 text-xl font-medium text-gray-900 dark:text-white">
-                    <?= $user["first_name"]?>, <?= $user["last_name"]?>
-                </h3>
-                <h4><?= $user["email"]?></h4>
-                <a href="#" class="m-3 py-2 px-4 ms-2 text-sm font-medium text-gray-900 focus:outline-none bg-white rounded-lg border border-gray-200 hover:bg-gray-100 hover:text-blue-700 focus:z-10 focus:ring-4 focus:ring-gray-100 dark:focus:ring-gray-700 dark:bg-gray-800 dark:text-gray-400 dark:border-gray-600 dark:hover:text-white dark:hover:bg-gray-700">Cambiar contraseña</a>
-            </div>
-        </div>
-        
-
-    </div>
-
-
-
 
     <?php
-    $data = Intratum\Facturas\Factura::getAnalitycs();
+        $data = Intratum\Facturas\Factura::getAnalitycs();
     ?>
 
     <!-- Trimestre 1 -->
@@ -183,7 +124,7 @@
         <div class="mt-10 flex flex-row gap-3 w-full">
             <div class="w-[50%] h-[50%] bg-[#c8c8c8] rounded flex flex-col shadow-xl justify-center p-3">
                 <h1 class="p-3 text-white text-[20px] font-[700] border-b-2">Resultados <span>T1</span></h1>
-                <h1 class="text-black text-[15px] font-[600] p-3">PAGO TRIMESTRAL DE <strong>IRPF</strong> <span class="ml-4"><?= max($baseint1 - $basegast1, 0) ?>€</span></h1>
+                <h1 class="text-black text-[15px] font-[600] p-3">PAGO TRIMESTRAL DE <strong>IRPF</strong> <span class="ml-4"><?= max(0.20*($baseint1 - $basegast1), 0) ?>€</span></h1>
                 <h1 class="text-black text-[15px] font-[600] p-3">PAGO TRIMESTRAL DE  <strong>IVA</strong> <span class="ml-4"><?= max($ivagastt1 + $ivaingt1, 0) ?>€</span></h1>
             </div>
             <div class="w-full rounded flex justify-center">
@@ -301,7 +242,7 @@
         <div class="mt-10 flex flex-row gap-3 w-full">
             <div class="w-[50%] h-[50%] bg-[#c8c8c8] rounded flex flex-col shadow-xl justify-center p-3">
                 <h1 class="p-3 text-white text-[20px] font-[700] border-b-2">Resultados <span>T2</span></h1>
-                <h1 class="text-black text-[15px] font-[600] p-3">PAGO TRIMESTRAL DE <strong>IRPF</strong> <span class="ml-4"><?= max($baseint2 - $basegast2, 0) ?>€</span></h1>
+                <h1 class="text-black text-[15px] font-[600] p-3">PAGO TRIMESTRAL DE <strong>IRPF</strong> <span class="ml-4"><?= max(0.20*($baseint2 - $basegast2), 0) ?>€</span></h1>
                 <h1 class="text-black text-[15px] font-[600] p-3">PAGO TRIMESTRAL DE  <strong>IVA</strong> <span class="ml-4"><?= max($ivagastt2 + $ivaingt2, 0) ?>€</span></h1>
             </div>
             <div class="w-full rounded flex justify-center">
@@ -419,7 +360,7 @@
         <div class="mt-10 flex flex-row gap-3 w-full">
             <div class="w-[50%] h-[50%] bg-[#c8c8c8] rounded flex flex-col shadow-xl justify-center p-3">
                 <h1 class="p-3 text-white text-[20px] font-[700] border-b-2">Resultados <span>T3</span></h1>
-                <h1 class="text-black text-[15px] font-[600] p-3">PAGO TRIMESTRAL DE <strong>IRPF</strong> <span class="ml-4"><?= max($baseint3 - $basegast3, 0) ?>€</span></h1>
+                <h1 class="text-black text-[15px] font-[600] p-3">PAGO TRIMESTRAL DE <strong>IRPF</strong> <span class="ml-4"><?= max(0.20*($baseint3 - $basegast3), 0) ?>€</span></h1>
                 <h1 class="text-black text-[15px] font-[600] p-3">PAGO TRIMESTRAL DE  <strong>IVA</strong> <span class="ml-4"><?= max($ivagastt3 + $ivaingt3, 0) ?>€</span></h1>
             </div>
             <div class="w-full rounded flex justify-center">
@@ -537,7 +478,7 @@
         <div class="mt-10 flex flex-row gap-3 w-full">
             <div class="w-[50%] h-[50%] bg-[#c8c8c8] rounded flex flex-col shadow-xl justify-center p-3">
                 <h1 class="p-3 text-white text-[20px] font-[700] border-b-2">Resultados <span>T4</span></h1>
-                <h1 class="text-black text-[15px] font-[600] p-3">PAGO TRIMESTRAL DE <strong>IRPF</strong> <span class="ml-4"><?= max($baseint4 - $basegast4, 0) ?>€</span></h1>
+                <h1 class="text-black text-[15px] font-[600] p-3">PAGO TRIMESTRAL DE <strong>IRPF</strong> <span class="ml-4"><?= max(0.20*($baseint4 - $basegast4), 0) ?>€</span></h1>
                 <h1 class="text-black text-[15px] font-[600] p-3">PAGO TRIMESTRAL DE  <strong>IVA</strong> <span class="ml-4"><?= max($ivagastt4 + $ivaingt4, 0) ?>€</span></h1>
             </div>
             <div class="w-full rounded flex justify-center">
@@ -556,29 +497,22 @@
     $('[id^="t"]').hide();
 
     $(document).ready(function() {
+
         var today = new Date();
 
         var month = today.getMonth();
 
-
         var trimestreActual = Math.floor(month / 3) + 1;
-
+        $('#valor').val(trimestreActual);
         $('#t' + trimestreActual).show(); 
-        $('button[data-target="t' + trimestreActual + '"]').addClass('bg-[#c8c8c8] bg-opacity-50');
 
-        console.log(trimestreActual)
-
-
-        $('button[data-target^="t"]').click(function() {
-            var trimestreId = $(this).attr('data-target');
-
+        $('#valor').change(function(){
+            var trimestreId = $(this).val();
             $('[id^="t"]').hide();
 
-            $('#' + trimestreId).show();
-            
-            $('button[data-target^="t"]').removeClass('bg-[#c8c8c8] bg-opacity-50');
-            $(this).addClass('bg-[#c8c8c8] bg-opacity-50');
+            $('#t' + trimestreId).show();
         });
+
     });
 </script>
 

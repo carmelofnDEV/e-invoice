@@ -35,6 +35,7 @@ Este proyecto utiliza las siguientes librerías de GitHub:
 - [Flowbite](https://flowbite.com/) - Una colección de componentes y estilos de UI basados en Tailwind CSS.
 - [Datepicker](https://flowbite.com/) - Un componente de selección de fecha para formularios web.
 - [Moment.js](https://momentjs.com/) - Una librería de JavaScript para el manejo de fechas y horas.
+- [ApexCharts](https://cdn.jsdelivr.net/npm/apexcharts) - Una librería JavaScript de gráficos interactivos para la visualización de datos.
 
 ## Licencia
 

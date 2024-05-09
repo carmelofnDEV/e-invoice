@@ -17,6 +17,10 @@ class ComposerStaticInit5aaa64e55394b8f794e0da9ef70a889a
         array (
             'Intratum\\Facturas\\' => 18,
         ),
+        'D' => 
+        array (
+            'Defuse\\Crypto\\' => 14,
+        ),
     );
 
     public static $prefixDirsPsr4 = array (
@@ -35,6 +39,10 @@ class ComposerStaticInit5aaa64e55394b8f794e0da9ef70a889a
         'Intratum\\Facturas\\' => 
         array (
             0 => __DIR__ . '/../..' . '/lib',
+        ),
+        'Defuse\\Crypto\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/defuse/php-encryption/src',
         ),
     );
 

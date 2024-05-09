@@ -3,6 +3,7 @@
 $item = $_GET['item'];
 $id2 = Intratum\Facturas\Util::getID2ByUUID("prod_",$item);
 $product = Intratum\Facturas\Product::get($params = ["id2"=>$id2]);
+$title = "Editar producto";
 
 ?>
 <h2 class="text-center font-[600] text-[20px]">Editar</h2>

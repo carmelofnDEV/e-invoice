@@ -1,6 +1,7 @@
 <?php
 
 Intratum\Facturas\Util::checkSession();
+$title = "Editar";
 
 $allSerials = Intratum\Facturas\Serial::all();
 

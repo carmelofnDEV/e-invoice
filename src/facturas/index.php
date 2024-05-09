@@ -1,7 +1,8 @@
 <?php
 
-Intratum\Facturas\Util::checkSession()
+Intratum\Facturas\Util::checkSession();
 
+$title = 'Facturas';
 ?>
 
 

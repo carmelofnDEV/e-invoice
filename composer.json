@@ -18,6 +18,7 @@
         }
     },
     "require": {
-        "mikehaertl/phpwkhtmltopdf": "^2.5"
+        "mikehaertl/phpwkhtmltopdf": "^2.5",
+        "defuse/php-encryption": "^2.4"
     }
 }
