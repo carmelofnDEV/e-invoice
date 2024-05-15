@@ -58,7 +58,7 @@ $(document).ready(function(){
             success: function(d){
                 if(d.success == true){
                     console.log("trueeeee")
-                    window.location.href = '/clientes/';
+                    window.location.href = '/contactos/';
                     exit();
                 }
             }

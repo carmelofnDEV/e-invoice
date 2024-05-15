@@ -26,10 +26,12 @@ class Traffic{
 			'/productos/ed' => 'src/producto/edit_form_producto.php',
 			'/productos/del' => 'src/producto/del_producto.php',
 
-			'/clientes' => 'src/clientes/index.php',
+			'/contactos' => 'src/clientes/index.php',
 			'/clientes/nuevo' => 'src/clientes/form_clientes.php',
 			'/clientes/ed' => 'src/clientes/edit_form_clientes.php',
 			'/clientes/del' => 'src/clientes/del_clientes.php',
+			'/contactos/single' => 'src/clientes/contactos_single.php',
+
 
 			'/proveedores' => 'src/proveedores/index.php',
 			'/proveedores/nuevo' => 'src/proveedores/form_proveedores.php',
@@ -42,6 +44,7 @@ class Traffic{
 			'/facturas' => 'src/facturas/index.php',
 			'/facturas/nuevo' => 'src/facturas/form_factura.php',
 			'/facturas/ed' => 'src/facturas/edit_form_factura.php',
+			
 			'/facturas/del' => 'src/facturas/del_factura.php',
 
 
@@ -67,6 +70,10 @@ class Traffic{
 			'/configuracion/impuestos/del' => 'src/configuration/tax/del_tax.php',
 
 			'/pdf' => 'src/facturas/generate_pdf.php',
+
+			'/invoice_paid' => 'src/facturas/invoice_paid.php',
+			'/invoice_unpaid' => 'src/facturas/invoice_unpaid.php',
+
 
 			'/empresa' => 'src/cuenta_emp/form_cuenta_emp.php',
 

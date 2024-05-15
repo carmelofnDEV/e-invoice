@@ -41,7 +41,6 @@ switch($_SERVER["REQUEST_METHOD"]){
 			echo json_encode(Intratum\Facturas\Tax::get(['id2' => $data,]));
         }
 
-
         break;
 }
 

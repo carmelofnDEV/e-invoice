@@ -52,7 +52,10 @@ class Serial{
 
 	public static function all(){
 		$db2 = Environment::$db;
-
+		
+		$user = Util::getSessionUser();
+		$acc = User::getUserAccount($user["id"]);
+		$db2->where('account_id', $acc["id"]);
         $all = $db2->get('serial');
 
 

@@ -88,6 +88,8 @@ class Customer
             $db2->where('search', '%' . $parms['q'] . '%', 'LIKE');
         }
 
+        $db2->where('account_id', $parms['acc_id']);
+
         $all = $db2->get('customer', 10, 'id, id2 as _id, email');
 
         foreach ($all as $k => $a) {

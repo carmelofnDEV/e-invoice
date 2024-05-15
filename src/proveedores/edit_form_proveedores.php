@@ -6,6 +6,7 @@ Intratum\Facturas\Util::checkSession()
 $item = $_GET['item'];
 $id2 = Intratum\Facturas\Util::getID2ByUUID("cust_", $item);
 $customer = Intratum\Facturas\Customer::get($params = ["id2" => $id2]);
+$title="Editar proveedor"
 ?>
 <h2 class="text-center font-[600] text-[20px]">Editar</h2>
 <hr class="w-48 h-1 mx-auto my-4 bg-gray-100 border-0 rounded md:my-10 dark:bg-gray-700">
@@ -117,7 +118,7 @@ $(document).ready(function(){
             success: function(d){
                 if(d == true){
                     console.log("trueeeee")
-                    window.location.href = '/proveedores/';
+                    window.location.href = '/contactos/';
                     exit();
                 }
             }

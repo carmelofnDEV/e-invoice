@@ -2,9 +2,11 @@
 
 Intratum\Facturas\Util::checkSession();
 
-$allSerials = Intratum\Facturas\Serial::all();
 
+$allSerials = Intratum\Facturas\Serial::all();
 $allTax = Intratum\Facturas\Tax::all();
+
+$title = "Nueva factura"
 
 ?>
 
@@ -465,9 +467,7 @@ $allTax = Intratum\Facturas\Tax::all();
 
 
 
-                    <select onchange="updateInvoiceNumber()" name="invoice_serial" id="select_serials" class="w-[30%] bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block  p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white
-
-                dark:focus:ring-primary-500 dark:focus:border-primary-500">
+                    <select onchange="updateInvoiceNumber()" name="invoice_serial" id="select_serials" class="w-[30%] bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block  p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500">
 
                         <?php foreach ($allSerials as $i) {?>
 

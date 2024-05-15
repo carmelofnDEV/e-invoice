@@ -176,8 +176,40 @@ class Factura
         return ['success' => true];
     }
 
-    public static function all(array $data)
-    {
+    public static function delete($data){
+        
+        $db = Environment::$db;
+
+        Environment::$db->where('id2', $data["id2"]);
+        $invoice = Environment::$db->get('invoice');
+
+        $invoice = $invoice[0];
+
+        Environment::$db->where('id2', $invoice["id"]);
+        $items = Environment::$db->get('invoice_item');
+
+
+
+        foreach ($items as $i) {
+
+            Environment::$db->where('invoice_item_id', $i["id"]);
+            Environment::$db->delete('invoice_item_tax');
+            
+        }
+
+        
+        Environment::$db->where('invoice_id', $invoice["id"]);
+        Environment::$db->delete('invoice_item');
+
+        Environment::$db->where('id', $invoice["id"]);
+        Environment::$db->delete('invoice');
+
+        Environment::$db->where('invoice_id', $invoice["id"]);
+        Environment::$db->delete('invoice_setting');
+
+        return ["success" => true];
+
+
 
     }
 
@@ -439,6 +471,10 @@ class Factura
         if ($year == 0) {
             $year = date('Y');
         }
+
+        $user = Util::getSessionUser();
+		$acc = User::getUserAccount($user["id"]);
+
         $trimestres = [];
 
         //iva
@@ -449,6 +485,7 @@ class Factura
         $db->join('invoice_item ii', 'ii.id = o.invoice_item_id');
         $db->join('invoice i', 'i.id = ii.invoice_id');
         $db->join('tax t', 'o.tax_id = t.id');
+		$db->where('i.account_id', $acc["id"]);
         $db->where('t.type', 1);
         $db->where('i.type', 1);
         $db->where('i.invoice_date', [date('Y-m-d', strtotime("{$year}-01-01")), date('Y-m-d', strtotime("{$year}-03-31"))], 'BETWEEN');
@@ -460,6 +497,7 @@ class Factura
         $db->join('invoice_item ii', 'ii.id = o.invoice_item_id');
         $db->join('invoice i', 'i.id = ii.invoice_id');
         $db->join('tax t', 'o.tax_id = t.id');
+		$db->where('i.account_id', $acc["id"]);
         $db->where('t.type', 1);
         $db->where('i.type', 1);
         $db->where('i.invoice_date', [date('Y-m-d', strtotime("{$year}-04-01")), date('Y-m-d', strtotime("{$year}-06-30"))], 'BETWEEN');
@@ -471,6 +509,7 @@ class Factura
         $db->join('invoice_item ii', 'ii.id = o.invoice_item_id');
         $db->join('invoice i', 'i.id = ii.invoice_id');
         $db->join('tax t', 'o.tax_id = t.id');
+		$db->where('i.account_id', $acc["id"]);
         $db->where('t.type', 1);
         $db->where('i.type', 1);
         $db->where('i.invoice_date', [date('Y-m-d', strtotime("{$year}-07-01")), date('Y-m-d', strtotime("{$year}-09-30"))], 'BETWEEN');
@@ -482,6 +521,7 @@ class Factura
         $db->join('invoice_item ii', 'ii.id = o.invoice_item_id');
         $db->join('invoice i', 'i.id = ii.invoice_id');
         $db->join('tax t', 'o.tax_id = t.id');
+		$db->where('i.account_id', $acc["id"]);
         $db->where('t.type', 1);
         $db->where('i.type', 1);
         $db->where('i.invoice_date', [date('Y-m-d', strtotime("{$year}-10-01")), date('Y-m-d', strtotime("{$year}-12-31"))], 'BETWEEN');
@@ -494,6 +534,7 @@ class Factura
         $db->join('invoice_item ii', 'ii.id = o.invoice_item_id');
         $db->join('invoice i', 'i.id = ii.invoice_id');
         $db->join('tax t', 'o.tax_id = t.id');
+		$db->where('i.account_id', $acc["id"]);
         $db->where('t.type', 1);
         $db->where('i.type', 0);
         $db->where('i.invoice_date', [date('Y-m-d', strtotime("{$year}-01-01")), date('Y-m-d', strtotime("{$year}-03-31"))], 'BETWEEN');
@@ -505,6 +546,7 @@ class Factura
         $db->join('invoice_item ii', 'ii.id = o.invoice_item_id');
         $db->join('invoice i', 'i.id = ii.invoice_id');
         $db->join('tax t', 'o.tax_id = t.id');
+		$db->where('i.account_id', $acc["id"]);
         $db->where('t.type', 1);
         $db->where('i.type', 0);
         $db->where('i.invoice_date', [date('Y-m-d', strtotime("{$year}-04-01")), date('Y-m-d', strtotime("{$year}-06-30"))], 'BETWEEN');
@@ -516,6 +558,7 @@ class Factura
         $db->join('invoice_item ii', 'ii.id = o.invoice_item_id');
         $db->join('invoice i', 'i.id = ii.invoice_id');
         $db->join('tax t', 'o.tax_id = t.id');
+		$db->where('i.account_id', $acc["id"]);
         $db->where('t.type', 1);
         $db->where('i.type', 0);
         $db->where('i.invoice_date', [date('Y-m-d', strtotime("{$year}-07-01")), date('Y-m-d', strtotime("{$year}-09-30"))], 'BETWEEN');
@@ -527,6 +570,7 @@ class Factura
         $db->join('invoice_item ii', 'ii.id = o.invoice_item_id');
         $db->join('invoice i', 'i.id = ii.invoice_id');
         $db->join('tax t', 'o.tax_id = t.id');
+		$db->where('i.account_id', $acc["id"]);
         $db->where('t.type', 1);
         $db->where('i.type', 0);
         $db->where('i.invoice_date', [date('Y-m-d', strtotime("{$year}-10-01")), date('Y-m-d', strtotime("{$year}-12-31"))], 'BETWEEN');

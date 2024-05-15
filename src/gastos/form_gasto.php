@@ -5,6 +5,7 @@ Intratum\Facturas\Util::checkSession();
 $allSerials = Intratum\Facturas\Serial::all();
 
 $allTax = Intratum\Facturas\Tax::all();
+$title = "Nuevo gasto"
 
 ?>
 

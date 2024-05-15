@@ -35,7 +35,9 @@ switch($_SERVER["REQUEST_METHOD"]){
         $data = Intratum\Facturas\Traffic::getEntryGET();
 
         if (empty($urlExp[3])) {
-
+            $user = Intratum\Facturas\Util::getSessionUser();
+            $acc = Intratum\Facturas\User::getUserAccount($user["id"]);
+            $data["acc_id"] = $acc["id"];
             $data = Intratum\Facturas\Product::all($data);
             $data = Intratum\Facturas\Util::sanizeExitData($data);
 

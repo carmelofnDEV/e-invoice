@@ -9,6 +9,8 @@ $all = Intratum\Facturas\Environment::$db->get('invoice');
 
 $allTax = Intratum\Facturas\Tax::all();
 
+$title = "Nuevo presupuesto"
+
 ?>
 
 

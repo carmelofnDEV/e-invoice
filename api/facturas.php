@@ -33,6 +33,7 @@ switch ($_SERVER["REQUEST_METHOD"]) {
         break;
 
     case 'GET':
+
         $url = $_SERVER['REQUEST_URI'];
         $urlExp = explode('/', $url);
 
@@ -42,14 +43,17 @@ switch ($_SERVER["REQUEST_METHOD"]) {
 
             $data = Intratum\Facturas\Customer::all($data);
             $data = Intratum\Facturas\Util::sanizeExitData($data);
-
             echo json_encode($data);
-        } else {
-            $data = Intratum\Facturas\Util::getID2ByUUID("cust",$urlExp[3]);
 
+        } else {
+
+
+            
+            $data = Intratum\Facturas\Util::getID2ByUUID("cust",$urlExp[3]);
 			echo json_encode(Intratum\Facturas\Customer::get([
 				'id2' => $data,
 			]));
+
         }
 
 
@@ -62,10 +66,12 @@ switch ($_SERVER["REQUEST_METHOD"]) {
         break;
 
     case 'DELETE':
+        
         $data = Intratum\Facturas\Traffic::getEntryPOST();
-        $existingCustomer = Intratum\Facturas\Customer::get(["id2" => $data["id2"]]);
-        if ($existingCustomer) {
-            echo json_encode(Intratum\Facturas\Customer::delete($data));
+
+        $existingInvoice = Intratum\Facturas\Factura::get(["id2" => $data["id2"]]);
+        if ($existingInvoice) {
+            echo json_encode(Intratum\Facturas\Factura::delete($data));
         }
 
         break;

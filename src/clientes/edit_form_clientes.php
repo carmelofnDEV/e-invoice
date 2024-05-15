@@ -120,7 +120,7 @@ $(document).ready(function(){
             success: function(d){
                 if(d == true){
                     console.log("trueeeee")
-                    window.location.href = '/clientes/';
+                    window.location.href = '/contactos/';
                     exit();
                 }
             }

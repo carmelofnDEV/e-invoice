@@ -6,6 +6,8 @@ $item = $_GET['item'];
 $id2 = Intratum\Facturas\Util::getID2ByUUID("prod_",$item);
 $product = Intratum\Facturas\Customer::get($params = ["id2"=>$id2]);
 
+$title = "Eliminar proveedor ".$product["first_name"]
+
 ?>
 <div class="flex flex-col justify-center items-center">
 <h2 class="text-center font-[600] text-[20px]">¿Este seguro que desea eliminar este <strong>proveedor</strong>?</h2>
@@ -57,7 +59,7 @@ $(document).ready(function(){
             success: function(d){
                 if(d.success == true){
                     console.log("trueeeee")
-                    window.location.href = '/clientes/';
+                    window.location.href = '/contactos/';
                     exit();
                 }
             }

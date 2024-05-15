@@ -65,9 +65,11 @@ class Product{
 	public static function all($parms = []){
 		$db2 = Environment::$db;
 
-        if (!empty($parms['q'])) {
+        if (!empty($parms['q'] )) {
             $db2->where('search', '%' . $parms['q'] . '%', 'LIKE');
         }
+
+		$db2->where('account_id', $parms['acc_id']);
 
         $all = $db2->get('product', 10, 'id, id2 as _id,title');
         foreach ($all as $k => $a) {

@@ -1,5 +1,7 @@
 <?php
-Intratum\Facturas\Util::checkSession()
+Intratum\Facturas\Util::checkSession();
+
+$title = "Crear proveedor"
 ?>
 
 
@@ -133,7 +135,7 @@ $(document).ready(function() {
             success: function(d) {
                 if (d) {
                     console.log("trueeeee")
-                    window.location.href = '/proveedores/';
+                    window.location.href = '/contactos/';
 
 
                 }

@@ -67,6 +67,10 @@ class Tax
     {
         $db2 = Environment::$db;
 
+
+        $user = Util::getSessionUser();
+		$acc = User::getUserAccount($user["id"]);
+		$db2->where('account_id', $acc["id"]);
 		$res = $db2->get('tax');
 
         return $res;

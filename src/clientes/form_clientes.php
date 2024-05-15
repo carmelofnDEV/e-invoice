@@ -1,5 +1,7 @@
 <?php
-Intratum\Facturas\Util::checkSession()
+Intratum\Facturas\Util::checkSession();
+
+$title = "Crear cliente";
 ?>
 
 
@@ -115,7 +117,7 @@ Intratum\Facturas\Util::checkSession()
                     success: function(d) {
                         if (d != false) {
                             console.log("trueeeee")
-                            window.location.href = '/clientes/';
+                            window.location.href = '/contactos/';
 
 
                         }
