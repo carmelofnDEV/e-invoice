@@ -98,10 +98,23 @@ $title = 'Cuenta';
         <input type="text" id="NIF" name="NIF" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
             placeholder="CIF / DNI" required value="<?=$acc["NIF"]?>"/>
     </div>
+    
 
     <div class="col-span-2 mb-5">
-    <label class="block mb-2 text-sm font-medium text-gray-900 dark:text-white" for="logo">Logo</label>
-    <input name="logo" class="block w-full text-sm text-gray-900 border border-gray-300 rounded-lg cursor-pointer bg-gray-50 dark:text-gray-400 focus:outline-none dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400" id="logo" type="file">
+        <label class="block mb-2 text-sm font-medium text-gray-900 dark:text-white" for="logo">Logo</label>
+        <input name="logo" class="block w-full text-sm text-gray-900 border border-gray-300 rounded-lg cursor-pointer bg-gray-50 dark:text-gray-400 focus:outline-none dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400" id="logo" type="file">
+    </div>
+
+    
+    <div class=" mb-5">
+        <label class="block mb-2 text-sm font-medium text-gray-900 dark:text-white" for="cert">Firma electronica</label>
+        <input name="cert" class="block w-full text-sm text-gray-900 border border-gray-300 rounded-lg cursor-pointer bg-gray-50 dark:text-gray-400 focus:outline-none dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400" id="cert" type="file">
+    </div>
+
+    <div class="mb-5">
+        <label for="cert_pass" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Contraseña</label>
+        <input type="password" id="cert_pass" name="cert_pass" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+            placeholder="La contraseña de tu firma digital"  value=""/>
     </div>
 
     <button type="submit" class=" col-span-2 text-white text-[20px] font-[700] bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300  rounded-lg  w-full sm:w-auto px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">Guardar</button>
@@ -118,22 +131,47 @@ $title = 'Cuenta';
 
                 
                 var fileInput = document.getElementById('logo');
-                            var formData = new FormData();
-                            formData.append('imagen', fileInput.files[0]);
-                            formData.append('action', 'upload_logo');
 
-                            $.ajax({
-                                type: 'POST',
-                                url: '/ajax/account',
-                                dataType: 'json',
-                                processData: false,
-                                contentType: false,
-                        
-                                data: formData,
-                                success: function(d) {
-                                }
-                            });
+                var formData = new FormData();
+                formData.append('imagen', fileInput.files[0]);
+                formData.append('action', 'upload_logo');
+                console.log(formData)
 
+                $.ajax({
+                    type: 'POST',
+                    url: '/ajax/account',
+                    dataType: 'json',
+                    processData: false,
+                    contentType: false,
+            
+                    data: formData,
+                    success: function(d) {
+                    }
+                });
+
+                var certFileInput = document.getElementById('cert');
+                var certPass = document.getElementById('cert_pass');
+
+                
+                var certFormData = new FormData();
+                certFormData.append('cert_pass', certPass.value);
+                certFormData.append('cert', certFileInput.files[0]);
+                certFormData.append('action', 'upload_cert');
+
+
+                $.ajax({
+                    type: 'POST',
+                    url: '/ajax/account',
+                    dataType: 'json',
+                    processData: false,
+                    contentType: false,
+            
+                    data: certFormData,
+                    success: function(d) {
+                    }
+                });
+
+               
                 $.ajax({
                     type: 'POST',
                     url: '/ajax/account',

@@ -17,9 +17,7 @@ $all = array_reverse($all)
 
 ?>
 
-
 <div class="py-5 px-10">
-
 
     <div class="w-full flex justify-between items-end mb-5 gap-2">   
 
@@ -43,7 +41,6 @@ $all = array_reverse($all)
         
     </div>
 
-
     <div class="w-full ">
 
         <div class="mb-3 grid grid-cols-3 bg-[#ffffff] border-[1px] p-2 font-[700]">
@@ -54,9 +51,7 @@ $all = array_reverse($all)
         </div>
 
         <?php
-
             foreach ($all as $i) {
-
         ?>
             <div data-url="ed?item=<?=Intratum\Facturas\Util::getUUIDByID2('prod', $i["id2"]);?>" class="db_div bg-[#ffffff] border-[1px] mb-1 grid grid-cols-3 items-center p-2 rounded-xl">
 

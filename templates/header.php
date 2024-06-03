@@ -93,18 +93,18 @@
                     <?php if ($_SERVER['SERVER_PORT'] == '80') {?>
                         <div class="rounded-full border-black border-[1px] w-12 h-12">
                             <a href="/empresa/">
-                                <img class="object-scale-down rounded-full transition-all duration-4 hover:opacity-50 hover:blur-[1px] blur-none" src="http://<?= $_SERVER['HTTP_HOST'] ?>/static/images/<?=$profile["hash_logo"]?>" alt="Logo" />
+                                <img class="object-scale-down rounded-full transition-all duration-4 hover:opacity-50 hover:blur-[1px] blur-none" src="http://<?= $_SERVER['HTTP_HOST'] ?>/static/images/<?php if($profile["hash_logo"] != ""){ echo $profile["hash_logo"]; }else{ echo "default.png"; }?>" alt="Logo" />
                             </a>
                         </div>
                     <?php } else if ($_SERVER['SERVER_PORT'] == '443') {?>
                         <div class="rounded-full border-black border-[1px] w-12 h-12">
                             <a href="/empresa/">
-                                <img class="object-scale-down rounded-full transition-all duration-4 hover:opacity-50 hover:blur-[1px] blur-none" src="https://<?= $_SERVER['HTTP_HOST'] ?>/static/images/<?=$profile["hash_logo"]?>" alt="Logo" />
+                                <img class="object-scale-down rounded-full transition-all duration-4 hover:opacity-50 hover:blur-[1px] blur-none" src="https://<?= $_SERVER['HTTP_HOST'] ?>/static/images/<?php if($profile["hash_logo"] != ""){ echo $profile["hash_logo"]; }else{ echo "default.png"; }?>" alt="Logo" />
                             </a>
                         </div>
                     <?php } else if ($_SERVER['SERVER_PORT'] == '8086') {?>
                             <a href="/empresa/">
-                                    <img class="object-scale-down w-12 h-12 border-black border-[1px] rounded-full transition-all duration-4 hover:opacity-50  blur-none" src="http://<?= $_SERVER['HTTP_HOST'] ?>/static/images/<?=$profile["hash_logo"]?>" alt="Logo" />
+                                    <img class="object-scale-down w-12 h-12 border-black border-[1px] rounded-full transition-all duration-4 hover:opacity-50  blur-none" src="http://<?= $_SERVER['HTTP_HOST'] ?>/static/images/<?php if($profile["hash_logo"] != ""){ echo $profile["hash_logo"]; }else{ echo "default.png"; }?>" alt="Logo" />
                             </a>
                     <?php }?>
 

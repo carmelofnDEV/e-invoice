@@ -8,6 +8,13 @@ switch ($_SERVER["REQUEST_METHOD"]) {
 
         break;
 
+    case 'UPDATE':
+        $data = Intratum\Facturas\Traffic::getEntryPOST();
+
+        echo json_encode(Intratum\Facturas\User::update($data));
+
+        break;        
+
     case 'GET':
         $url = $_SERVER['REQUEST_URI'];
         $urlExp = explode('/', $url);

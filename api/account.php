@@ -4,9 +4,17 @@ switch ($_SERVER["REQUEST_METHOD"]) {
     case 'POST':
         $data = Intratum\Facturas\Traffic::getEntryPOST();
 
+
         if(!empty($_POST['action']) && $_POST['action'] == 'upload_logo'){
             if(isset($_FILES["imagen"])){
                 echo Intratum\Facturas\Account::saveLogo($_FILES["imagen"]);
+
+            }
+        }elseif(!empty($_POST['action']) && $_POST['action'] == 'upload_cert'){
+
+            if(isset($_FILES["cert"]) && $_POST["cert_pass"] != "") {
+                echo Intratum\Facturas\Account::saveCert($_FILES["cert"],$_POST["cert_pass"]);
+
 
             }
         }else{

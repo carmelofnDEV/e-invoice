@@ -7,48 +7,21 @@ $allSerials = Intratum\Facturas\Serial::all();
 
 $allTax = Intratum\Facturas\Tax::all();
 
-?>
-
-
-
-
-
-<?php
-
 $item = $_GET['item'];
 
 $id2 = Intratum\Facturas\Util::getID2ByUUID("inv_", $item);
 
 $invoice = Intratum\Facturas\Factura::get($params = ["id2" => $id2]);
 
-
-?>
-
-
-
-
-
-
-
-<?php
-
 $db2 = Intratum\Facturas\Environment::$db;
 
 ?>
-
-
-
-
 
 <form action="lib/add_producto.php" id="form" class="mt-5" method="update">
 
     <div class="flex flex-col lg:flex-row justify-center gap-[5%] px-[35px]">
 
-
-
         <input type="hidden" name="id_invoice" value="<?=$invoice["id"]?>">
-
-
 
         <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
 
@@ -74,8 +47,6 @@ $db2 = Intratum\Facturas\Environment::$db;
 
                 dark:focus:border-blue-500" placeholder="Nombre" required />
 
-
-
                 <div class="absolute top- left-0">
 
                     <ul id="lista"
@@ -87,11 +58,7 @@ $db2 = Intratum\Facturas\Environment::$db;
 
             </div>
 
-
-
-            <input type="hidden" id="cust-id" name="cust-id" value="<?=$invoice["id"]?>">
-
-
+            <input type="hidden" id="cust-id" name="cust-id" value="<?=$invoice["issuer_id"]?>">
 
             <div id="campo-apellidos" class="mb-5">
 
@@ -104,8 +71,6 @@ $db2 = Intratum\Facturas\Environment::$db;
 
             </div>
 
-
-
             <div>
 
                 <label for="email" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Correo</label>
@@ -116,8 +81,6 @@ $db2 = Intratum\Facturas\Environment::$db;
 
             </div>
 
-
-
             <div>
 
                 <label for="phone" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Teléfono</label>
@@ -127,8 +90,6 @@ $db2 = Intratum\Facturas\Environment::$db;
                 dark:focus:border-blue-500" placeholder="000-000-000" required="">
 
             </div>
-
-
 
             <div class="mb-5">
 
@@ -142,8 +103,6 @@ $db2 = Intratum\Facturas\Environment::$db;
 
             </div>
 
-
-
             <div class="mb-5">
 
                 <label for="address_2" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Dirección
@@ -155,8 +114,6 @@ $db2 = Intratum\Facturas\Environment::$db;
                 dark:focus:border-blue-500" placeholder="Direccion 1" />
 
             </div>
-
-
 
             <div class="mb-5">
 
@@ -170,8 +127,6 @@ $db2 = Intratum\Facturas\Environment::$db;
 
             </div>
 
-
-
             <div class="mb-5">
 
                 <label for="country" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">País</label>
@@ -181,8 +136,6 @@ $db2 = Intratum\Facturas\Environment::$db;
                 dark:focus:border-blue-500" placeholder="País" required />
 
             </div>
-
-
 
             <div class="mb-5">
 
@@ -195,8 +148,6 @@ $db2 = Intratum\Facturas\Environment::$db;
 
             </div>
 
-
-
             <div class="mb-5">
 
                 <label for="city" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Ciudad</label>
@@ -207,15 +158,9 @@ $db2 = Intratum\Facturas\Environment::$db;
 
             </div>
 
-
-
             <input type="hidden" name="type" value="<?=$invoice["type"]?>">
 
             <input id="autoComp" type="hidden" name="autoComp" value="false">
-
-
-
-
 
             <div class="mb-5">
 
@@ -235,8 +180,6 @@ $db2 = Intratum\Facturas\Environment::$db;
 
             </div>
 
-
-
             <div class="mb-5">
 
                 <label for="NIF" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">NIF</label>
@@ -249,23 +192,17 @@ $db2 = Intratum\Facturas\Environment::$db;
 
         </div>
 
-
-
         <!-- ############################################################################################################################################################################ -->
 
         <!-- ############################################################################################################################################################################ -->
 
         <!-- ############################################################################################################################################################################ -->
-
-
 
         <div class="grid grid-cols-3 gap-5 mt-[50px] lg:mt-0">
 
             <div class="flex flex-col col-span-3">
 
                 <h2 class="text-center font-[600] text-[20px] mb-5 col-span-3">Datos de la factura</h2>
-
-
 
                 <div class="flex flex-row gap-5">
 
@@ -293,8 +230,6 @@ $db2 = Intratum\Facturas\Environment::$db;
 
                     </div>
 
-
-
                     <div class="mb-5 min-w-[35%]">
 
                         <label for="description"
@@ -305,8 +240,6 @@ $db2 = Intratum\Facturas\Environment::$db;
                 dark:focus:border-blue-500" placeholder="Descripción del producto"></textarea>
 
                     </div>
-
-
 
                     <div class="mb-5 min-w-[10%]">
 
@@ -332,8 +265,6 @@ $db2 = Intratum\Facturas\Environment::$db;
 
                     </div>
 
-
-
                     <div class="mb-5 flex justify-center items-center">
 
                         <button id="boton-tax" data-modal-target="crud-modal" data-modal-toggle="crud-modal"
@@ -346,13 +277,9 @@ $db2 = Intratum\Facturas\Environment::$db;
 
                     </div>
 
-
-
                     <div class="mb-5 min-w-[1px] border-[2px] border-[#362faa]">
 
                     </div>
-
-
 
                     <div class="mb-5">
 
@@ -364,8 +291,6 @@ $db2 = Intratum\Facturas\Environment::$db;
                 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" />
 
                     </div>
-
-
 
                     <div id="lineitems">
 
@@ -422,18 +347,7 @@ foreach ($results as $i) {
 }
 
 ?>
-
-
-
                     </div>
-
-
-
-
-
-
-
-
 
                 </div>
 
@@ -455,15 +369,9 @@ foreach ($results as $i) {
 
                             <th class="border border-gray-400 px-4 py-2">Subtotal</th>
 
-
-
                             <th class="border border-gray-400 px-4 py-2">Impuestos</th>
 
                             <th class="border border-gray-400 px-4 py-2">Eliminar </th>
-
-
-
-
 
                         </tr>
 
@@ -478,7 +386,6 @@ foreach ($results as $i) {
 $calcTaxs = [];
 $aftertax = [];
 $aftertaxOk = [];
-
 $total = 0;
 $subtotal = 0;
 
@@ -544,11 +451,7 @@ foreach ($results as $i) {
             ];
             $aftertax[] = $aftertax_item;
 
-
         }
-
-
-        
 
         $listaTaxs = $listaTaxs . "<li>" . $tax_item[0]["name"] . " " . $tax_item[0]["value"] . "%</li>";
         $contador_taxs += 1;
@@ -577,19 +480,11 @@ foreach ($results as $i) {
 
 ?>
 
-
-
                     </tbody>
 
                 </table>
 
-
-
-
-
             </div>
-
-
 
             <div id="total-div" class=" text-[20px] flex items-end flex-col col-span-3">
 
@@ -600,8 +495,6 @@ foreach ($results as $i) {
                         <h2>Subtotal</h2>
 
                         <h2 id="subtotal"><?=round(($invoice["subtotal"] / 100), 2)?> €</h2>
-
-
 
                     </div>
 
@@ -623,29 +516,21 @@ foreach ($results as $i) {
 
                     </div>
 
-
-
                 </div>
 
             </div>
 
         </div>
 
-
-
         <!-- ############################################################################################################################################################################ -->
 
         <!-- ############################################################################################################################################################################ -->
 
         <!-- ############################################################################################################################################################################ -->
-
-
 
         <div class="min-w-[15%] mt-[50px] lg:mt-0">
 
             <h2 class="text-center font-[600] text-[20px] mb-5">Datos de la factura</h2>
-
-
 
             <div class="mb-10">
 
@@ -659,8 +544,6 @@ foreach ($results as $i) {
 
             </div>
 
-
-
             <?php if ($invoice["type"] == "1") {?>
 
             <div class="mb-10">
@@ -669,8 +552,6 @@ foreach ($results as $i) {
                     numero de factura</label>
 
                 <div class="flex mb-10">
-
-
 
                     <select onchange="" value="<?=$invoice["serial_id"]?>" name="invoice_serial"
                         id="select_serials" class="w-[30%] bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block  p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white
@@ -684,8 +565,6 @@ foreach ($results as $i) {
                         <?php }?>
 
                     </select>
-
-
 
                     <input type="number" value="<?=$invoice["invoice_number"]?>" name="invoice_number"
                         id="invoice_number" class="w-full bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500
@@ -705,17 +584,11 @@ foreach ($results as $i) {
 
                 <div class="flex mb-10">
 
-
-
-
-
                     <input type="text" name="name" id="name" value="<?=$invoice["name"]?>" class="w-full bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500
 
                         dark:focus:border-blue-500">
 
                 </div>
-
-
 
                 <input type="hidden" name="invoice_serial" value="0">
 
@@ -724,12 +597,6 @@ foreach ($results as $i) {
             </div>
 
             <?php }?>
-
-
-
-
-
-
 
             <div class="mb-10">
 
@@ -755,17 +622,11 @@ foreach ($results as $i) {
                         class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full ps-10 p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
                         placeholder="Selecciona una fecha">
 
-
-
                 </div>
 
             </div>
 
-
-
         </div>
-
-
 
     </div>
 
@@ -793,8 +654,6 @@ foreach ($results as $i) {
 <!-- ############################################################################################################################################################################ -->
 
 <!-- ############################  MODAL ############################ -->
-
-
 
 <!-- Main modal -->
 
@@ -844,8 +703,6 @@ foreach ($results as $i) {
                 </ul>
             </div>
 
-
-
             <div class="p-5">
 
                 <div class="flex items-center justify-center mt-5 gap-[10px] mb-5">
@@ -871,30 +728,11 @@ foreach ($results as $i) {
 
     </div>
 
-
-
-
-
 </div>
 
 <!-- ############################################################################################################################################################################ -->
 
 <!-- ############################################################################################################################################################################ -->
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 <!--
 
    *
@@ -915,18 +753,6 @@ foreach ($results as $i) {
 
     -->
 
-
-
-
-
-
-
-
-
-
-
-
-
 <!-- ############################################################################################################################################################################ -->
 
 <!-- ############   FORMULARIO FACTURA ########################################################################################################################################################## -->
@@ -946,24 +772,18 @@ $(document).ready(function() {
 
     addTaxText()
 
-
-
     $('#form').submit(function(e) {
 
         e.preventDefault();
 
-
-
         var data = $(this).serializeJSON();
-
 
         data["invoice_total"] = invoice_total
 
         data["invoice_subtotal"] = invoice_subtotal
 
         data.invoice_date = moment(data.invoice_date, 'MM/DD/YYYY').format('YYYY-MM-DD');
-
-
+        console.log(data)
         $.ajax({
 
             type: 'UPDATE',             
@@ -988,9 +808,12 @@ $(document).ready(function() {
                         window.location.href = '/facturas/';
                     }
 
-                    exit();
 
 
+
+                }if (d.success == false && d.errors) {
+
+                    setNotification(d.errors)
 
                 }
 
@@ -998,21 +821,9 @@ $(document).ready(function() {
 
         });
 
-
-
-
-
     });
 
 });
-
-
-
-
-function recalcular(){
-
-
-}
 
 function selectCategory(item) {
 
@@ -1037,12 +848,7 @@ function selectCategory(item) {
         $("#div-responsive-1").removeClass("col-span-2")
 
     }
-
-
-
 }
-
-
 
 var aftertax =<?=json_encode($aftertax)?>;
 
@@ -1069,10 +875,7 @@ function addTax() {
 
     }
 
-
-
     let taxValid = checkTaxs(itemTax.type);
-
 
     if (taxValid) {
 
@@ -1080,10 +883,16 @@ function addTax() {
 
 
         addTaxText()
+        
     } else {
-        alert("No puedes añadir dos impuestos del mismo tipo.");
-    }
 
+        errors = [{
+            "error":"repeat_tax",
+            "message":"No puedes añadir dos impuestos del mismo tipo.",
+        }]
+        setNotification(errors)
+
+    }
 
 }
 
@@ -1099,10 +908,7 @@ function checkTaxs(type) {
     return valid
 }
 
-
 function addTaxText() {
-
-
 
     let boton = document.getElementById("boton-tax");
     let listaTax = document.getElementById("lista-modal-taxs");
@@ -1110,8 +916,6 @@ function addTaxText() {
     let buttonTitle = "<ul>";
 
     aftertax.forEach(element => {
-
-
 
         if (true) {
             buttonTitle += "<li>" + element.name + " / " + element.value + "</li>";
@@ -1152,8 +956,6 @@ function deleteItemTax(e) {
     let ul = e.parentNode;
     ul.removeChild(e);
 
-
-
     aftertax.forEach((element, index) => {
         let type = element.type;
         let id = e.id;
@@ -1165,7 +967,6 @@ function deleteItemTax(e) {
     });
 
     addTaxText()
-
 }
 
 function addItem() {
@@ -1182,8 +983,6 @@ function addItem() {
     var id_item = $('#id-item').val();
 
     if (item != "" && quantity != "") {
-
-
 
         let subtotal = price * quantity
 
@@ -1202,11 +1001,7 @@ function addItem() {
 
         });
 
-
-
         taxesList += '</ul>';
-
-
 
         var newRow = '<tr>' +
 
@@ -1230,12 +1025,6 @@ function addItem() {
         '</td>' +
 
         '</tr>';
-
-
-
-
-
-
 
         $('#itemTableBody').append(newRow);
 
@@ -1264,13 +1053,6 @@ function addItem() {
 
         });
 
-
-
-
-
-
-
-
         $('#autocomp-item').val("");
 
         $('#description').val("");
@@ -1281,15 +1063,7 @@ function addItem() {
 
         $('#quantity').val("");
 
-
-
-
-
-
-
-
         keyitems++;
-
 
         aftertax.forEach(element => {
 
@@ -1307,23 +1081,11 @@ function addItem() {
             }
         });
 
-
-
         updateTotalMenu();
-
 
     }
 
 }
-
-
-
-
-
-
-
-
-
 
 function updateTotalMenu() {
 
@@ -1332,8 +1094,6 @@ function updateTotalMenu() {
         $("#total-div").removeClass("hidden")
 
     }
-
-
 
     $("#totalMenu").empty();
     console.log("calculados",calcTaxs)
@@ -1348,26 +1108,14 @@ function updateTotalMenu() {
 
     });
 
-
-
     $("#subtotal").text(invoice_subtotal.toFixed(2) + "€")
 
-
-
-
-
-
     invoice_total = invoice_subtotal;
-
-
-
 
     var tex_total2 = 0;
     calcTaxs.forEach(element => {
 
         tex_total2 += element.tax_total;
-
-      //  invoice_total = invoice_total + parseFloat(element.tax_total)
 
     });
     tex_total2 = tex_total2.toFixed(2)
@@ -1377,10 +1125,6 @@ function updateTotalMenu() {
 
     $("#total").text(finalTotal.toFixed(2) + "€")
 
-
-
-
-
     if (invoice_total == 0) {
 
         $("#total-div").addClass("hidden")
@@ -1389,33 +1133,17 @@ function updateTotalMenu() {
 
 }
 
-
-
-
-
-
-
-
-
-
 // <!-- ############################################################################################################################################################################ -->
 
 // <!-- ############ FORMULARIO IMPUESTOS (MODAL) ########################################################################################################################################################## -->
 
 // <!-- ############################################################################################################################################################################ -->
 </script>
-
-
-
 <!-- ############################################################################################################################################################################ -->
 
 <!-- ############ AUTOCOMPLETADO CLIENTES FACTURA ########################################################################################################################################################## -->
 
 <!-- ############################################################################################################################################################################ -->
-
-
-
-
 
 <script>
 var delay = 200;
@@ -1426,15 +1154,9 @@ $("#searchAccount").eq(0).bind("keyup paste", function() {
 
     clearTimeout(timerId);
 
-
-
     var value = $(this).val();
 
-
-
     timerId = setTimeout(function() {
-
-
 
         after = null;
 
@@ -1445,8 +1167,6 @@ $("#searchAccount").eq(0).bind("keyup paste", function() {
     }, delay);
 
 });
-
-
 
 function search(value) {
 
@@ -1480,25 +1200,15 @@ function search(value) {
 
         },
 
-
-
     });
 
-
-
-
-
 }
-
-
 
 $(document).on('click', '.element-li', function() {
 
     $('#lista').empty();
 
     $('#lista').addClass("hidden");
-
-
 
     $.ajax({
 
@@ -1519,8 +1229,6 @@ $(document).on('click', '.element-li', function() {
 
 
 });
-
-
 
 function autocompleteForm(response) {
 
@@ -1551,24 +1259,33 @@ function autocompleteForm(response) {
 
     $('#cust-id').val(response.id);
 
-
-
     $('#autoComp').val(true);
 
 }
 </script>
 
+<style>
+    @keyframes slideOutLeft {
+        0% {
+            transform: translateX(0);
+        }
+        100% {
+            transform: translateX(100%);
+            opacity: 0;
+        }
 
+    }
 
-
+  .slide-out-left {
+    animation: slideOutLeft 0.3s ease-out forwards;
+  }
+</style>
 
 <!-- ############################################################################################################################################################################ -->
 
 <!-- ############ AUTOCOMPLETADO ITEMS ########################################################################################################################################################## -->
 
 <!-- ############################################################################################################################################################################ -->
-
-
 
 <script>
 var delay = 200;
@@ -1579,15 +1296,9 @@ $("#autocomp-item").eq(0).bind("keyup paste", function() {
 
     clearTimeout(timerId);
 
-
-
     var value = $(this).val();
 
-
-
     timerId = setTimeout(function() {
-
-
 
         after = null;
 
@@ -1598,8 +1309,6 @@ $("#autocomp-item").eq(0).bind("keyup paste", function() {
     }, delay);
 
 });
-
-
 
 function searchItem(value) {
 
@@ -1628,30 +1337,19 @@ function searchItem(value) {
                 $('#lista-item').append('<li data-id="' + element.id + '"' +
                     'class="element-li-item w-full px-4 py-2 border-b border-gray-200 dark:border-gray-600">' +
                     element.title + '</li>');
-
             });
 
         },
 
-
-
     });
 
-
-
-
-
 }
-
-
 
 $(document).on('click', '.element-li-item', function() {
 
     $('#lista-item').empty();
 
     $('#lista-item').addClass("lista-item");
-
-
 
     $.ajax({
 
@@ -1664,21 +1362,13 @@ $(document).on('click', '.element-li-item', function() {
         success: function(response) {
 
             autocompleteFormItems(response)
-
         },
 
     });
 
-
-
 });
 
-
-
 function autocompleteFormItems(response) {
-
-
-
 
     $('#autocomp-item').val(response.title);
 
@@ -1690,16 +1380,7 @@ function autocompleteFormItems(response) {
 
     $('#quantity').val(1);
 
-
-
-
-
 }
-
-
-
-
-
 
 function removeListItem(index) {
 
@@ -1709,7 +1390,6 @@ function removeListItem(index) {
 
     console.log(calcTaxs)
     console.log(aftertax)
-
 
     aftertax.forEach(element => {
         let existe = calcTaxs.findIndex(elemento => elemento.id == element.id);
@@ -1726,16 +1406,11 @@ function removeListItem(index) {
                 calcTaxs.push(invoiceTax)
             } else {
 
-
                 calcTaxs[existe].tax_total = Math.abs(calcTaxs[existe].tax_total) - ((Math.abs(element.value) / 100) * subTotalItem);
-
 
             }
         }
     });
-
-
-
 
     invoice_subtotal = invoice_subtotal - subTotalItem;
 
@@ -1746,10 +1421,60 @@ function removeListItem(index) {
 }
 
 
+function setNotification(errors) {
+    errors.forEach(e => {
+        console.log(e.error);
 
-// function removeListItem(index) {
+        const toast = document.createElement('div');
+        toast.className = 'flex items-center w-full max-w-xs p-4 mb-4 text-gray-500 bg-white rounded-lg shadow dark:text-gray-400 dark:bg-gray-800';
+        toast.setAttribute('role', 'alert');
 
-//     $(".hidden_item_" + index).remove();
+        const iconContainer = document.createElement('div');
+        iconContainer.className = 'inline-flex items-center justify-center flex-shrink-0 w-8 h-8 text-red-500 bg-red-100 rounded-lg dark:bg-red-800 dark:text-red-200';
+        const icon = document.createElement('div');
+        icon.setAttribute('viewBox', '0 0 20 20');
+        icon.innerHTML = '<svg class="w-5 h-5" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 20 20"><path d="M10 .5a9.5 9.5 0 1 0 9.5 9.5A9.51 9.51 0 0 0 10 .5Zm3.707 11.793a1 1 0 1 1-1.414 1.414L10 11.414l-2.293 2.293a1 1 0 0 1-1.414-1.414L8.586 10 6.293 7.707a1 1 0 0 1 1.414-1.414L10 8.586l2.293-2.293a1 1 0 0 1 1.414 1.414L11.414 10l2.293 2.293Z"/></svg>';
+        iconContainer.appendChild(icon);
 
-// }
+        const message = document.createElement('div');
+        message.className = 'ms-3 text-sm font-normal';
+        message.textContent = e.message;
+
+        const button = document.createElement('button');
+        button.className = 'ms-auto -mx-1.5 -my-1.5 bg-white text-gray-400 hover:text-gray-900 rounded-lg focus:ring-2 focus:ring-gray-300 p-1.5 hover:bg-gray-100 inline-flex items-center justify-center h-8 w-8 dark:text-gray-500 dark:hover:text-white dark:bg-gray-800 dark:hover:bg-gray-700';
+        button.setAttribute('type', 'button');
+        button.setAttribute('aria-label', 'Close');
+        button.innerHTML = '<svg class="w-3 h-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 14 14"><path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m1 1 6 6m0 0 6 6M7 7l6-6M7 7l-6 6"/></svg>';
+        
+        button.addEventListener('click', () => {
+            toast.classList.add('slide-out-left');
+            setTimeout(() => {
+                toast.remove();
+            });
+        });
+
+        toast.appendChild(iconContainer);
+        toast.appendChild(message);
+        toast.appendChild(button);
+
+        toast.style.position = 'fixed';
+        toast.style.zIndex = '100';
+        toast.style.top = '20px'; 
+        toast.style.right = '20px'; 
+
+        const notificationsContainer = document.getElementById('notifications');
+        if (notificationsContainer) {
+            notificationsContainer.appendChild(toast);
+        } else {
+            document.body.appendChild(toast);
+        }
+
+        setTimeout(() => {
+            toast.classList.add('slide-out-left');
+            setTimeout(() => {
+                toast.remove();
+            }, 500);
+        }, 3000);
+    });
+}
 </script>

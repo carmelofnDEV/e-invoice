@@ -2,45 +2,67 @@
 
 namespace Intratum\Facturas;
 
+use josemmo\Facturae\Facturae;
+use josemmo\Facturae\FacturaeParty;
+use josemmo\Facturae\FacturaeItem;
+use josemmo\Facturae\Common\FacturaeSigner;
+
+
+
 class Factura
 {
 
     public static function insert(array $data)
     {
-
         $subtotal = 0;
         $totaltaxs = 0;
+        $errors = [];
+
 
         $db = Environment::$db;
 
-        foreach ($data["items"] as $i) {
+        if(!empty($data["items"])){
+            foreach ($data["items"] as $i) {
 
-            $subtotal += floatVal($i["price"]) * $i["quantity"];
-
-            if (array_key_exists('tax_0', $i)) {
-                $tax = explode("/", $i["tax_0"]);
-
-                $db->where('id2', $tax[3]);
-                $results = $db->get('tax');
-
-                $totaltaxs += round($i["subtotal"] * ($tax[2] / 100), 2);
-
+                $subtotal += floatVal($i["price"]) * $i["quantity"];
+    
+                if (array_key_exists('tax_0', $i)) {
+                    $tax = explode("/", $i["tax_0"]);
+    
+                    $db->where('id2', $tax[3]);
+                    $results = $db->get('tax');
+    
+                    $totaltaxs += round($i["subtotal"] * ($tax[2] / 100), 2);
+    
+                }
+    
+                if (array_key_exists('tax_1', $i)) {
+                    $tax = explode("/", $i["tax_1"]);
+    
+                    $db->where('id2', $tax[3]);
+                    $results = $db->get('tax');
+    
+                    $totaltaxs += round($i["subtotal"] * ($tax[2] / 100), 2);
+    
+                }
             }
+        }else{
 
-            if (array_key_exists('tax_1', $i)) {
-                $tax = explode("/", $i["tax_1"]);
+            $errors[] = [
+                "error" => "no_items",
+                "message" => "Debes añadir al menos un item.",
+            ];
 
-                $db->where('id2', $tax[3]);
-                $results = $db->get('tax');
-
-                $totaltaxs += round($i["subtotal"] * ($tax[2] / 100), 2);
-
-            }
+            return [
+                'success' => false,
+                'errors' => $errors,
+            ];
         }
 
         $data['total'] = $subtotal + $totaltaxs;
 
         //$all = Environment::$db->get('customer');
+
         $invoice_items = $data["items"];
 
         $search = $data['first_name'] . ' ' . $data['last_name'] . '
@@ -188,15 +210,12 @@ class Factura
         Environment::$db->where('id2', $invoice["id"]);
         $items = Environment::$db->get('invoice_item');
 
-
-
         foreach ($items as $i) {
 
             Environment::$db->where('invoice_item_id', $i["id"]);
             Environment::$db->delete('invoice_item_tax');
             
         }
-
         
         Environment::$db->where('invoice_id', $invoice["id"]);
         Environment::$db->delete('invoice_item');
@@ -208,8 +227,6 @@ class Factura
         Environment::$db->delete('invoice_setting');
 
         return ["success" => true];
-
-
 
     }
 
@@ -273,6 +290,8 @@ class Factura
             $data["name"] = $prefix['serial_tag'] . $data['invoice_number'];
 
         }
+
+
         $data = [
 
             'user_id' => Util::getSessionUser()["id"],
@@ -410,8 +429,135 @@ class Factura
         return $all;
     }
 
-    public static function generarPDF($id2)
-    {
+    
+    public static function generarFacturae($id2,$acc) {
+        
+        $db2 = Environment::$db;
+    
+        $hash = hash('sha256', $id2 . '50E7RQwnF050');
+    
+        $db2->where('id2', $id2);
+        $factura = $db2->getOne('invoice');
+        if (!$factura) {
+            echo "Factura no encontrada";
+            return;
+        }
+    
+        $db2->where('id', $factura["serial_id"]);
+        $serial = $db2->get('serial');
+        if (empty($serial)) {
+            echo "Serial no encontrado";
+            return;
+        }
+    
+        $db2->where('invoice_id', $factura["id"]);
+        $items = $db2->get('invoice_item');
+        if (empty($items)) {
+            echo "Items de factura no encontrados";
+            return;
+        }
+    
+        $db2->where('id', $factura["recipient_id"]);
+        $buyer = $db2->get('customer');
+        if (empty($buyer)) {
+            echo "Comprador no encontrado";
+            return;
+        }
+        $buyer = $buyer[0];
+    
+        $fac = new Facturae();
+        $fac->setNumber($serial[0]["serial_tag"], $factura["invoice_number"]);
+        $fac->setIssueDate($factura["invoice_date"]);
+    
+
+    
+        $fac->setSeller(new FacturaeParty([
+            "taxNumber" => $acc["NIF"],
+            "name"      => $acc["first_name"],
+            "address"   => ($acc["address1"] . $acc["address2"]),
+            "postCode"  => $acc["zip"],
+            "town"      => $acc["city"],
+            "province"  => $acc["state"]
+        ]));
+    
+        $fac->setBuyer(new FacturaeParty([
+            "isLegalEntity" => false,
+            "taxNumber"     => $buyer["NIF"],
+            "name"          => $buyer["first_name"],
+            "firstSurname"  => $buyer["last_name"],
+            "address"       => ($buyer["address1"] . $buyer["address2"]),
+            "postCode"      => $buyer["zip"],
+            "town"          => $buyer["city"],
+            "province"      => $buyer["state"]
+        ]));
+    
+        foreach ($items as $item) {
+            $db2->where('id', $item["id_item"]);
+            $product = $db2->getOne('product');
+            if (!$product) {
+                echo "Producto no encontrado para el item " . $item["id"];
+                continue;
+            }
+    
+            $db2->where('invoice_item_id', $item["id"]);
+            $taxs = $db2->get('invoice_item_tax');
+            
+            $taxes = [];
+
+            $withheld = [];
+            foreach ($taxs as $i) {
+                $db2->where('id', $i["tax_id"]);
+                $tax = $db2->getOne('tax');
+                if (!$tax) {
+                    echo "Impuesto no encontrado para el tax_id " . $i["tax_id"];
+                    continue;
+                }
+                if ($tax["type"] == 1) {
+                 
+                    $taxes[Facturae::TAX_IVA] = $i["tax_value"];
+
+
+                }
+    
+                if ($tax["type"] == 0) {
+                    $taxes[Facturae::TAX_IRPF] = $i["tax_value"];
+
+                }
+            }
+
+
+            $fac->addItem(new FacturaeItem([
+                "name" => $product["title"],
+                "description" => $product["description"],
+                "quantity" => $item["quantity"],
+                "unitPriceWithoutTax" => ($item["subtotal"] / $item["quantity"]),
+                "taxes" =>  $taxes,
+            ]));
+           
+        }
+
+        
+        $db2->where('setting', 1);
+        $db2->where('target_account_id', $acc["id"]);
+        $setting = $db2->get('account_setting')[0];
+
+        
+
+        $enc = new \Intratum\Facturas\Encryption();
+
+        $enc->setKey('private');
+        $pass = $enc->decode($setting["value"]);
+
+        $cert_file = ('assets/certs/'.$acc["hash_cert"]);
+        
+        $resp = $fac->sign($storeOrCertificate = $cert_file, $privateKey=null, $passphrase=$pass);
+
+        $resp == false;
+
+        $fac->export("einvoices/$hash.xsig");
+    }
+
+    public static function generarPDF($id2){
 
         $db2 = Environment::$db;
 
@@ -452,6 +598,13 @@ class Factura
 
     public static function publicarFactura($id2)
     {
+
+        $acc = User::getUserAccount(Util::getSessionUser()["id"]);
+
+        if ($acc["hash_cert"] != "") {
+            self::generarFacturae($id2,$acc);
+        }
+
 
         self::generarPDF($id2);
         $db2 = Environment::$db;
@@ -639,5 +792,121 @@ class Factura
         ];
 
     }
+
+
+    public static function checkRecurring($token) {
+        if ($token === "token1") {
+
+            $db = Environment::$db;
+            $db->where('operation', 1);
+            $db->where('status', "planned");
+            $allTask = $db->get('task', 10);
+    
+            $resp_tasks = [];
+    
+            foreach ($allTask as $task) {
+
+
+                if (date('Y-m-d') >= $task["release_date"]) {
+
+                    $data["status"] = "in_progres";
+                    $db->where('id', $task["id"]);
+                    $allTask = $db->update('task',$data);
+    
+                    $db->where('id', $task["object_id"]);
+                    $invoice = $db->get('invoice')[0];
+    
+                    $current_id = $invoice['id'];
+                    unset($invoice['id']);
+                    $invoice['created'] = Util::getDate();
+                    $invoice['updated'] = Util::getDate();
+                    $invoice['invoice_date'] = Util::getDate();
+                    $invoice['id2'] = Util::genUUID();
+
+                    if ($invoice["type"] == 1) {
+                        $serial_options = self::getSerialNum($invoice["serial_id"]);
+
+                        $invoice['name'] = ($serial_options["tag"].$serial_options["number"]);
+                        $invoice['invoice_number'] = $serial_options["number"];
+
+
+                    }
+
+    
+                    $invoice_id = $db->insert('invoice', $invoice);
+
+
+
+                    $parms["OPTIONS"] = [
+                    ["VALUE" => true,
+                        "OPTION" => "IS_RECURRING"]
+                    ];
+                    InvoiceSetting::save($parent_id=$invoice_id,$params=$parms);
+    
+                    $db->where('invoice_id', $current_id);
+                    $invoice_items = $db->get('invoice_item');
+    
+                    
+                    foreach ($invoice_items as $item) {
+
+                        $db->where('invoice_item_id', $item["id"]);
+                        $invoice_items_taxs = $db->get('invoice_item_tax');
+                        $current_item_id = $item['id'];
+                        unset($item['id']);
+    
+                        $item['created'] = Util::getDate();
+                        $item['updated'] = Util::getDate();
+                        $item['invoice_id'] = $invoice_id;
+
+                        $item['id2'] = Util::genUUID();
+                        $invoice_item_id = $db->insert('invoice_item', $item);
+    
+                        foreach ($invoice_items_taxs as $item_tax) {
+
+                            unset($item_tax['id']);
+                            $item_tax['invoice_item_id'] = $invoice_item_id;
+                            $item_tax['created'] = Util::getDate();
+                            $item_tax['updated'] = Util::getDate();
+                            $item_tax['id2'] = Util::genUUID();
+    
+                            $db->insert('invoice_item_tax', $item_tax);
+                        }
+                    }
+
+                    $data["status"] = "finished";
+                    $db->where('id', $task["id"]);
+                    $allTask = $db->update('task',$data);
+
+                    $resp_tasks[] = $task["object_id"];
+                }
+            }
+            return json_encode($resp_tasks);
+        }
+        return false;
+    }
+    
+    public static function getSerialNum($serial_id) {
+
+        $db = Environment::$db;
+        $db->where('id', $serial_id);
+        $serial = $db->get('serial')[0];
+
+        if ($serial) {
+
+            $db->where('serial_id', $serial_id);
+            $invoices = $db->get('invoice');
+
+            $num_invoices = count($invoices);
+
+            $number = $serial["serial_number"];
+
+            return ["tag"=> $serial["serial_tag"],"number"=>$number + $num_invoices +1];
+
+        }else{
+            return false;
+        }
+
+    }
+    
 
 }

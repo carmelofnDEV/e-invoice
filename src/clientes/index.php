@@ -17,7 +17,7 @@ $all = array_reverse($all)
 
 <div class="w-full flex justify-between items-center mb-5">   
 
-    <div class="ml-12 flex justify-center items-center" >
+    <div class=" flex justify-center items-center" >
 
         <button id="dropdownCust" data-dropdown-toggle="dropdown-cust" class="flex bg-[#1A1917] rounded-md px-3 py-1 justify-center items-center gap-3 " type="button">
             <p class="text-white text-[20px]">Nuevo</p>
@@ -38,7 +38,6 @@ $all = array_reverse($all)
                 </a>
             </div>
 
-
         </div>        
 
     </div>
@@ -58,7 +57,6 @@ $all = array_reverse($all)
 
 </div>
 
-
 <div class="w-full ">
     <div class="mb-3 grid grid-cols-6 bg-[#ffffff] border-[1px] p-2 font-[700]">
         <h2>Nombre</h2>
@@ -67,7 +65,6 @@ $all = array_reverse($all)
         <h2>NIF</h2>
         <h2>Documentos</h2>
         <h2>Total</h2>
-
 
     </div>
 
@@ -144,8 +141,6 @@ $all = array_reverse($all)
 
                                 <?php }?>
 
-
-
                                 </ul>
                             </div>
                             <div class="place-self-end" data-popper-arrow></div>
@@ -157,7 +152,6 @@ $all = array_reverse($all)
         <?php }?>
     </div>
 </div>
-
 
 </div>
 
@@ -175,8 +169,6 @@ $all = array_reverse($all)
         let busqueda = `?q=${$('#searchInput').val()}`
         window.location.href = busqueda;
     }
-
-
 
 </script>
 

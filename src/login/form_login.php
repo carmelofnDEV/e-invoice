@@ -26,6 +26,9 @@
                     <div class="g-recaptcha" data-sitekey="6LfmCqwpAAAAAJMZOpuaSyba77TytuEm6QpzDEj1"></div>
                     <button type="submit" class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm w-full sm:w-auto px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">Login</button>
                     <p class="text-sm font-light text-gray-500 dark:text-gray-400">
+                        ¿Has olvidado la contraseña? <a href="/forgot_password/" class="font-medium text-primary-600 hover:underline dark:text-primary-500">Cambiar contraseña</a>
+                    </p>
+                    <p class="text-sm font-light text-gray-500 dark:text-gray-400">
                         ¿Aún no tienes cuenta? <a href="/register/" class="font-medium text-primary-600 hover:underline dark:text-primary-500">Registrate</a>
                     </p>
                 </form>

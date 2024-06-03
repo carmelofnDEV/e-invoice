@@ -83,6 +83,48 @@ class User
 
     }
 
+
+    public static function update(array $data){
+        $errors= [];
+        
+        if (strlen($data["password"]) < 5) {
+            $errors[] = [
+                'params' => "password",
+                'message' => "La contraseña debe tener al menos 5 caracteres.",
+            ];
+        }
+
+        if ($data["password"] != $data["repeat_password"]) {
+            $errors[] = [
+                'params' => "repeat_password",
+                'message' => "Las  contraseñas deben ser iguales!",
+            ];
+        }
+
+
+        if (count($errors) != 0) {
+            return [
+                'success' => false,
+                'errors' => $errors,
+
+            ];
+
+        }else{
+            $new_data = [
+                "id2" => $data["id2"],
+                "password" => hash("sha256", $data["password"]),
+
+            ];
+            $db = Environment::$db;
+            $db->where('id2', $new_data["id2"]);
+            $db->update('user',$new_data);
+
+            return ['success' => true];
+        }
+
+
+    }
+
     public static function login(array $args)
     {
 
@@ -141,19 +183,7 @@ class User
         return $user;
     }
 
-    public static function update(array $data)
-    {
-        $db2 = Environment::$db;
 
-        $data["price"] = $data["price"] * 100;
-        $db2->where('id2', $data["id2"]);
-        if ($db2->update('product', $data)) {
-
-        } else {
-        }
-
-        return ['success' => true];
-    }
 
     public static function delete(array $data)
     {
@@ -178,9 +208,7 @@ class User
         return $all;
     }
 
-    public static function get(array $parms = [])
-    {
-
+    public static function get(array $parms = []){
         $db2 = Environment::$db;
         $db2->where('id2', $parms['id2']);
         $all = $db2->getOne('product');
@@ -210,11 +238,9 @@ class User
 
 
     public static function getUserAccount($id){
-
         $db2 = Environment::$db;
         $db2->where('user_id', $id);
         $acc_id = $db2->getOne('accountuser');
-
 
         $db2 = Environment::$db;
         $db2->where('id', $acc_id["account_id"]);
@@ -223,25 +249,93 @@ class User
 
     }
 
-    public static function forgotPassword($user_id){
+    public static function forgotPassword($email){
+
+        $db2 = Environment::$db;
+        $db2->where('email', $email);
+        $user = $db2->getOne('user');
+
+        if($user){
+
+            $enc = new \Intratum\Facturas\Encryption();
+
+            $enc->setKey('private');
+            $codi = $enc->encode(json_encode([$user["id"],time()]));
+    
+            if (!empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] == "on") {
+                $url = 'https://'.$_SERVER['HTTP_HOST'].'/passwordrecovery/'.$codi;
+            }else{
+                $url = 'http://'.$_SERVER['HTTP_HOST'].'/passwordrecovery/'.$codi;
+            }
+    
+            return self::sendPasswordMail($url,$email);
+
+        }else{
+            return false;
+        }
+    }
+
+    private static function sendPasswordMail($url,$userEmail){
+
+        $data = [
+            "link" => $url,
+        ];
+
+        ob_start();
+        require('templates/mail/forgotpassword.php');
+        $content = ob_get_clean();
+        $email = array(
+            'title' => 'Elige una nueva contraseña para e-invoice',
+            'content' => 'Elige una nueva contraseña para e-invoice',
+            'to' => $userEmail,
+            'content_html' => $content
+        );
+    
+       return Util::sendMail($email);
+    }
+
+    private static function sendInvoiceMail($data){
+        
+        return json_encode($mail);
+
+
+        $email = array(
+            'title' => 'Elige una nueva contraseña para e-invoice',
+            'content' => 'Elige una nueva contraseña para e-invoice',
+            'to' => $userEmail,
+            'content_html' => $content
+        );
+    
+       return Util::sendMail($email);
+    }
+
+    public static function checkValidToken($token){
 
         $enc = new \Intratum\Facturas\Encryption();
 
-
         $enc->setKey('private');
-        $codi = $enc->encode(json_encode([$user_id,time()]));
+        $codi = json_decode($enc->decode($token), true);
+        
+        $user_id = $codi[0];
+        $time = end($codi);
 
-        $urlExp = end(explode('/', $url));
-        if ($_SERVER['HTTPS'] == "on") {
-            return 'https://'.$_SERVER['HTTP_HOST'].'/passwordrecovery/'.$codi;
-        }else{
-            return 'http://'.$_SERVER['HTTP_HOST'].'/passwordrecovery/'.$codi;
+        if ($time >=  time()) {
+            return false;
         }
-       
+
+        $db = Environment::$db;
+        $db->where('id', $user_id);
+        $user = $db->getOne('user');
+
+        if($user){
+            return $user["id2"];
+        }
+
     }
+    
 
 
 
-}
+};
 
 

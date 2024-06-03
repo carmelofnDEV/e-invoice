@@ -19,6 +19,7 @@
     },
     "require": {
         "mikehaertl/phpwkhtmltopdf": "^2.5",
-        "defuse/php-encryption": "^2.4"
+        "defuse/php-encryption": "^2.4",
+        "josemmo/facturae-php": "^1.8"
     }
 }

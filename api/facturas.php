@@ -28,6 +28,8 @@ switch ($_SERVER["REQUEST_METHOD"]) {
             $data["cust-id"] =  $cust;
             }
 
+
+
 		    echo json_encode(Intratum\Facturas\Factura::insert($data));
 
         break;
@@ -60,7 +62,6 @@ switch ($_SERVER["REQUEST_METHOD"]) {
         break;
     case 'UPDATE':
             $data = Intratum\Facturas\Traffic::getEntryPOST();
-
 		    echo json_encode(Intratum\Facturas\Factura::update($data));
 
         break;

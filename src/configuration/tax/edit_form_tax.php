@@ -45,7 +45,7 @@ $tax = Intratum\Facturas\Tax::get($params = ["id2"=>$id2]);
 
 
 
-        <input type="hidden" name="id2">
+        <input type="hidden" name="id2" value="<?=$tax["id2"]?>">
 
         <button type="submit"
             class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm w-full sm:w-auto px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">Guardar
@@ -64,7 +64,6 @@ $(document).ready(function() {
         e.preventDefault();
 
         var data = $(this).serializeJSON();
-        console.log(data);
 
         $.ajax({
             type: 'UPDATE',
@@ -73,10 +72,9 @@ $(document).ready(function() {
             contentType: 'application/json',
             data: JSON.stringify(data),
             success: function(d) {
-                if (d.success == true) {
-                    console.log("trueeeee")
+                if (d.success != false ) {
+                    console.log(data)
                     window.location.href = '/configuracion/impuestos/';
-                    exit();
                 }
             }
         });

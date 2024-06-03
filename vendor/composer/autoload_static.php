@@ -13,6 +13,10 @@ class ComposerStaticInit5aaa64e55394b8f794e0da9ef70a889a
             'mikehaertl\\tmp\\' => 15,
             'mikehaertl\\shellcommand\\' => 24,
         ),
+        'j' => 
+        array (
+            'josemmo\\Facturae\\' => 17,
+        ),
         'I' => 
         array (
             'Intratum\\Facturas\\' => 18,
@@ -35,6 +39,10 @@ class ComposerStaticInit5aaa64e55394b8f794e0da9ef70a889a
         'mikehaertl\\shellcommand\\' => 
         array (
             0 => __DIR__ . '/..' . '/mikehaertl/php-shellcommand/src',
+        ),
+        'josemmo\\Facturae\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/josemmo/facturae-php/src',
         ),
         'Intratum\\Facturas\\' => 
         array (

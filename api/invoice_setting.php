@@ -6,13 +6,9 @@ switch ($_SERVER["REQUEST_METHOD"]) {
 
         $data = Intratum\Facturas\Traffic::getEntryPOST();
 
-        $invoice = Intratum\Facturas\Factura::get($params = ["id2" => $data]);
+        $invoice = Intratum\Facturas\Factura::get($params = ["id2" => $data["id2"]]);
 
-        $params=[
-            "OPTION" => "PAYMENT_DATE"
-        ];
-
-        $result = Intratum\Facturas\InvoiceSetting::save($invoice["id"],$params);
+        $result = Intratum\Facturas\InvoiceSetting::save($invoice["id"],$data);
 
         echo json_encode($result);
      
@@ -23,13 +19,9 @@ switch ($_SERVER["REQUEST_METHOD"]) {
 
         $data = Intratum\Facturas\Traffic::getEntryPOST();
 
-        $invoice = Intratum\Facturas\Factura::get($params = ["id2" => $data]);
+        $invoice = Intratum\Facturas\Factura::get($params = ["id2" => $data["id2"]]);
 
-        $params=[
-            "OPTION" => "PAYMENT_DATE"
-        ];
-
-        $result = Intratum\Facturas\InvoiceSetting::delete($invoice["id"],$params);
+        $result = Intratum\Facturas\InvoiceSetting::delete($invoice["id"],$data);
 
         echo json_encode($result);
      

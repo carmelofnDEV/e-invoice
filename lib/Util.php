@@ -156,4 +156,55 @@ class Util
 
     }
 
+    public static function sendMail($parms){
+
+        // API endpoint
+        $url = 'https://api.postmarkapp.com/email';
+
+        // Request headers
+        $headers = array(
+            'Accept: application/json',
+            'Content-Type: application/json',
+            'X-Postmark-Server-Token: cf5b686f-5385-41a5-b575-ebbf8d6a9dde'
+        );
+
+        // Request data
+        $data = array(
+            'From' => $parms["from"] ?? "carmelo@intratum.com",
+            'To' => "carmelo@intratum.com",
+            'Subject' => $parms["title"],
+            'HtmlBody' => $parms["content_html"],
+            'MessageStream' => 'outbound'
+        );
+
+        // Initialize cURL session
+        $ch = curl_init();
+
+        // Set cURL options
+        curl_setopt($ch, CURLOPT_URL, $url);
+        curl_setopt($ch, CURLOPT_POST, true);
+        curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($data));
+        curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+
+        // Execute cURL request
+        $response = curl_exec($ch);
+
+        // Close cURL session
+        curl_close($ch);
+
+        // Handle response
+        if ($response === false) {
+            // Request failed
+            // echo 'Error: ' . curl_error($ch);
+            return false;
+
+        } else {
+            // Request successful
+            // echo 'Response: ' . $response;
+            return true;
+        }
+    
+    }
+
 }

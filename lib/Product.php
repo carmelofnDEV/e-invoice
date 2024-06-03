@@ -45,10 +45,8 @@ class Product{
 		$data["user_id"] = Util::getSessionUser()["id"];
 
 		$db2->where('id2', $data["id2"]);
-		if ($db2->update('product', $data)) {	
-		} else {
-		}
-		
+		$db2->update('product', $data);
+	
 
 		return ["success"=>true];
 	}
@@ -60,7 +58,6 @@ class Product{
 
 		return ['success' => true];
 	}
-
 
 	public static function all($parms = []){
 		$db2 = Environment::$db;

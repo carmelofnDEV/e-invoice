@@ -10,18 +10,13 @@ $title = "Nueva factura"
 
 ?>
 
-
-
 <form action="lib/add_producto.php" id="form" class="mt-5" method="post">
 
     <div class="flex flex-col lg:flex-row justify-center gap-[5%] px-[35px]">
 
-
-
         <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
 
             <h2 class="text-center font-[600] col-span-2 text-[20px]">Datos del receptor</h2>
-
 
             <div id=" div-responsive-1" class="mb-5 relative">
 
@@ -36,13 +31,9 @@ $title = "Nueva factura"
                     class=" hidden col-span-2 block mb-2 text-sm font-medium text-gray-900 dark:text-white">Nombre
                     Fiscal</label>
 
-
-
                 <input type="text" id="searchAccount" name="first_name" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500
 
                 dark:focus:border-blue-500" placeholder="Nombre" required />
-
-
 
                 <div class="absolute top- left-0">
 
@@ -55,11 +46,7 @@ $title = "Nueva factura"
 
             </div>
 
-
-
             <input type="hidden" id="cust-id" name="cust-id">
-
-
 
             <div id="campo-apellidos" class="mb-5">
 
@@ -72,8 +59,6 @@ $title = "Nueva factura"
 
             </div>
 
-
-
             <div>
 
                 <label for="email" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Correo</label>
@@ -84,8 +69,6 @@ $title = "Nueva factura"
 
             </div>
 
-
-
             <div>
 
                 <label for="phone" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Teléfono</label>
@@ -95,8 +78,6 @@ $title = "Nueva factura"
                 dark:focus:border-blue-500" placeholder="000-000-000" required="">
 
             </div>
-
-
 
             <div class="mb-5">
 
@@ -110,8 +91,6 @@ $title = "Nueva factura"
 
             </div>
 
-
-
             <div class="mb-5">
 
                 <label for="address_2" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Dirección
@@ -123,8 +102,6 @@ $title = "Nueva factura"
                 dark:focus:border-blue-500" placeholder="Direccion 1" />
 
             </div>
-
-
 
             <div class="mb-5">
 
@@ -138,8 +115,6 @@ $title = "Nueva factura"
 
             </div>
 
-
-
             <div class="mb-5">
 
                 <label for="country" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">País</label>
@@ -149,8 +124,6 @@ $title = "Nueva factura"
                 dark:focus:border-blue-500" placeholder="País" required />
 
             </div>
-
-
 
             <div class="mb-5">
 
@@ -163,8 +136,6 @@ $title = "Nueva factura"
 
             </div>
 
-
-
             <div class="mb-5">
 
                 <label for="city" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Ciudad</label>
@@ -175,17 +146,9 @@ $title = "Nueva factura"
 
             </div>
 
-
-
             <input type="hidden" name="type" value="1">
 
             <input id="autoComp" type="hidden" name="autoComp" value="false">
-
-
-
-
-
-
 
             <div class="mb-5">
 
@@ -205,8 +168,6 @@ $title = "Nueva factura"
 
             </div>
 
-
-
             <div class="mb-5">
 
                 <label for="NIF" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">NIF</label>
@@ -219,23 +180,17 @@ $title = "Nueva factura"
 
         </div>
 
-
-
         <!-- ############################################################################################################################################################################ -->
 
         <!-- ############################################################################################################################################################################ -->
 
         <!-- ############################################################################################################################################################################ -->
-
-
 
         <div class="grid grid-cols-3 gap-5 mt-[50px] lg:mt-0">
 
             <div class="flex flex-col col-span-3">
 
                 <h2 class="text-center font-[600] text-[20px] mb-5 col-span-3">Items</h2>
-
-
 
                 <div class="flex flex-row gap-5">
 
@@ -246,16 +201,11 @@ $title = "Nueva factura"
                         <label for="item"
                             class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Item</label>
 
-                        <input type="text" id="autocomp-item" name="item" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500
-
-                dark:focus:border-blue-500" placeholder="Item" />
-
-
+                        <input type="text" id="autocomp-item" name="item" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="Item" />
 
                         <div class="absolute top- left-0">
 
-                            <ul id="lista-item"
-                                class="hidden w-60 text-sm font-medium text-gray-900 bg-white border border-gray-200 rounded-lg dark:bg-gray-700 dark:border-gray-600 dark:text-white">
+                            <ul id="lista-item" class="hidden w-60 text-sm font-medium text-gray-900 bg-white border border-gray-200 rounded-lg dark:bg-gray-700 dark:border-gray-600 dark:text-white">
 
                             </ul>
 
@@ -263,94 +213,51 @@ $title = "Nueva factura"
 
                     </div>
 
-
-
                     <div class="mb-5 min-w-[35%]">
 
-                        <label for="description"
-                            class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Descripción</label>
+                        <label for="description" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Descripción</label>
 
-                        <textarea type="number" id="description" name="description" class="h-[50%] bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500
-
-                dark:focus:border-blue-500" placeholder="Descripción del producto"></textarea>
+                        <textarea type="number" id="description" name="description" class="h-[50%] bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="Descripción del producto"></textarea>
 
                     </div>
-
-
 
                     <div class="mb-5 min-w-[10%]">
 
                         <label for="price"
                             class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Precio</label>
-
-                        <input type="number" id="price" name="price" class="h-[50%] bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500
-
-                dark:focus:border-blue-500" placeholder="0.00" step="0.01" />
+                        <input type="number" id="price" name="price" class="h-[50%] bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="0.00" step="0.01" />
 
                     </div>
-
-
 
                     <div class="mb-5 min-w-[10%]">
 
-                        <label for="quantity"
-                            class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Cantidad</label>
+                        <label for="quantity" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Cantidad</label>
 
-                        <input type="number" id="quantity" name="quantity" class="h-[50%] bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500
-
-                dark:focus:border-blue-500" placeholder="X" value="" />
+                        <input type="number" id="quantity" name="quantity" class="h-[50%] bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="X" value="" />
 
                     </div>
 
-
-
                     <div class="mb-5 flex justify-center items-center">
 
-                        <button id="boton-tax" data-modal-target="crud-modal" data-modal-toggle="crud-modal"
-                            class="min-w-[100px] text-[12px] text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg py-2 px-5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
-                            type="button">
-
+                        <button id="boton-tax" data-modal-target="crud-modal" data-modal-toggle="crud-modal" class="flex min-w-[100px] text-[12px] text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg py-1 px-2 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800" type="button">
                             Añadir impuesto
-
                         </button>
 
                     </div>
 
 
 
-                    <div class="mb-5 min-w-[1px] border-[2px] border-[#362faa]">
+                    <div class="mb-5 flex justify-center items-center ">
+                        <input type="button" id="add-item-btn" onclick="addItem()" value="Añadir" class="font-[600] text-center text-[15px] bg-[#8cce79] border border-gray-300 text-gray-900 rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-1 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" />
 
                     </div>
-
-
-
-                    <div class="mb-5">
-
-                        <label for="add"
-                            class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Añadir</label>
-
-                        <input type="button" id="add-item-btn" onclick="addItem()" value="+"
-                            class="font-[900] text-center text-[20px] bg-[#8cce79] border border-gray-300 text-gray-900 rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-1 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" />
-
-                    </div>
-
-
 
                     <div id="lineitems">
 
                     </div>
 
-
-
-
-
-
-
-
-
                 </div>
 
-                <hr class="p-0 w-full h-1 mx-auto bg-[#362faa] border-0 rounded dark:bg-gray-700">
 
                 <table id="itemTable" class="border-collapse w-full mt-5">
 
@@ -372,23 +279,13 @@ $title = "Nueva factura"
 
                     <tbody id="itemTableBody">
 
-
-
                         <!-- ELEMENTOS DE LA TALBA -->
-
-
 
                     </tbody>
 
                 </table>
 
-
-
-
-
             </div>
-
-
 
             <div id="total-div" class="text-[20px] hidden flex items-end flex-col col-span-3">
 
@@ -399,7 +296,6 @@ $title = "Nueva factura"
                         <h2>Subtotal</h2>
 
                         <h2 id="subtotal"></h2>
-
 
 
                     </div>
@@ -418,29 +314,21 @@ $title = "Nueva factura"
 
                     </div>
 
-
-
                 </div>
 
             </div>
 
         </div>
 
-
-
         <!-- ############################################################################################################################################################################ -->
 
         <!-- ############################################################################################################################################################################ -->
 
         <!-- ############################################################################################################################################################################ -->
-
-
 
         <div class="min-w-[15%] mt-[50px] lg:mt-0">
 
             <h2 class="text-center font-[600] text-[20px] mb-5">Detalles</h2>
-
-
 
             <div class="mb-10">
 
@@ -454,18 +342,12 @@ $title = "Nueva factura"
 
             </div>
 
-
-
-
-
             <div class="mb-10">
 
                 <label for="message" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Serial y
                     numero de factura</label>
 
                 <div class="flex mb-10">
-
-
 
                     <select onchange="updateInvoiceNumber()" name="invoice_serial" id="select_serials" class="w-[30%] bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block  p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500">
 
@@ -477,21 +359,13 @@ $title = "Nueva factura"
 
                     </select>
 
-
-
                     <input type="number" name="invoice_number" id="invoice_number" class="w-full bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500
 
                 dark:focus:border-blue-500">
 
                 </div>
 
-
-
             </div>
-
-
-
-
 
             <div class="mb-10">
 
@@ -505,17 +379,14 @@ $title = "Nueva factura"
                         <svg class="w-4 h-4 text-gray-500 dark:text-gray-400" aria-hidden="true"
                             xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 20 20">
 
-                            <path
-                                d="M20 4a2 2 0 0 0-2-2h-2V1a1 1 0 0 0-2 0v1h-3V1a1 1 0 0 0-2 0v1H6V1a1 1 0 0 0-2 0v1H2a2 2 0 0 0-2 2v2h20V4ZM0 18a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V8H0v10Zm5-8h10a1 1 0 0 1 0 2H5a1 1 0 0 1 0-2Z" />
+                            <path d="M20 4a2 2 0 0 0-2-2h-2V1a1 1 0 0 0-2 0v1h-3V1a1 1 0 0 0-2 0v1H6V1a1 1 0 0 0-2 0v1H2a2 2 0 0 0-2 2v2h20V4ZM0 18a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V8H0v10Zm5-8h10a1 1 0 0 1 0 2H5a1 1 0 0 1 0-2Z" />
 
                         </svg>
 
                     </div>
 
                     <input datepicker datepicker-title="Fecha de facturación" value="<?php echo date('m-d-Y') ?>"
-                        name="invoice_date" type="text"
-                        class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full ps-10 p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                        placeholder="Selecciona una fecha">
+                        name="invoice_date" type="text" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full ps-10 p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="Selecciona una fecha">
 
 
 
@@ -523,11 +394,11 @@ $title = "Nueva factura"
 
             </div>
 
+            <div id="notifications ">
 
+            </div>
 
         </div>
-
-
 
     </div>
 
@@ -606,8 +477,6 @@ $title = "Nueva factura"
                 </ul>
             </div>
 
-
-
             <div class="p-5">
 
                 <div class="flex items-center justify-center mt-5 gap-[10px] mb-5">
@@ -632,10 +501,6 @@ $title = "Nueva factura"
         </div>
 
     </div>
-
-
-
-
 
 </div>
 
@@ -672,10 +537,25 @@ $title = "Nueva factura"
 <!-- ############   FORMULARIO FACTURA ########################################################################################################################################################## -->
 
 <!-- ############################################################################################################################################################################ -->
+<style>
+    @keyframes slideOutLeft {
+        0% {
+            transform: translateX(0);
+        }
+        100% {
+            transform: translateX(100%);
+            opacity: 0;
+        }
 
+    }
 
+  .slide-out-left {
+    animation: slideOutLeft 0.3s ease-out forwards;
+  }
+</style>
 
 <script>
+
 $(document).ready(function() {
 
     updateInvoiceNumber()
@@ -683,8 +563,6 @@ $(document).ready(function() {
     $('#form').submit(function(e) {
 
         e.preventDefault();
-
-
 
         var data = $(this).serializeJSON();
 
@@ -717,24 +595,75 @@ $(document).ready(function() {
 
                     exit();
 
+                }else if (d.success == false && d.errors) {
 
+                    setNotification(d.errors)
 
-                }
-
-            }
+                }}
 
         });
-
-
-
-
 
     });
 
 });
 
 
+function setNotification(errors) {
+    errors.forEach(e => {
+        console.log(e.error);
 
+        const toast = document.createElement('div');
+        toast.className = 'flex items-center w-full max-w-xs p-4 mb-4 text-gray-500 bg-white rounded-lg shadow dark:text-gray-400 dark:bg-gray-800';
+        toast.setAttribute('role', 'alert');
+
+        const iconContainer = document.createElement('div');
+        iconContainer.className = 'inline-flex items-center justify-center flex-shrink-0 w-8 h-8 text-red-500 bg-red-100 rounded-lg dark:bg-red-800 dark:text-red-200';
+        const icon = document.createElement('div');
+        icon.setAttribute('viewBox', '0 0 20 20');
+        icon.innerHTML = '<svg class="w-5 h-5" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 20 20"><path d="M10 .5a9.5 9.5 0 1 0 9.5 9.5A9.51 9.51 0 0 0 10 .5Zm3.707 11.793a1 1 0 1 1-1.414 1.414L10 11.414l-2.293 2.293a1 1 0 0 1-1.414-1.414L8.586 10 6.293 7.707a1 1 0 0 1 1.414-1.414L10 8.586l2.293-2.293a1 1 0 0 1 1.414 1.414L11.414 10l2.293 2.293Z"/></svg>';
+        iconContainer.appendChild(icon);
+
+        const message = document.createElement('div');
+        message.className = 'ms-3 text-sm font-normal';
+        message.textContent = e.message;
+
+        const button = document.createElement('button');
+        button.className = 'ms-auto -mx-1.5 -my-1.5 bg-white text-gray-400 hover:text-gray-900 rounded-lg focus:ring-2 focus:ring-gray-300 p-1.5 hover:bg-gray-100 inline-flex items-center justify-center h-8 w-8 dark:text-gray-500 dark:hover:text-white dark:bg-gray-800 dark:hover:bg-gray-700';
+        button.setAttribute('type', 'button');
+        button.setAttribute('aria-label', 'Close');
+        button.innerHTML = '<svg class="w-3 h-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 14 14"><path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m1 1 6 6m0 0 6 6M7 7l6-6M7 7l-6 6"/></svg>';
+        
+        button.addEventListener('click', () => {
+            toast.classList.add('slide-out-left');
+            setTimeout(() => {
+                toast.remove();
+            });
+        });
+
+        toast.appendChild(iconContainer);
+        toast.appendChild(message);
+        toast.appendChild(button);
+
+        toast.style.position = 'fixed';
+        toast.style.zIndex = '100';
+        toast.style.top = '20px'; 
+        toast.style.right = '20px'; 
+
+        const notificationsContainer = document.getElementById('notifications');
+        if (notificationsContainer) {
+            notificationsContainer.appendChild(toast);
+        } else {
+            document.body.appendChild(toast);
+        }
+
+        setTimeout(() => {
+            toast.classList.add('slide-out-left');
+            setTimeout(() => {
+                toast.remove();
+            }, 500);
+        }, 3000);
+    });
+}
 
 
 function selectCategory(item) {
@@ -765,8 +694,6 @@ function selectCategory(item) {
 
 }
 
-
-
 var aftertax = [];
 
 var keyitems = 0;
@@ -779,14 +706,10 @@ var invoice_total = 0;
 
 var calcTaxs = []
 
-
-
-
-
 function addTax() {
 
-
     let tax = $("#select_tax").val().split("/");
+
     let itemTax = {
         name: tax[1],
         type: tax[0],
@@ -794,8 +717,6 @@ function addTax() {
         id: tax[3],
 
     }
-
-
 
     let taxValid = checkTaxs(itemTax.type);
     console.log(aftertax)
@@ -811,7 +732,12 @@ function addTax() {
 
         addTaxText()
     } else {
-        alert("No puedes añadir dos impuestos del mismo tipo.");
+        errors = [{
+            "error":"repeat_tax",
+            "message":"No puedes añadir dos impuestos del mismo tipo.",
+        }]
+        setNotification(errors)
+
     }
 
 
@@ -895,8 +821,6 @@ function deleteItemTax(e) {
 
 function addItem() {
 
-
-
     var item = $('#autocomp-item').val();
 
     var description = $('#description').val();
@@ -909,15 +833,11 @@ function addItem() {
 
     if (item != "" && quantity != "") {
 
-
-
         let subtotal = price * quantity
 
         invoice_subtotal += subtotal
 
         var lista = 0;
-
-
 
         var taxesList = '<ul>';
         console.log(aftertax)
@@ -930,12 +850,9 @@ function addItem() {
 
         });
 
-
-
         taxesList += '</ul>';
 
         console.log(taxesList)
-
 
         var newRow = '<tr>' +
 
@@ -959,12 +876,6 @@ function addItem() {
         '</td>' +
 
         '</tr>';
-
-
-
-
-
-
 
         $('#itemTableBody').append(newRow);
 
@@ -990,15 +901,7 @@ function addItem() {
             $('#lineitems').append('<input class="hidden_item_' + keyitems + '" type="hidden" name="items[' +
                 keyitems + '][tax_' + element.type + ']" value="' + element.type + "/" + element.name +
                 "/" + element.value + "/" + element.id + '">');
-
         });
-
-
-
-
-
-
-
 
         $('#autocomp-item').val("");
 
@@ -1010,15 +913,7 @@ function addItem() {
 
         $('#quantity').val("");
 
-
-
-
-
-
-
-
         keyitems++;
-
 
         aftertax.forEach(element => {
             let existe = calcTaxs.findIndex(elemento => elemento.id == element.id);
@@ -1037,22 +932,11 @@ function addItem() {
 
         console.log(calcTaxs)
 
-
         updateTotalMenu();
-
 
     }
 
 }
-
-
-
-
-
-
-
-
-
 
 function updateTotalMenu() {
 
@@ -1061,8 +945,6 @@ function updateTotalMenu() {
         $("#total-div").removeClass("hidden")
 
     }
-
-
 
     $("#totalMenu").empty();
 
@@ -1073,16 +955,11 @@ function updateTotalMenu() {
             $('#totalMenu').append('<li>' + element.name + ' ' + element.tax_value + '% -> ' + (element
                     .tax_total).toFixed(2) +
                 '€</li>');
-
         }
 
     });
 
-
-
     $("#subtotal").text(invoice_subtotal + "€")
-
-
 
     invoice_total = invoice_subtotal;
 
@@ -1103,10 +980,6 @@ function updateTotalMenu() {
 
     $("#total").text(invoice_total.toFixed(2) + "€")
 
-
-
-
-
     if (invoice_total == 0) {
 
         $("#total-div").addClass("hidden")
@@ -1115,15 +988,9 @@ function updateTotalMenu() {
 
 }
 
-
-
-
-
 function updateInvoiceNumber() {
 
     var serial_id = $("#select_serials").val()
-
-
 
     $.ajax({
 
@@ -1145,10 +1012,7 @@ function updateInvoiceNumber() {
 
 }
 
-
-
 </script>
-
 
 <!-- ############################################################################################################################################################################ -->
 
@@ -1164,28 +1028,20 @@ function updateInvoiceNumber() {
 
 <!-- ############################################################################################################################################################################ -->
 
-
-
-
-
 <script>
-var delay = 200;
 
+var delay = 200;
 var timerId;
 
 $("#searchAccount").eq(0).bind("keyup paste", function() {
 
     clearTimeout(timerId);
 
-
-
     var value = $(this).val();
 
 
 
     timerId = setTimeout(function() {
-
-
 
         after = null;
 
@@ -1196,8 +1052,6 @@ $("#searchAccount").eq(0).bind("keyup paste", function() {
     }, delay);
 
 });
-
-
 
 function search(value) {
 
@@ -1231,25 +1085,15 @@ function search(value) {
 
         },
 
-
-
     });
 
-
-
-
-
 }
-
-
 
 $(document).on('click', '.element-li', function() {
 
     $('#lista').empty();
 
     $('#lista').addClass("hidden");
-
-
 
     $.ajax({
 
@@ -1267,10 +1111,7 @@ $(document).on('click', '.element-li', function() {
 
     });
 
-
-
 });
-
 
 
 function autocompleteForm(response) {
@@ -1303,43 +1144,28 @@ function autocompleteForm(response) {
 
     $('#cust-id').val(response.id);
 
-
-
     $('#autoComp').val(true);
 
 }
 </script>
-
-
-
-
 
 <!-- ############################################################################################################################################################################ -->
 
 <!-- ############ AUTOCOMPLETADO ITEMS ########################################################################################################################################################## -->
 
 <!-- ############################################################################################################################################################################ -->
-
-
-
 <script>
-var delay = 200;
 
+var delay = 200;
 var timerId;
 
 $("#autocomp-item").eq(0).bind("keyup paste", function() {
 
     clearTimeout(timerId);
 
-
-
     var value = $(this).val();
 
-
-
     timerId = setTimeout(function() {
-
-
 
         after = null;
 
@@ -1350,8 +1176,6 @@ $("#autocomp-item").eq(0).bind("keyup paste", function() {
     }, delay);
 
 });
-
-
 
 function searchItem(value) {
 
@@ -1385,25 +1209,15 @@ function searchItem(value) {
 
         },
 
-
-
     });
 
-
-
-
-
 }
-
-
 
 $(document).on('click', '.element-li-item', function() {
 
     $('#lista-item').empty();
 
     $('#lista-item').addClass("lista-item");
-
-
 
     $.ajax({
 
@@ -1421,17 +1235,12 @@ $(document).on('click', '.element-li-item', function() {
 
     });
 
-
-
 });
-
 
 
 function autocompleteFormItems(response) {
 
     console.log(response)
-
-
 
     $('#autocomp-item').val(response.title);
 
@@ -1443,17 +1252,7 @@ function autocompleteFormItems(response) {
 
     $('#quantity').val(1);
 
-
-
-
-
 }
-
-
-
-
-
-
 
 function removeListItem(index) {
 
@@ -1478,9 +1277,6 @@ function removeListItem(index) {
         }
     });
 
-
-
-
     invoice_subtotal = invoice_subtotal - subTotalItem;
 
     updateTotalMenu();
@@ -1489,10 +1285,4 @@ function removeListItem(index) {
 
 }
 
-
-// function removeListItem(index) {
-
-//     $(".hidden_item_" + index).remove();
-
-// }
 </script>

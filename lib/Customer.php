@@ -15,7 +15,7 @@ class Customer
 
         $search = $data['first_name'] . ' ' . $data['last_name'] . '
 ' . $data['NIF'] . '
-' . $data['address_1'] . '
+' . $data['address1'] . '
 ' . $data['zip'] . ' ' . $data['city'] . '
 ' . $data['country'] . '
 ';
@@ -35,7 +35,7 @@ class Customer
             'email' => $data['email'],
             'phone' => $data['phone'],
             'search' => $search,
-            'address1' => $data['address_1'],
+            'address1' => $data['address1'],
             'address2' => $data['address2'] ?? "",
             'country' => $data['country'],
             'state' => $data['state'],

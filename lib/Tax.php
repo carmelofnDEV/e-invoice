@@ -5,9 +5,7 @@ namespace Intratum\Facturas;
 class Tax
 {
 
-    public static function insert(array $data)
-    {
-
+    public static function insert(array $data){
         //$all = Environment::$db->get('tax');
         $search = $data['name'] . '
 ' . $data['value'];
@@ -31,6 +29,7 @@ class Tax
 
     public static function update(array $data)
     {
+        $id2 = $data["id2"];
         $db2 = Environment::$db;
 
         $search = $data['name'] . '
@@ -46,16 +45,15 @@ class Tax
         $data["updated"] = date("Y-m-d H:i:s");
         $data["user_id"] = Util::getSessionUser()["id"];
 
-        $db2->where('type', $data["type"]);
+        $db2->where('id2', $id2);
         $db2->update('tax', $data);
-
         return ["success" => true];
     }
 
     public static function delete(array $data)
     {
         $db2 = Environment::$db;
-        $db2->where('id2', $data["id2"]);
+        $db2->where('id2', $id2);
         if ($db2->delete('tax')) {
             echo 'successfully deleted';
         }

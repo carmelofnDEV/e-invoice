@@ -10,7 +10,7 @@ switch($_SERVER["REQUEST_METHOD"]){
 
 	case 'UPDATE':
 		$data = Intratum\Facturas\Traffic::getEntryPOST();
-			echo json_encode(Intratum\Facturas\Tax::update($data));
+		echo json_encode(Intratum\Facturas\Tax::update($data));
 		
 	break;
 

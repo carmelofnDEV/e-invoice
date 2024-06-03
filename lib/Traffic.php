@@ -44,6 +44,8 @@ class Traffic{
 			'/facturas' => 'src/facturas/index.php',
 			'/facturas/nuevo' => 'src/facturas/form_factura.php',
 			'/facturas/ed' => 'src/facturas/edit_form_factura.php',
+
+
 			
 			'/facturas/del' => 'src/facturas/del_factura.php',
 
@@ -77,6 +79,13 @@ class Traffic{
 
 			'/empresa' => 'src/cuenta_emp/form_cuenta_emp.php',
 
+			'/forgot_password' => 'src/cuenta_emp/forgot_password_form.php',
+
+
+			'/forgot_password' => 'src/cuenta_emp/forgot_password_form.php',
+
+
+
 		];
 
 
@@ -108,6 +117,10 @@ class Traffic{
 
 		if($urlpath2[1] == 'html'){
 			$res  = 'templates/html/'.$urlpath2[2].'.php';
+		}
+
+		if($urlpath2[1] == 'bot'){
+			$res  = 'bot/'.$urlpath2[2].'.php';
 		}
 
 		return $res;
