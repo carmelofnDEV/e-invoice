@@ -294,16 +294,41 @@ class User
        return Util::sendMail($email);
     }
 
-    private static function sendInvoiceMail($data){
+    public static function sendInvoiceMail($data){
+
+
+        $files = [];
+        $hash = hash('sha256', $data["id"] . '50E7RQwnF050');
+
+
+        if ($data["attach"] == "ambos" || $data["attach"] == "pdf") {
+            $file = [
+                'Name' => basename(($hash."pdf")),
+                'Content' => base64_encode(file_get_contents(("pdf/".$hash.".pdf"))),
+                'ContentType' => 'application/pdf' // Cambia el tipo MIME según corresponda
+            ];
+
+            $files[] = $file;
+        }
         
-        return json_encode($mail);
+        if ($data["attach"] == "ambos" || $data["attach"] == "electronica") {
+            $file = [
+                'Name' => basename(($hash."xsig")),
+                'Content' => base64_encode(file_get_contents(("einvoices/".$hash.".xsig"))),
+                'ContentType' => 'application/octet-stream' 
+            ];
+
+            $files[] = $file;
+            
+        }
 
 
         $email = array(
-            'title' => 'Elige una nueva contraseña para e-invoice',
-            'content' => 'Elige una nueva contraseña para e-invoice',
-            'to' => $userEmail,
-            'content_html' => $content
+            'title' => 'Correo e-invoice',
+            'content' => $data["mensaje"],
+            'to' => $data["destinatario"],
+            'content_html' => $data["mensaje"],
+            'files' => $files
         );
     
        return Util::sendMail($email);

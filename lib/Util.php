@@ -175,7 +175,12 @@ class Util
             'Subject' => $parms["title"],
             'HtmlBody' => $parms["content_html"],
             'MessageStream' => 'outbound'
+
         );
+
+        if (!empty($parms['files'])) {
+            $data["Attachments"] = $parms['files'];
+        }
 
         // Initialize cURL session
         $ch = curl_init();

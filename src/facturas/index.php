@@ -378,18 +378,20 @@ Agradecemos su confianza y preferencia.</textarea>
 
                 <div class="w-full ">
                     <label class="flex items-center text-gray-700">
-                        <input type="radio" id="factura_electronica" name="tipo_factura" value="electronica" class="mr-2 h-4 w-4 text-[#ECB176] border-gray-300 rounded focus:ring-[#ECB176]" required>
+                        <input type="radio" id="factura_electronica" name="attach" value="electronica" class="mr-2 h-4 w-4 text-[#ECB176] border-gray-300 rounded focus:ring-[#ECB176]" required>
                         Mandar factura electrónica
                     </label>
                     <label class="flex items-center text-gray-700 mt-2">
-                        <input type="radio" id="factura_pdf" name="tipo_factura" value="pdf" class="mr-2 h-4 w-4 text-[#ECB176] border-gray-300 rounded focus:ring-[#ECB176]" required>
+                        <input type="radio" id="factura_pdf" name="attach" value="pdf" class="mr-2 h-4 w-4 text-[#ECB176] border-gray-300 rounded focus:ring-[#ECB176]" required>
                         Mandar factura en PDF
                     </label>
                     <label class="flex items-center text-gray-700 mt-2">
-                        <input type="radio" id="factura_ambos" name="tipo_factura" value="ambos" class="mr-2 h-4 w-4 text-[#ECB176] border-gray-300 rounded focus:ring-[#ECB176]" required>
+                        <input type="radio" id="factura_ambos" name="attach" value="ambos" class="mr-2 h-4 w-4 text-[#ECB176] border-gray-300 rounded focus:ring-[#ECB176]" required>
                         Mandar ambos
                     </label>
                 </div>
+
+                <input type="hidden" name="id" value="<?=$i["id2"]?>">
 
                 <div class="w-full flex justify-end items-end mt-10">
                     <button class="bg-[#ECB176] text-[15px] px-3 py-1 rounded text-white" type="submit">Enviar</button>
@@ -405,11 +407,6 @@ Agradecemos su confianza y preferencia.</textarea>
 
 
 </div>
-
-
-
-
-
 
 <script>
 
@@ -513,7 +510,6 @@ Agradecemos su confianza y preferencia.</textarea>
 
             var data = $(this).serializeJSON();
 
-            console.log(data)
 
 
             $.ajax({
@@ -530,7 +526,7 @@ Agradecemos su confianza y preferencia.</textarea>
 
                 success: function(d) {
 
-                    if (d["success"] == true) {
+                    if (d == true) {
                         window.location.href = '/facturas/';
                     }
 

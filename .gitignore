@@ -1,6 +1,5 @@
 assets/images/*
 assets/certs/*
-
 pdf/*
 .secret/
 .vscode/ 
