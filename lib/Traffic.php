@@ -37,9 +37,11 @@ class Traffic{
 			'/proveedores/nuevo' => 'src/proveedores/form_proveedores.php',
 			'/proveedores/ed' => 'src/proveedores/edit_form_proveedores.php',
 			'/proveedores/del' => 'src/proveedores/del_proveedores.php',
+			
 
 			'/gastos' => 'src/gastos/index.php',
 			'/gastos/nuevo' => 'src/gastos/form_gasto.php',
+			
 
 			'/facturas' => 'src/facturas/index.php',
 			'/facturas/nuevo' => 'src/facturas/form_factura.php',

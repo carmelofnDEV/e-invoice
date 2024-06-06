@@ -17,137 +17,175 @@ $id2 = Intratum\Facturas\Util::getID2ByUUID("inv_", $item);
 $invoice = Intratum\Facturas\Factura::get($params = ["id2" => $id2]);
 
 $db2 = Intratum\Facturas\Environment::$db;
-
+$customer = false
 ?>
 
 <form action="lib/add_producto.php" id="form" class="mt-5" method="update">
 
 
+
+<form action="lib/add_producto.php" id="form" class=" bgmt-5" method="post">
 <div class="border-[1px] my-5 rounded-lg flex flex-col justify-center gap-[5%]  mx-[18%]">
-        <div class="grid grid-cols-2 pt-10 bg-gray-100 px-[35px] pb-5">
-            <div>
-
-
-                <div class=" pl-10 flex flex-col justify-between h-full">
-
-                    <div class=" flex  items-center  w-full">
-                        <?php if ($_SERVER['SERVER_PORT'] == '80') {?>
-                            <img class="w-64" src="http://<?= $_SERVER['HTTP_HOST'] ?>/static/images/<?php if($profile["hash_logo"] != ""){ echo $profile["hash_logo"]; }else{ echo "default.png"; }?>" alt="Logo" />
-                        <?php } else if ($_SERVER['SERVER_PORT'] == '443') {?>
-                            <img class="w-64" src="https://<?= $_SERVER['HTTP_HOST'] ?>/static/images/<?php if($profile["hash_logo"] != ""){ echo $profile["hash_logo"]; }else{ echo "default.png"; }?>" alt="Logo" />
-                        <?php } else if ($_SERVER['SERVER_PORT'] == '8086') {?>
-                            <img class=" w-[50%] object-cover" src="http://<?= $_SERVER['HTTP_HOST'] ?>/static/images/<?php if($profile["hash_logo"] != ""){ echo $profile["hash_logo"]; }else{ echo "default.png"; }?>" alt="Logo" />
-                        <?php }?>
-                    </div>
-
-                        <div>
-                            <p class="text-[20px] font-[600]">Datos fiscales</p>
-                            <p><?=$profile["first_name"]?> &nbsp; <?=$profile["last_name"]?></p>
-                            <p><?=$profile["NIF"]?></p>
-                            <p><?=$profile["address1"]?></p>
-                            <p><?=$profile["country"]?><?=", ".$profile["state"]?><?=", ".$profile["city"]?><?=" ".$profile["zip"]?></p>
-                            <p><?=$profile["email"]?></p>
-                            <p><?=$profile["phone"]?></p>
-                            
-
-
-
-                        </div>
-
-
-
+    <div class="grid grid-cols-3  pt-10 bg-gray-100 px-[35px] pb-5">
+        <div class="col-span-2">
+            <div class=" pl-10 flex flex-col justify-between h-full">
+                <div class=" flex  items-center  w-full">
+                    <?php if ($_SERVER['SERVER_PORT'] == '80') { ?>
+                        <img class="max-w-[300px] max-h-[70px] w-[50%] object-cover" src="http://<?= $_SERVER['HTTP_HOST'] ?>/static/images/<?php if ($profile["hash_logo"] != "") { echo $profile["hash_logo"]; } else { echo "default.png"; } ?>" alt="Logo" />
+                    <?php } else if ($_SERVER['SERVER_PORT'] == '443') { ?>
+                        <img class="max-w-[300px] max-h-[70px] w-[50%] object-cover" src="https://<?= $_SERVER['HTTP_HOST'] ?>/static/images/<?php if ($profile["hash_logo"] != "") { echo $profile["hash_logo"]; } else { echo "default.png"; } ?>" alt="Logo" />
+                    <?php } else if ($_SERVER['SERVER_PORT'] == '8086') { ?>
+                        <img class="max-w-[300px] max-h-[70px] w-[50%] object-cover" src="http://<?= $_SERVER['HTTP_HOST'] ?>/static/images/<?php if ($profile["hash_logo"] != "") { echo $profile["hash_logo"]; } else { echo "default.png"; } ?>" alt="Logo" />
+                    <?php } ?>
+                </div>
+                <div>
+                    <p class="text-[20px] font-[600]">Datos fiscales</p>
+                    <p><?= $profile["first_name"] ?>&nbsp;<?= $profile["last_name"] ?></p>
+                    <p><?= $profile["NIF"] ?></p>
+                    <p><?= $profile["address1"] ?></p>
+                    <p><?= $profile["country"] ?><?= ", " . $profile["state"] ?><?= ", " . $profile["city"] ?><?= " " . $profile["zip"] ?></p>
+                    <p><?= $profile["email"] ?></p>
+                    <p><?= $profile["phone"] ?></p>
                 </div>
             </div>
+        </div>
+        <input type="hidden" name="id_invoice" value="<?=$invoice["id"]?>">
+        <div>
 
-            <div>
-                <h2 class="mb-2  font-[600] col-span-2 text-[20px]">Datos del receptor</h2>
-                <div class="grid grid-cols-3 gap-5">
-                    <div id="div-responsive-1" class="mb-2 relative">
-                        <!-- nombre particular  -->
-                        <label id="nombre-particular" for="first_name"
-                        class=" mb-2 text-sm font-medium text-gray-900 dark:text-white">Nombre</label>
-                        <!-- nombre fiscal  -->
-                        <label for="first_name" id="nombre-fiscal"
-                        class=" hidden !col-span-2  mb-2 text-sm font-medium text-gray-900 dark:text-white">Nombre Fiscal</label>
-                        <input value="<?=$invoice["first_name"]?>" type="text" id="searchAccount" name="first_name" class="!col-span-2 bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500  w-full py-1.5 px-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500
-                        dark:focus:border-blue-500" placeholder="Nombre" required />
-                        <div class="absolute top- left-0">
-                        <ul id="lista"
-                            class="hidden w-60 text-sm font-medium text-gray-900 bg-white border border-gray-200 rounded-lg dark:bg-gray-700 dark:border-gray-600 dark:text-white">
-                        </ul>
-                        </div>
-                    </div>
-                    <input type="hidden" id="cust-id" name="cust-id" value="<?=$invoice["issuer_id"]?>">
                     
-                    <div id="campo-apellidos" class="mb-2">
-                        <label for="last_name"
-                        class=" mb-2 text-sm font-medium text-gray-900 dark:text-white">Apellidos</label>
-                        <input value="<?=$invoice["last_name"]?>" type="text" id="last_name" name="last_name" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full py-1.5 px-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500
-                        dark:focus:border-blue-500" placeholder="Apellidos" />
+            <div class="relative">
+
+                <label id="buscador-contact"  class=" mb-2 text-sm font-medium text-gray-900 dark:text-white">Buscar cliente:</label>
+                <input type="text" id="searchAccount" autocomplete="off" class="!col-span-2 bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500  w-full py-1.5 px-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="Buscar..."  />
+                <div class=" w-full absolute top- left-0">
+                    <ul id="lista" class="hidden w-full text-sm font-medium text-gray-900 bg-white border border-gray-200 rounded-lg dark:bg-gray-700 dark:border-gray-600 dark:text-white">
+                    </ul>
+                </div>
+
+            </div>
+
+
+            <h2 class=" font-[600] col-span-2 text-[20px]">Datos del cliente</h2>
+            
+            <div class="grid grid-cols-4">
+
+                <div id="cont_cliente" class="col-span-3">
+
+                </div>
+
+                <div id="boton-cont" class="hidden  ">
+                    <button  data-modal-target="modal-contact" data-modal-toggle="modal-contact" class="" type="button">
+                        <svg width="20px" height="20px" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M16.293 2.293a1 1 0 0 1 1.414 0l4 4a1 1 0 0 1 0 1.414l-13 13A1 1 0 0 1 8 21H4a1 1 0 0 1-1-1v-4a1 1 0 0 1 .293-.707l10-10 3-3zM14 7.414l-9 9V19h2.586l9-9L14 7.414zm4 1.172L19.586 7 17 4.414 15.414 6 18 8.586z" fill="#0D0D0D"/></svg>
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Cotact modal -->
+        <div id="modal-contact" tabindex="-1" aria-hidden="false" class="fixed top-0 left-0 right-0 z-50 hidden w-full p-4 overflow-x-hidden overflow-y-auto md:inset-0 h-[calc(100%-1rem)] max-h-full">
+            <div class="relative w-full max-w-2xl max-h-full">
+                <!-- Modal content -->
+                <div class="relative bg-white rounded-lg shadow dark:bg-gray-700">
+                    <div class="flex items-start justify-between p-4 border-b rounded-t dark:border-gray-600">
+                        <h2 class="mb-2  font-[600] col-span-2 text-[20px]">Datos del receptor</h2>
+                        <button type="button" class="text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm w-8 h-8 ml-auto inline-flex justify-center items-center dark:hover:bg-gray-600 dark:hover:text-white" data-modal-hide="modal-contact">
+                            <svg class="w-3 h-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 14 14">
+                                <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m1 1 6 6m0 0 6 6M7 7l6-6M7 7l-6 6" />
+                            </svg>
+                            <span class="sr-only">Close modal</span>
+                        </button>
                     </div>
                     <div>
-                        <label for="email" class=" mb-2 text-sm font-medium text-gray-900 dark:text-white">Correo</label>
-                        <input value="<?=$invoice["email"]?>" type="email" name="email" id="email" class="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full py-1.5 px-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="correo@email.com" required="">
+                        <div class="grid grid-cols-3 gap-5 p-5">
+                            <div id="div-responsive-1" class="mb-2 ">
+                                <!-- nombre particular -->
+                                <label id="nombre-particular" for="first_name" class=" mb-2 text-sm font-medium text-gray-900 dark:text-white">Nombre</label>
+                                <!-- nombre fiscal -->
+                                <label for="first_name" id="nombre-fiscal" class=" hidden !col-span-2  mb-2 text-sm font-medium text-gray-900 dark:text-white">Nombre Fiscal</label>
+                                <input value="<?=$invoice["first_name"]?>" <?php if ($customer) { echo ' value="' . $customer["first_name"] . '" '; } ?> type="text" id="first_name" name="first_name" class="!col-span-2 bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500  w-full py-1.5 px-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="Nombre"  />
+
+                            </div>
+                            <input type="hidden" id="cust-id" name="cust-id" value="<?=$invoice["recipient_id"]?>">
+                            <div id="campo-apellidos" class="mb-2">
+                                <label for="last_name" class=" mb-2 text-sm font-medium text-gray-900 dark:text-white">Apellidos</label>
+                                <input value="<?=$invoice["last_name"]?>" <?php if ($customer) { echo ' value="' . $customer["last_name"] . '" '; } ?> type="text" id="last_name" name="last_name" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full py-1.5 px-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="Apellidos" />
+                            </div>
+
+                            <div class="mb-2 flex flex-col justify-center items-center">
+
+                                <label class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Tipo de cliente</label>
+                                <div class="flex">
+                                    <div class="flex items-center">
+                                        <input type="radio" id="cliente_fiscal" name="category" value="f" <?php if($invoice["category"] == "f"){ echo "checked";}?> class="hidden">
+                                        <label id="fiscal" for="cliente_fiscal" class="w-20 text-center  rounded-l-lg  py-1 px-3 border-[1px] text-sm text-gray-900 dark:text-white <?php if($invoice["category"] == "f"){ echo " bg-blue-300";}?>" onclick="highlightBackground(this.id)">Fiscal</label>
+                                    </div>
+                                    <div class="flex items-center ">
+                                        <input type="radio" id="cliente_particular" name="category" value="p"  <?php if($invoice["category"] == "p"){ echo "checked";}?> class="hidden">
+                                        <label id="particular" for="cliente_particular" class="w-20 text-center rounded-r-lg border-[1px] border-l-none py-1 px-3   text-sm text-gray-900 dark:text-white <?php if($invoice["category"] == "p"){ echo " bg-blue-300";}?>" onclick="highlightBackground(this.id)">Particular</label>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div>
+                                <label for="email" class=" mb-2 text-sm font-medium text-gray-900 dark:text-white">Correo</label>
+                                <input  value="<?=$invoice["email"]?>" <?php if ($customer) { echo ' value="' . $customer["email"] . '" '; } ?> type="email" name="email" id="email" class="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full py-1.5 px-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="correo@email.com" >
+                            </div>
+                            <div>
+                                <label for="phone" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Teléfono</label>
+                                <input value="<?=$invoice["phone"]?>"  <?php if ($customer) { echo ' value="' . $customer["phone"] . '" '; } ?> type="tel" name="phone" id="phone" class="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full py-1.5 px-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="000-000-000" >
+                            </div>
+                            <div class="mb-2">
+                                <label for="address_1" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Dirección 1 *</label>
+                                <input value="<?=$invoice["address1"]?>"  <?php if ($customer) { echo ' value="' . $customer["address1"] . '" '; } ?> type="text" id="address_1" name="address_1" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full py-1.5 px-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="Direccion 1"  />
+                            </div>
+
+                            <div class="mb-2">
+                                <label for="zip" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Codigo postal</label>
+                                <input value="<?=$invoice["zip"]?>"  <?php if ($customer) { echo ' value="' . $customer["zip"] . '" '; } ?> type="number" id="zip" name="zip" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full py-1.5 px-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="Codigo postal" />
+                            </div>
+                            <div class="mb-2">
+                                <label for="country" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">País</label>
+                                <input  value="<?=$invoice["country"]?>" type="text" <?php if ($customer) { echo ' value="' . $customer["country"] . '" '; } ?> id="country" name="country" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full py-1.5 px-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="País"  />
+                            </div>
+                            <div class="mb-2">
+                                <label for="state" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Provincia</label>
+                                <input value="<?=$invoice["state"]?>"  <?php if ($customer) { echo ' value="' . $customer["state"] . '" '; } ?> type="text" id="state" name="state" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full py-1.5 px-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="Provincia"  />
+                            </div>
+                            <div class="mb-2">
+                                <label for="city" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Ciudad</label>
+                                <input value="<?=$invoice["city"]?>" <?php if ($customer) { echo ' value="' . $customer["city"] . '" '; } ?> type="text" id="city" name="city" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full py-1.5 px-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="Ciudad"  />
+                            </div>
+                            <input type="hidden" name="type"  value="<?=$invoice["type"]?>" >
+
+                            <input id="autoComp" type="hidden" name="autoComp"  value="true" >
+
+
+
+
+
+
+                            <div class="mb-">
+                                <label for="NIF" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">NIF</label>
+                                <input value="<?=$invoice["NIF"]?>"  <?php if ($customer) { echo ' value="' . $customer["NIF"] . '" '; } ?> type="text" id="NIF" name="NIF" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full py-1.5 px-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="CIF / DNI"  />
+                            </div>
+                        </div>
+
+                        
                     </div>
-                    <div>
-                        <label for="phone" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Teléfono</label>
-                        <input value="<?=$invoice["phone"]?>"  type="tel" name="phone" id="phone" class="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full py-1.5 px-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500
-                        dark:focus:border-blue-500" placeholder="000-000-000" required="">
-                    </div>
-                    <div class="mb-2">
-                        <label for="address_1" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Dirección 1
-                        *</label>
-                        <input value="<?=$invoice["address1"]?>"  type="text" id="address_1" name="address_1" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full py-1.5 px-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500
-                        dark:focus:border-blue-500" placeholder="Direccion 1" required />
-                    </div>
-                    <div class="mb-2">
-                        <label for="address_2" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Dirección
-                        2</label>
-                        <input value="<?=$invoice["address2"]?>"  type="text" id="address_2" name="address_2" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full py-1.5 px-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500
-                        dark:focus:border-blue-500" placeholder="Direccion 1" />
-                    </div>
-                    <div class="mb-2">
-                        <label for="zip" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Codigo
-                        postal</label>
-                        <input  value="<?=$invoice["zip"]?>"  type="number" id="zip" name="zip" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full py-1.5 px-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500
-                        dark:focus:border-blue-500" placeholder="Codigo postal" />
-                    </div>
-                    <div class="mb-2">
-                        <label for="country" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">País</label>
-                        <input  value="<?=$invoice["country"]?>"  type="text" id="country" name="country" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full py-1.5 px-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500
-                        dark:focus:border-blue-500" placeholder="País" required />
-                    </div>
-                    <div class="mb-2">
-                        <label for="state"
-                        class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Provincia</label>
-                        <input value="<?=$invoice["state"]?>"  type="text" id="state" name="state" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full py-1.5 px-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500
-                        dark:focus:border-blue-500" placeholder="Provincia" required />
-                    </div>
-                    <div class="mb-2">
-                        <label for="city" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Ciudad</label>
-                        <input  value="<?=$invoice["city"]?>"  type="text" id="city" name="city" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full py-1.5 px-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500
-                        dark:focus:border-blue-500" placeholder="Ciudad" required />
-                    </div>
-                    <input type="hidden" name="type"  value="<?=$invoice["type"]?>" >
-                    <input id="autoComp" type="hidden" name="autoComp" value="false">
-                    <div class="mb-2">
-                        <label for="category" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Tipo de
-                        cliente</label>
-                        <select  value="<?=$invoice["category"]?>" onchange="selectCategory(this)" name="category" id="category"
-                        class="block w-full py-1.5 px-2.5 border border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500"
-                        required>
-                        <option value="f">Cliente Fiscal</option>
-                        <option selected="selected" value="p">Cliente Particular</option>
-                        </select>
-                    </div>
-                    <div class="mb-">
-                        <label for="NIF" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">NIF</label>
-                        <input  value="<?=$invoice["NIF"]?>" type="text" id="NIF" name="NIF" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full py-1.5 px-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500
-                        dark:focus:border-blue-500" placeholder="CIF / DNI" required />
+                    <div class="flex items-end justify-end p-4 rounded-t dark:border-gray-600">
+                        <button onclick="updateContact()" type="button" class="flex  items-center bg-[#afafaf]  bg-opacity-10 transition-all duration-200 hover:bg-opacity-30 py-1 px-3 rounded-lg" data-modal-hide="modal-contact">
+                            <p class="font-[500]">Hecho</p>
+                            <svg width="20px" height="20px" viewBox="0 0 24 24" role="img" xmlns="http://www.w3.org/2000/svg" aria-labelledby="okIconTitle" stroke="#000000" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" fill="none" color="#000000"> <title id="okIconTitle">Ok</title> <polyline points="4 13 9 18 20 7"/> </svg>
+                            <span class="sr-only">Close modal</span>
+                        </button>
                     </div>
                 </div>
             </div>
         </div>
+    </div>
+
+
+
         <!-- ############################################################################################################################################################################ -->
 
         <!-- ############################################################################################################################################################################ -->
@@ -398,7 +436,7 @@ $db2 = Intratum\Facturas\Environment::$db;
 
         </div>
 
-        <hr class="w-full h-[2px] bg-[#362faa] border-0 rounded dark:bg-gray-700">
+        <hr class="w-full h-[2px] bg-black  border-0 rounded dark:bg-gray-700">
 
         <ul id="totalMenu">
         <?php foreach ($calcTaxs as $key) { ?>
@@ -406,7 +444,7 @@ $db2 = Intratum\Facturas\Environment::$db;
         <?php } ?>
         </ul>
 
-        <hr class="w-full h-[2px] bg-[#362faa] border-0 rounded dark:bg-gray-700">
+        <hr class="w-full h-[2px] bg-black  border-0 rounded dark:bg-gray-700">
 
         <div>
 
@@ -446,7 +484,7 @@ $db2 = Intratum\Facturas\Environment::$db;
 
                         <div class="flex ">
 
-                            <select onchange="" value="<?=$invoice["serial_id"]?>" name="invoice_serial"
+                            <select onchange="" required value="<?=$invoice["serial_id"]?>" name="invoice_serial"
                                 id="select_serials" class="w-[30%] bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block  p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white
 
                             dark:focus:ring-primary-500 dark:focus:border-primary-500">
@@ -459,7 +497,7 @@ $db2 = Intratum\Facturas\Environment::$db;
 
                             </select>
 
-                            <input type="number" value="<?=$invoice["invoice_number"]?>" name="invoice_number"
+                            <input type="number" required value="<?=$invoice["invoice_number"]?>" name="invoice_number"
                                 id="invoice_number" class="w-full bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500
 
                             dark:focus:border-blue-500">
@@ -477,7 +515,7 @@ $db2 = Intratum\Facturas\Environment::$db;
 
                         <div class="flex mb-10">
 
-                            <input type="text" name="name" id="name" value="<?=$invoice["name"]?>" class="w-full bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500
+                            <input type="text" name="name"  required  id="name" value="<?=$invoice["name"]?>" class="w-full bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500
 
                                 dark:focus:border-blue-500">
 
@@ -653,6 +691,16 @@ $db2 = Intratum\Facturas\Environment::$db;
 
 $(document).ready(function() {
 
+    selectCategory(
+        <?php if ( $customer) {
+            echo '"'.$customer["category"].'"';
+            
+        }else{
+            echo "'f'";
+        } ?>
+    )
+
+    updateContact();
 
     addTaxText()
 
@@ -660,58 +708,62 @@ $(document).ready(function() {
 
         e.preventDefault();
 
-        var data = $(this).serializeJSON();
+        if(addCustInfo()){
 
-        data["invoice_total"] = invoice_total
+            var data = $(this).serializeJSON();
 
-        data["invoice_subtotal"] = invoice_subtotal
+            data["invoice_total"] = invoice_total
 
-        data.invoice_date = moment(data.invoice_date, 'MM/DD/YYYY').format('YYYY-MM-DD');
-        console.log(data)
-        $.ajax({
+            data["invoice_subtotal"] = invoice_subtotal
 
-            type: 'UPDATE',             
+            data.invoice_date = moment(data.invoice_date, 'MM/DD/YYYY').format('YYYY-MM-DD');
+            console.log(data)
+            $.ajax({
 
-            url: '/ajax/facturas',
+                type: 'UPDATE',             
 
-            dataType: 'json',
+                url: '/ajax/facturas',
 
-            contentType: 'application/json',
+                dataType: 'json',
 
-            data: JSON.stringify(data),
+                contentType: 'application/json',
 
-            success: function(d) {
+                data: JSON.stringify(data),
 
-                if (d.success == true) {
+                success: function(d) {
 
-                    if (<?php echo $invoice["type"]; ?> == 0) {
-                        window.location.href = '/gastos/';
-                    } else if (<?php echo $invoice["type"]; ?> == 2) {
-                        window.location.href = '/presupuestos/';
-                    } else {
-                        window.location.href = '/facturas/';
+                    if (d.success == true) {
+
+                        if (<?php echo $invoice["type"]; ?> == 0) {
+                            window.location.href = '/gastos/';
+                        } else if (<?php echo $invoice["type"]; ?> == 2) {
+                            window.location.href = '/presupuestos/';
+                        } else {
+                            window.location.href = '/facturas/';
+                        }
+
+
+
+
+                    }if (d.success == false && d.errors) {
+
+                        setNotification(d.errors)
+
                     }
-
-
-
-
-                }if (d.success == false && d.errors) {
-
-                    setNotification(d.errors)
 
                 }
 
-            }
-
-        });
+            });
+        }
 
     });
 
 });
 
-function selectCategory(item) {
 
-    if ($(item).val() == 'f') {
+function selectCategory(option) {
+    console.log(option)
+    if (option == 'f') {
 
         $("#nombre-fiscal").removeClass("hidden")
 
@@ -721,7 +773,7 @@ function selectCategory(item) {
 
         $("#campo-apellidos").addClass("hidden")
 
-    } else {
+    } else if (option == 'p') {
 
         $("#nombre-particular").removeClass("hidden")
 
@@ -732,6 +784,9 @@ function selectCategory(item) {
         $("#div-responsive-1").removeClass("col-span-2")
 
     }
+
+
+
 }
 
 var aftertax =<?=json_encode($aftertax)?>;
@@ -940,7 +995,7 @@ function addItem() {
 
         $('#price').val("");
 
-        $('#id_item').val("");
+        $('#id-item').val("");
 
         $('#quantity').val("");
 
@@ -1026,9 +1081,28 @@ function updateTotalMenu() {
 
 <!-- ############################################################################################################################################################################ -->
 
-<script>
-var delay = 200;
 
+<script>
+
+function highlightBackground(id) {
+    
+
+    if (id == "fiscal") {
+        selectCategory("f")
+        $("#fiscal").addClass("bg-blue-300")
+        $("#particular").removeClass("bg-blue-300")
+    }else{
+        selectCategory("p")
+        $("#particular").addClass("bg-blue-300")
+        $("#fiscal").removeClass("bg-blue-300")
+
+    }
+
+
+}
+
+
+var delay = 200;
 var timerId;
 
 $("#searchAccount").eq(0).bind("keyup paste", function() {
@@ -1036,6 +1110,8 @@ $("#searchAccount").eq(0).bind("keyup paste", function() {
     clearTimeout(timerId);
 
     var value = $(this).val();
+
+
 
     timerId = setTimeout(function() {
 
@@ -1049,6 +1125,58 @@ $("#searchAccount").eq(0).bind("keyup paste", function() {
 
 });
 
+function openModal(id=null){
+
+    $('#lista').addClass("hidden");
+
+
+    console.log(id)
+    if (id == "newCust") {
+
+
+        
+        $('#NIF').val('');
+        $('#boton-cont').addClass('hidden');
+
+
+        $('#first_name').val($('#searchAccount').val());
+
+        $('#last_name').val('');
+
+        $('#email').val('');
+
+        $('#phone').val('');
+
+        $('#address_1').val('');
+
+
+        $('#zip').val('');
+
+        $('#country').val('');
+
+        $('#state').val('');
+
+        $('#city').val('');
+
+        $('#category').val('');
+
+        $('#cust-id').val('');
+        $('#autoComp').val(false);
+        
+    }
+
+
+
+    $("#modal-contact").removeClass("hidden")
+    $("#modal-contact").addClass("flex")
+    $("#modal-contact").addClass("flex")
+    $("#modal-contact").addClass("bg-black bg-opacity-30")
+
+
+    $("#modal-contact").attr("role", "dialog");
+
+    $("#modal-contact").attr("aria-modal", "true");
+}
 function search(value) {
 
     $.ajax({
@@ -1071,23 +1199,44 @@ function search(value) {
 
             $('#lista').removeClass("hidden");
 
-            $.each(response, function(index, element) {
+            setTimeout(function() {
 
+                $('#lista').addClass("hidden");
+
+
+            }, 5000);
+            
+            console.log(response)
+            $.each(response, function(index, element) {
+                
                 $('#lista').append('<li data-id="' + element.id + '"' +
-                    'class="element-li w-full px-4 py-2 border-b border-gray-200 dark:border-gray-600">' +
-                    element.email + '</li>');
+                    'class="cursor-pointer  element-li w-full px-4 py-2 border-b border-gray-200 dark:border-gray-600">' +
+                    element.first_name + '</li>');
 
             });
 
+
+            $('#lista').append('<li><button id="newCust" onClick="openModal(this.id)" type="button" class="cursor-pointer   w-full px-4 py-2 border-b bg-gray-500 bg-opacity-20 border-gray-200 dark:border-gray-600"> <span class="font-[700]" >Añadir contacto: </span> '+ value +'</button></li>');
+           
         },
 
     });
 
+
+
+
 }
+
+
+
 
 $(document).on('click', '.element-li', function() {
 
     $('#lista').empty();
+
+
+
+    
 
     $('#lista').addClass("hidden");
 
@@ -1107,60 +1256,94 @@ $(document).on('click', '.element-li', function() {
 
     });
 
-
-
 });
+
 
 function autocompleteForm(response) {
 
+  console.log(response);
 
-    $('#NIF').val(response.NIF);
+  $("#NIF").val(response.NIF);
 
-    $('#searchAccount').val(response.first_name);
+  $("#first_name").val(response.first_name);
 
-    $('#last_name').val(response.last_name);
+  $("#last_name").val(response.last_name);
 
-    $('#email').val(response.email);
+  $("#email").val(response.email);
 
-    $('#phone').val(response.phone);
+  $("#phone").val(response.phone);
 
-    $('#address_1').val(response.address1);
+  $("#address_1").val(response.address1);
 
-    $('#address_2').val(response.address2);
+  $("#zip").val(response.zip);
 
-    $('#zip').val(response.zip);
+  $("#country").val(response.country);
 
-    $('#country').val(response.country);
+  $("#state").val(response.state);
 
-    $('#state').val(response.state);
+  $("#city").val(response.city);
 
-    $('#city').val(response.city);
+  $("#category").val(response.category);
 
-    $('#category').val(response.category);
+  $("#cust-id").val(response.id);
 
-    $('#cust-id').val(response.id);
+  $("#autoComp").val(true);
 
-    $('#autoComp').val(true);
+
+
+
+
+  updateContact();
 
 }
+
+function addCustInfo(){
+
+    var camposVacios = $('#first_name, #email, #phone, #address_1, #zip, #country, #state, #city, #NIF').filter(function() {
+            return $(this).val().trim() === '';
+        });
+
+        if (camposVacios.length > 0) {
+            setNotification([{"error":"bad_contact_info","message":"Debes completar los datos del cliente."}])
+            return false
+        }else{
+            return true
+
+        }
+}
+
+function updateContact(){
+
+    $('#searchAccount').val("");
+
+
+    $('#boton-cont').removeClass('hidden');
+
+
+    $("#cont_cliente").html(
+        $("#first_name").val() +
+    " <br> " +
+    $("#NIF").val() +
+    " <br> " +
+    $("#address_1").val() +
+    " <br> " +
+    $("#country").val() +
+    " " +
+    $("#state").val() +
+    " " +
+    $("#city").val() +
+    " " +
+    $("#zip").val() +
+    " <br> " +
+    $("#email").val() +
+    " <br> " +
+    $("#phone").val());
+
+}
+
+
+
 </script>
-
-<style>
-    @keyframes slideOutLeft {
-        0% {
-            transform: translateX(0);
-        }
-        100% {
-            transform: translateX(100%);
-            opacity: 0;
-        }
-
-    }
-
-  .slide-out-left {
-    animation: slideOutLeft 0.3s ease-out forwards;
-  }
-</style>
 
 <!-- ############################################################################################################################################################################ -->
 
@@ -1230,7 +1413,7 @@ $(document).on('click', '.element-li-item', function() {
 
     $('#lista-item').empty();
 
-    $('#lista-item').addClass("lista-item");
+    $('#lista-item').addClass("hidden");
 
     $.ajax({
 

@@ -12,14 +12,14 @@ $id2 = Intratum\Facturas\Util::getID2ByUUID("inv_",$item);
 
 $invoice = Intratum\Facturas\Factura::get($params = ["id2"=>$id2]);
 
-$title = "Eliminar factura ".$invoice["name"]
+$title = "Eliminar documento - ".$invoice["name"]
 
 
 ?>
 
 <div class="flex flex-col justify-center items-center">
 
-<h2 class="text-center font-[600] text-[20px]">¿Este seguro que desea eliminar esta <strong>factura</strong>?</h2>
+<h2 class="text-center font-[600] text-[20px]">¿Este seguro que desea eliminar este documento?</h2>
 
 <hr class="w-48 h-1 mx-auto my-4 bg-gray-100 border-0 rounded md:my-10 dark:bg-gray-700">
 
@@ -29,7 +29,7 @@ $title = "Eliminar factura ".$invoice["name"]
 
     <div class="flex flex-col pb-3">
 
-        <dt class="mb-1 text-gray-500 md:text-lg dark:text-gray-400">Factura Num:</dt>
+        <dt class="mb-1 text-gray-500 md:text-lg dark:text-gray-400">Num:</dt>
 
         <dd class="text-lg font-semibold"><?= $invoice["name"]?></dd>
 
@@ -115,7 +115,14 @@ $(document).ready(function(){
             success: function(d){
 
                 if(d.success == true){
-                    window.location.href = '/facturas/';
+                   
+                    if (<?php echo $invoice["type"]; ?> == 0) {
+                        window.location.href = '/gastos/';
+                    } else if (<?php echo $invoice["type"]; ?> == 2) {
+                        window.location.href = '/presupuestos/';
+                    } else {
+                        window.location.href = '/facturas/';
+                    }
                 }
 
             }

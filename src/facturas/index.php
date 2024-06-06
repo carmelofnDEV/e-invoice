@@ -33,9 +33,15 @@ $all = array_reverse($all);
 
 <div class="py-5 px-10">
 
-    <div class="w-full flex justify-end items-end mb-5 gap-2">   
+
+
+    <div class="w-full flex justify-end items-end mb-5 gap-2">  
+        
+    
     
         <div date-rangepicker class="flex items-center">
+
+
 
             <div class="relative">
                 <div class="absolute inset-y-0 start-0 flex items-center ps-3 pointer-events-none">

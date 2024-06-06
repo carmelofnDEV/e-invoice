@@ -75,7 +75,6 @@ class Factura
 ' . $data['invoice_serial'] . '
 
 ';
-
         if (empty($data["name"])) {
             $db = Environment::$db;
             $db->where('id', $data['invoice_serial']);
@@ -129,6 +128,7 @@ class Factura
                 $data = [
                     'id2' => Util::genUUID(),
                     'user_id' => Util::getSessionUser()["id"],
+                    'account_id' => User::getUserAccount(Util::getSessionUser()["id"])["id"],
                     'title' => $i['type'] ?? '',
                     'created' => Util::getDate(),
                     'search' => $search,
@@ -239,29 +239,45 @@ class Factura
 
         $db = Environment::$db;
 
-        foreach ($data["items"] as $i) {
 
-            $subtotal += floatVal($i["price"]) * $i["quantity"];
+        if(!empty($data["items"])){
+            
+            foreach ($data["items"] as $i) {
 
-            if (array_key_exists('tax_0', $i)) {
-                $tax = explode("/", $i["tax_0"]);
+                $subtotal += floatVal($i["price"]) * $i["quantity"];
 
-                $db->where('id2', $tax[3]);
-                $results = $db->get('tax');
+                if (array_key_exists('tax_0', $i)) {
+                    $tax = explode("/", $i["tax_0"]);
 
-                $totaltaxs += round($i["subtotal"] * ($tax[2] / 100), 2);
+                    $db->where('id2', $tax[3]);
+                    $results = $db->get('tax');
 
+                    $totaltaxs += round($i["subtotal"] * ($tax[2] / 100), 2);
+
+                }
+
+                if (array_key_exists('tax_1', $i)) {
+                    $tax = explode("/", $i["tax_1"]);
+
+                    $db->where('id2', $tax[3]);
+                    $results = $db->get('tax');
+
+                    $totaltaxs += round($i["subtotal"] * ($tax[2] / 100), 2);
+
+                }
             }
+            
+        }else{
 
-            if (array_key_exists('tax_1', $i)) {
-                $tax = explode("/", $i["tax_1"]);
+            $errors[] = [
+                "error" => "no_items",
+                "message" => "Debes añadir al menos un item.",
+            ];
 
-                $db->where('id2', $tax[3]);
-                $results = $db->get('tax');
-
-                $totaltaxs += round($i["subtotal"] * ($tax[2] / 100), 2);
-
-            }
+            return [
+                'success' => false,
+                'errors' => $errors,
+            ];
         }
 
         $data['total'] = $subtotal + $totaltaxs;
@@ -485,7 +501,7 @@ class Factura
             "taxNumber"     => $buyer["NIF"],
             "name"          => $buyer["first_name"],
             "firstSurname"  => $buyer["last_name"],
-            "address"       => ($buyer["address1"] . $buyer["address2"]),
+            "address"       => ($buyer["address1"]),
             "postCode"      => $buyer["zip"],
             "town"          => $buyer["city"],
             "province"      => $buyer["state"]
@@ -820,7 +836,7 @@ class Factura
                     unset($invoice['id']);
                     $invoice['created'] = Util::getDate();
                     $invoice['updated'] = Util::getDate();
-                    $invoice['invoice_date'] = Util::getDate();
+                    $invoice['invoice_date'] = $task["release_date"];
                     $invoice['id2'] = Util::genUUID();
 
                     if ($invoice["type"] == 1) {
@@ -828,6 +844,13 @@ class Factura
 
                         $invoice['name'] = ($serial_options["tag"].$serial_options["number"]);
                         $invoice['invoice_number'] = $serial_options["number"];
+
+
+                    }
+                    
+                    if ($invoice["type"] == 0) {
+
+                        $invoice['name'] = "xxxxxxxxxx";
 
 
                     }

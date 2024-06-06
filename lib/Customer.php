@@ -90,7 +90,7 @@ class Customer
 
         $db2->where('account_id', $parms['acc_id']);
 
-        $all = $db2->get('customer', 10, 'id, id2 as _id, email');
+        $all = $db2->get('customer', 10, 'id, id2 as _id, first_name');
 
         foreach ($all as $k => $a) {
             $all[$k]['_id'] = ['cust', 0, $a['_id']];

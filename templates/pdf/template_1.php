@@ -2635,6 +2635,7 @@
         padding: 27px 15px 27px 15px;
     }
     }
+
 </style>
 
 
@@ -2655,6 +2656,9 @@
                 <div class="tm_logo"><img src="http://<?= $_SERVER['HTTP_HOST'] ?>/static/images/<?=$acc["hash_logo"]?>" alt="Logo"></div>
             <?php }?>
             </div>
+
+            <div class="watermark"></div>
+            
             <div class="tm_invoice_right tm_text_right tm_mobile_hide">
               <div class="tm_f50 tm_text_uppercase tm_white_color">Invoice</div>
             </div>
