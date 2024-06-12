@@ -1,5 +1,7 @@
 assets/images/*
 assets/certs/*
 pdf/*
+einvoices/*
+
 .secret/
 .vscode/ 

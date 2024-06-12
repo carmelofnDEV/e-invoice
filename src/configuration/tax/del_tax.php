@@ -6,6 +6,8 @@ Intratum\Facturas\Util::checkSession()
 $item = $_GET['item'];
 $id2 = Intratum\Facturas\Util::getID2ByUUID("tax_",$item);
 $tax = Intratum\Facturas\Tax::get($params = ["id2"=>$id2]);
+
+$title = "Eliminar impuesto"
 ?>
 
 <div class="flex flex-col justify-center items-center">
@@ -49,7 +51,7 @@ $(document).ready(function(){
             data: JSON.stringify(data),
             success: function(d){
                 if(d.success == true){
-                    window.location.href = '/configuracion/impuestos/';
+                    window.location.href = '/configuracion/impuestos/?success=true';
                 }
             }
         });

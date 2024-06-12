@@ -48,7 +48,7 @@ $all = array_reverse($all)
                 <p class="text-gray-700 dark:text-gray-300 text-sm"><?= $i["city"] ?>, <?= $i["country"] ?></p>
             </div>
             <div class="px-6 py-4">
-            <a href="ed?item=<?=Intratum\Facturas\Util::getUUIDByID2('cust', $i["id2"]);?>" class=" select-none rounded-lg bg-green-500 py-3 px-6 text-center align-middle font-sans text-xs font-bold uppercase text-white shadow-md shadow-green-500/20 transition-all hover:shadow-lg hover:shadow-green-500/40 focus:opacity-[0.85] focus:shadow-none active:opacity-[0.85] active:shadow-none disabled:pointer-events-none disabled:opacity-50 disabled:shadow-none">
+            <a href="/documento/ed?doc=presupuesto&item=<?=Intratum\Facturas\Util::getUUIDByID2('cust', $i["id2"]);?>" class=" select-none rounded-lg bg-green-500 py-3 px-6 text-center align-middle font-sans text-xs font-bold uppercase text-white shadow-md shadow-green-500/20 transition-all hover:shadow-lg hover:shadow-green-500/40 focus:opacity-[0.85] focus:shadow-none active:opacity-[0.85] active:shadow-none disabled:pointer-events-none disabled:opacity-50 disabled:shadow-none">
                         EDITAR</a>    
                 
                 <a href="del?item=<?=Intratum\Facturas\Util::getUUIDByID2('cust', $i["id2"]);?>" 

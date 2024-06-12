@@ -51,9 +51,7 @@ $(document).ready(function(){
             data: JSON.stringify(data),
             success: function(d){
                 if(d.success == true){
-                    console.log("trueeeee")
-                    window.location.href = '/productos/';
-                    exit();
+                    window.location.href = '/productos/?success=true';
                 }
             }
         });

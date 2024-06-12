@@ -53,7 +53,7 @@ $(document).ready(function(){
             success: function(d){
                 if(d.success == true){
                     console.log("trueeeee")
-                    window.location.href = '/productos/';
+                    window.location.href = '/productos/?success=true';
                     exit();
                 }
             }

@@ -10,7 +10,6 @@ $title = "Eliminar cliente ".$product["first_name"]
 ?>
 <div class="flex flex-col justify-center items-center">
 <h2 class="text-center font-[600] text-[20px]">¿Este seguro que desea eliminar este <strong>cliente</strong>?</h2>
- class="w-48 h-1 mx-auto my-4 bg-gray-100 border-0 rounded md:my-10 dark:bg-gray-700">
 
 <div class="flex flex-col  max-w-md text-gray-900 divide-y divide-gray-200 dark:text-white dark:divide-gray-700">
     <div class="flex flex-col pb-3">
@@ -58,8 +57,7 @@ $(document).ready(function(){
             success: function(d){
                 if(d.success == true){
                     console.log("trueeeee")
-                    window.location.href = '/contactos/';
-                    exit();
+                    window.location.href = '/contactos/?success=true';
                 }
             }
         });

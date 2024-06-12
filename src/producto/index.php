@@ -12,6 +12,7 @@ if(!empty($_GET['q']))
     Intratum\Facturas\Environment::$db->where('search', '%'.$_GET['q'].'%', 'LIKE');
 
 Intratum\Facturas\Environment::$db->where('account_id',$acc_id);
+Intratum\Facturas\Environment::$db->where('state',1);
 $all = Intratum\Facturas\Environment::$db->get('product');
 $all = array_reverse($all)
 
@@ -21,7 +22,7 @@ $all = array_reverse($all)
 
     <div class="w-full flex justify-between items-end mb-5 gap-2">   
 
-        <a href="nuevo/" id="dropdownCust" class="flex bg-[#1A1917] rounded-md px-3 py-1 justify-center items-center gap-3 " >
+        <a href="/nuevo/" id="dropdownCust" class="flex bg-[#1A1917] rounded-md px-3 py-1 justify-center items-center gap-3 " >
             <p class="text-white text-[20px]">Nuevo</p>
             <svg class="" width="20px" height="20px" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><g id="SVGRepo_bgCarrier" stroke-width="0"></g><g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g><g id="SVGRepo_iconCarrier"> <path d="M4 12H20M12 4V20" stroke="#ffffff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path> </g></svg>
         </a>
@@ -29,7 +30,7 @@ $all = array_reverse($all)
         <div class="flex ">
             <label for="searchInput" class="sr-only">Search</label>
             <div class="relative w-full">
-                    <input type="text" id="searchInput" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full ps p-2.5  dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="Buscar facturas..." required />
+                    <input type="text" id="searchInput" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full ps p-2.5  dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="Buscar productos..." required />
             </div>
             <button onclick="buscar()" class="p-2.5 ms-2 text-sm font-medium text-white bg-blue-700 rounded-lg border border-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">
                 <svg class="w-4 h-4" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 20 20">
@@ -130,7 +131,7 @@ $all = array_reverse($all)
             success: function(d) {
 
                 if (d["success"] == true) {
-                    window.location.href = '/facturas/';
+                    window.location.href = '/facturas/?success=true';
                 }
 
             }
@@ -156,7 +157,7 @@ $all = array_reverse($all)
             success: function(d) {
 
                 if (d["success"] == true) {
-                    window.location.href = '/facturas/';
+                    window.location.href = '/facturas/?success=true';
                 }
 
             }
@@ -194,7 +195,7 @@ $all = array_reverse($all)
             success: function(d) {
                 console.log(d)
                 if(d.content == 1){
-                   window.location.href = "/facturas/";
+                   window.location.href = "/facturas/?success=true";
                 }
             }
         });

@@ -7,6 +7,21 @@ class Tax
 
     public static function insert(array $data){
         //$all = Environment::$db->get('tax');
+
+        
+
+        if (strlen($data["name"]) > 5) {
+            $data["name"] =  substr($data["name"], 0, 5);
+        }
+
+        
+        if (!is_numeric($data["value"])) {
+            return ['success' => false];
+        }
+
+
+        
+
         $search = $data['name'] . '
 ' . $data['value'];
 
@@ -24,7 +39,8 @@ class Tax
 
         Environment::$db->insert('tax', $data);
 
-        return ['success' => true];
+        return ['success' => true,
+                "id2_response" => $data["id2"]];
     }
 
     public static function update(array $data)

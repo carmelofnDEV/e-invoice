@@ -10,7 +10,7 @@ class Product{
         $search = $data['title'].'
 ' . $data['description'] . '
 ' . $data['price'];
-	
+
 		$data = [
 			'id2' => Util::genUUID(),
 			'account_id' => User::getUserAccount(Util::getSessionUser()["id"])["id"],
@@ -21,6 +21,7 @@ class Product{
 			"search"=> $search,
 			'description'=> $data["description"] ?? '',
 			'price'=> floatVal($data["price"]) * 100 ?? 0,
+			'state'=> 1,
 		];
 		
 
@@ -54,12 +55,16 @@ class Product{
 	public static function delete(array $data){
 		$db2 = Environment::$db;
 		$db2->where('id2', $data["id2"]);
-		if($db2->delete('product')) echo 'successfully deleted';
+		//if($db2->delete('product')) echo 'successfully deleted';
+		$db2->update('product', [
+			'state' => 2
+		]);
 
 		return ['success' => true];
 	}
 
 	public static function all($parms = []){
+		
 		$db2 = Environment::$db;
 
         if (!empty($parms['q'] )) {
@@ -67,6 +72,7 @@ class Product{
         }
 
 		$db2->where('account_id', $parms['acc_id']);
+		$db2->where('state', 1);
 
         $all = $db2->get('product', 10, 'id, id2 as _id,title');
         foreach ($all as $k => $a) {

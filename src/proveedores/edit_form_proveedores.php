@@ -47,21 +47,21 @@ $title="Editar proveedor"
                 <div>
                     <label for="email" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Correo</label>
                     <input  value="<?=$customer["email"]?>" type="email" name="email" id="email" class="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                        placeholder="correo@email.com" required="">
+                        placeholder="correo@email.com" required>
                 </div>
 
                 <div>
                     <label for="phone" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Teléfono</label>
                     <input  value="<?=$customer["phone"]?>" type="tel" name="phone" id="phone" class="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                        placeholder="000-000-000" required="">
+                        placeholder="000-000-000" required>
                 </div>
             </div>
 
             <div class="flex gap-5 col-span-2">
                 <div class="mb-5">
-                    <label for="address1" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Dirección 1 *</label>
+                    <label for="address1" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Dirección  *</label>
                     <input  value="<?=$customer["address1"]?>" type="text" id="address1" name="address1" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                        placeholder="Direccion 1" required />
+                        placeholder="Direccion " required />
                 </div>
 
         </div>
@@ -142,7 +142,7 @@ $(document).ready(function(){
             success: function(d){
                 if(d == true){
                     console.log("trueeeee")
-                    window.location.href = '/contactos/';
+                    window.location.href = '/contactos/?success=true';
                     exit();
                 }
             }

@@ -59,7 +59,7 @@ $(document).ready(function(){
             success: function(d){
                 if(d.success == true){
                     console.log("trueeeee")
-                    window.location.href = '/contactos/';
+                    window.location.href = '/contactos/?success=true';
                     exit();
                 }
             }

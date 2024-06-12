@@ -13,11 +13,12 @@ class Factura
 {
 
     public static function insert(array $data)
-    {
+{
+        
         $subtotal = 0;
         $totaltaxs = 0;
         $errors = [];
-
+        $discount = $data["discount"];
 
         $db = Environment::$db;
 
@@ -59,7 +60,6 @@ class Factura
             ];
         }
 
-        $data['total'] = $subtotal + $totaltaxs;
 
         //$all = Environment::$db->get('customer');
 
@@ -106,7 +106,7 @@ class Factura
             'city' => $data['city'],
             'zip' => $data['zip'],
             'subtotal' => $data['invoice_subtotal'] * 100,
-            'total' => $data['total'] * 100,
+            'total' => $data['invoice_total'] * 100,
             'invoice_state' => 0,
             'serial_id' => $data["invoice_serial"],
             'invoice_number' => $data["invoice_number"],
@@ -120,8 +120,12 @@ class Factura
         foreach ($invoice_items as $i) {
 
             if ($i["id"] == "") {
+                if (!isset($i['description'])) {
+                    $i['description'] = "";
+                }
+                
 
-                $search = $i['type'] . '
+                $search = $i['title'] . '
 ' . $i['description'] . '
 ' . $i['price'];
 
@@ -129,11 +133,12 @@ class Factura
                     'id2' => Util::genUUID(),
                     'user_id' => Util::getSessionUser()["id"],
                     'account_id' => User::getUserAccount(Util::getSessionUser()["id"])["id"],
-                    'title' => $i['type'] ?? '',
+                    'title' => $i['title'] ?? '',
                     'created' => Util::getDate(),
                     'search' => $search,
                     'description' => $i["description"] ?? '',
                     'price' => floatVal($i["price"]) * 100 ?? 0,
+                    'state' => 1,
                 ];
 
                 $i["id"] = Environment::$db->insert('product', $data);
@@ -195,10 +200,21 @@ class Factura
 
         }
 
+
+        if ($discount != "") {
+            $parms["OPTIONS"] = [
+                ["VALUE" => $discount,
+                    "OPTION" => "DISCOUNT"]
+                ];
+                InvoiceSetting::save($parent_id=$id_invoice,$params=$parms);
+        }
+
         return ['success' => true];
     }
 
     public static function delete($data){
+
+
         
         $db = Environment::$db;
 
@@ -236,6 +252,8 @@ class Factura
         //calcular total
         $subtotal = 0;
         $totaltaxs = 0;
+
+        $discount = $data["discount"];
 
         $db = Environment::$db;
 
@@ -279,8 +297,6 @@ class Factura
                 'errors' => $errors,
             ];
         }
-
-        $data['total'] = $subtotal + $totaltaxs;
 
         $main_id = $data["id_invoice"];
 
@@ -328,8 +344,8 @@ class Factura
             'state' => $data['state'],
             'city' => $data['city'],
             'zip' => $data['zip'],
-            'subtotal' => $subtotal * 100,
-            'total' => $data['total'] * 100,
+            'subtotal' => $data['invoice_subtotal'] * 100,
+            'total' => $data['invoice_total'] * 100,
 
             'invoice_state' => 0,
 
@@ -428,6 +444,34 @@ class Factura
                 Environment::$db->insert('invoice_item_tax', $item_tax_data);
 
             }
+
+        }
+
+        $parms["OPTIONS"] = [
+            ["VALUE" => $discount,
+            "OPTION" => "DISCOUNT"]
+        ];
+
+
+
+
+
+
+        if ($discount == "") {
+            $parms["OPTIONS"] = [
+                ["VALUE" => $discount,
+                "OPTION" => "DISCOUNT"]
+            ];
+    
+            $exist = InvoiceSetting::delete($parent_id=$main_id,$params=$parms); 
+        }else if ($discount != "") {
+
+            $parms["OPTIONS"] = [
+                ["VALUE" => $discount,
+                "OPTION" => "DISCOUNT"]
+            ];
+    
+            $exist = InvoiceSetting::save($parent_id=$main_id,$params=$parms); 
 
         }
 
@@ -584,11 +628,15 @@ class Factura
         $db2->where('id2', $id2);
         $factura = $db2->getOne('invoice');
 
+
+
         $db2->where('id', $factura["serial_id"]);
         $serial = $db2->get('serial');
 
         $db2->where('invoice_id', $factura["id"]);
         $items = $db2->get('invoice_item');
+
+        $discount = InvoiceSetting::checkIfExistSetting($parent_id=$factura["id"],$params = ["OPTION" => "DISCOUNT",]);
 
         $db2->where('invoice_item_id', $factura["id"]);
         $taxs = $db2->get('invoice_item_tax');

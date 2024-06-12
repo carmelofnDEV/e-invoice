@@ -51,11 +51,11 @@ $custInvoices = Intratum\Facturas\Environment::$db->get('invoice');
 
             
                 <?php if ($customer["type"] == 'p') {?>
-                    <a href="/facturas/ed?item=<?=Intratum\Facturas\Util::getUUIDByID2('cust', $customer["id2"]);?>" class="bg-[#40A578] text-white px-4 py-2 rounded-md">Editar</a>
-                    <a href="/facturas/del?item=<?=Intratum\Facturas\Util::getUUIDByID2('cust', $customer["id2"]);?>" class="bg-[#FE0000] text-white px-4 py-2 rounded-md">Eliminar</a>
+                    <a href="/proveedores/ed?item=<?=Intratum\Facturas\Util::getUUIDByID2('cust', $customer["id2"]);?>" class="bg-[#40A578] text-white px-4 py-2 rounded-md">Editar</a>
+                    <a href="/proveedores/del?item=<?=Intratum\Facturas\Util::getUUIDByID2('cust', $customer["id2"]);?>" class="bg-[#FE0000] text-white px-4 py-2 rounded-md">Eliminar</a>
                 <?php }else{?>
-                    <a href="/facturas/ed?item=<?=Intratum\Facturas\Util::getUUIDByID2('cust', $customer["id2"]);?>" class="bg-[#40A578] text-white px-4 py-2 rounded-md">Editar</a>
-                    <a href="/facturas/del?item=<?=Intratum\Facturas\Util::getUUIDByID2('cust', $customer["id2"]);?>" class="bg-[#FE0000] text-white px-4 py-2 rounded-md">Eliminar</a>
+                    <a href="/clientes/ed?item=<?=Intratum\Facturas\Util::getUUIDByID2('cust', $customer["id2"]);?>" class="bg-[#40A578] text-white px-4 py-2 rounded-md">Editar</a>
+                    <a href="/clientes/del?item=<?=Intratum\Facturas\Util::getUUIDByID2('cust', $customer["id2"]);?>" class="bg-[#FE0000] text-white px-4 py-2 rounded-md">Eliminar</a>
                 <?php }?>
 
 
@@ -82,12 +82,12 @@ $custInvoices = Intratum\Facturas\Environment::$db->get('invoice');
 
     <div class="flex flex-col w-full text-md text-gray-700  dark:text-gray-200" aria-labelledby="dropdownCust">
 
-        <a href="/facturas/nuevo?cust=<?=Intratum\Facturas\Util::getUUIDByID2('cust', $customer["id2"]);?>" class="flex items-center gap-1 w-full border-l-4 border-[#0029FF] hover:bg-[#0029FF] animation-all duration-300 hover:bg-opacity-30 p-2">
+        <a href="/documento/nuevo?doc=factura&cust=<?=Intratum\Facturas\Util::getUUIDByID2('cust', $customer["id2"]);?>" class="flex items-center gap-1 w-full border-l-4 border-[#0029FF] hover:bg-[#0029FF] animation-all duration-300 hover:bg-opacity-30 p-2">
             Factura
 
         </a>
 
-        <a href="/gastos/nuevo?cust=<?=Intratum\Facturas\Util::getUUIDByID2('cust', $customer["id2"]);?>" class="flex items-center gap-1 w-full border-l-4 border-[#ffd600] hover:bg-[#ffd600] animation-all duration-300 hover:bg-opacity-30 p-2">
+        <a href="/documento/nuevo?doc=gasto&cust=<?=Intratum\Facturas\Util::getUUIDByID2('cust', $customer["id2"]);?>" class="flex items-center gap-1 w-full border-l-4 border-[#ffd600] hover:bg-[#ffd600] animation-all duration-300 hover:bg-opacity-30 p-2">
             Gasto
         </a>
     </div>
@@ -141,7 +141,7 @@ $custInvoices = Intratum\Facturas\Environment::$db->get('invoice');
 
 ?>
 
-    <div data-url="/facturas/ed?item=<?=Intratum\Facturas\Util::getUUIDByID2('inv', $i["id2"]);?>" class="db_div bg-[#ffffff] border-[1px] mb-1 grid grid-cols-5 items-center p-2 rounded-xl">
+    <div data-url="/documento/ed?item=<?=Intratum\Facturas\Util::getUUIDByID2('inv', $i["id2"]);?>" class="db_div bg-[#ffffff] border-[1px] mb-1 grid grid-cols-5 items-center p-2 rounded-xl">
 
         <h2 ><?= $i["first_name"]?></h2>
         <h2><?= $i["name"]?></h2>
@@ -249,7 +249,7 @@ $custInvoices = Intratum\Facturas\Environment::$db->get('invoice');
                                     
 
 
-                                <a href="del?item=<?=Intratum\Facturas\Util::getUUIDByID2('inv', $i["id2"]);?>" class="w-full flex gap-3 p-2 hover:bg-[#fafafafa] text-[#FE0000] rounded-md">
+                                <a href="/documento/del?item=<?=Intratum\Facturas\Util::getUUIDByID2('inv', $i["id2"]);?>" class="w-full flex gap-3 p-2 hover:bg-[#fafafafa] text-[#FE0000] rounded-md">
                                     <svg width="20px" height="20px" viewBox="0 0 1024 1024" xmlns="http://www.w3.org/2000/svg" fill="#FE0000" stroke="#FE0000"><g id="SVGRepo_bgCarrier" stroke-width="0"></g><g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g><g id="SVGRepo_iconCarrier"><path fill="#FE0000" d="M160 256H96a32 32 0 0 1 0-64h256V95.936a32 32 0 0 1 32-32h256a32 32 0 0 1 32 32V192h256a32 32 0 1 1 0 64h-64v672a32 32 0 0 1-32 32H192a32 32 0 0 1-32-32V256zm448-64v-64H416v64h192zM224 896h576V256H224v640zm192-128a32 32 0 0 1-32-32V416a32 32 0 0 1 64 0v320a32 32 0 0 1-32 32zm192 0a32 32 0 0 1-32-32V416a32 32 0 0 1 64 0v320a32 32 0 0 1-32 32z"></path></g></svg>
                                     <p>Eliminar</p>
                                 </a> 
@@ -519,6 +519,7 @@ $custInvoices = Intratum\Facturas\Environment::$db->get('invoice');
 
                 if (d["success"] == true) {
                     location.reload();
+
                 }
 
             }

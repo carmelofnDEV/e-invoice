@@ -51,8 +51,8 @@ $title = "Editar serial ".$serial["serial_tag"]
                 success: function(d){
                     if(d.success == true){
                         console.log("trueeeee")
-                        window.location.href = '/configuracion/seriales/';
-                        exit();
+                        window.location.href = '/configuracion/seriales/?success=true';
+                        
                     }
                 }
             });

@@ -74,7 +74,7 @@ $(document).ready(function() {
             success: function(d) {
                 if (d.success != false ) {
                     console.log(data)
-                    window.location.href = '/configuracion/impuestos/';
+                    window.location.href = '/configuracion/impuestos/?success=true';
                 }
             }
         });

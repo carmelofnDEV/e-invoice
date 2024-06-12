@@ -7,6 +7,13 @@ $title = 'Cuenta';
 ?>
 
 
+<div class="container mx-auto px-3 mt-8">
+<?php if(!empty($_GET['success'])){ ?>
+<div class="p-4 mb-4 text-sm text-green-800 rounded-lg bg-green-50 dark:bg-gray-800 dark:text-green-400" role="alert">
+  <span class="font-medium">Cambios guardados correctamente.</span>
+</div>
+<?php } ?>
+</div>
 
     <h2 class="text-center font-[600] text-[20px] mb-5">Mi empresa </h2>
 
@@ -50,9 +57,9 @@ $title = 'Cuenta';
     </div>
 
     <div class="mb-5">
-        <label for="address_1" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Dirección 1 *</label>
+        <label for="address_1" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Dirección  *</label>
         <input type="text" id="address_1" name="address_1" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-            placeholder="Direccion 1" required value="<?=$acc["address1"]?>"/>
+            placeholder="Direccion " required value="<?=$acc["address1"]?>"/>
     </div>
 
     <div class="mb-5">
@@ -175,7 +182,7 @@ $title = 'Cuenta';
                     success: function(d) {
                         console.log(d)
                         if (d == true) {
-                            window.location.href = '/';   
+                            window.location.href = '/empresa/?success=true';   
                             
                         }
                     }

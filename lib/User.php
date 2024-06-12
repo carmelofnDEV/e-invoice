@@ -81,6 +81,37 @@ class User
             'password' => $password,
         ]);
 
+        $acc_user  = Environment::$db->insert('accountuser', $data);
+
+        $tax = [
+            'id2' => Util::genUUID(),
+            'created' => Util::getDate(),
+            'updated' => Util::getDate(),
+            'user_id' => $user_id,
+            'account_id' => $account_id,
+            'name' => "IVA",
+            'value' => "21",
+            'search' => "IVA 21",
+            'type' => 1
+
+        ];
+
+        $serial = [
+            'id2' => Util::genUUID(),
+            'created' => Util::getDate(),
+            'updated' => Util::getDate(),
+            'user_id' => $user_id,
+            'account_id' => $account_id,
+            'serial_tag' => "",
+            'serial_number' => "0",
+
+        ];
+
+        Environment::$db->insert('serial', $serial);
+        Environment::$db->insert('tax', $tax);
+
+
+
     }
 
 

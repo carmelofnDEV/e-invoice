@@ -2709,9 +2709,14 @@
                     </tr>
                   </thead>
                   <tbody>
-                    <?php 
+                    <?php
+                     
+                        $subtotalWithoutDisc=0;
+
                         foreach ($items as $key) {
-                            $db2 = Intratum\Facturas\Environment::$db;     
+                            $db2 = Intratum\Facturas\Environment::$db;    
+                            
+                            $subtotalWithoutDisc += $key["subtotal"];
                             
                             $db2->where('id', $key["id_item"]);
                             $item = $db2->get('product');
@@ -2774,21 +2779,41 @@
               <div class="tm_right_footer">
                 <table class="tm_mb15">
                   <tbody>
+
+                  
                     <tr class="tm_gray_bg ">
                       <td class="tm_width_3 tm_primary_color tm_bold">Subtotal</td>
                       <td class="tm_width_3 tm_primary_color tm_bold tm_text_right"><?=$factura["subtotal"]/100?>€</td>
                     </tr>
-                    
-                    <?php 
-                        foreach ($invoiceTaxsList as $invoice_tax) {
-                    ?>
+
+                  
+                  <?php if ($discount) { ?>
+
 
                         <tr class="tm_gray_bg">
-                        <td class="tm_width_3 tm_primary_color"><?=$invoice_tax["tax_name"]?><span class="tm_ternary_color"> (<?=$invoice_tax["tax_value"]?>%)</span></td>
-                        <td class="tm_width_3 tm_primary_color tm_text_right"><?=$invoice_tax["tax_total"]?>€</td>
+                            <td class="tm_width_3 tm_primary_color">Descuento<span class="tm_ternary_color"> (<?=$discount[0]["value"]?>%)</span></td>
+                            <td class="tm_width_3 tm_primary_color tm_text_right">- <?=($subtotalWithoutDisc * ($discount[0]["value"]/100))?>€</td>
                         </tr>
 
                     <?php } ?>
+
+
+
+
+                    
+                    <?php 
+
+                        foreach ($invoiceTaxsList as $invoice_tax) {
+
+                    ?>
+
+                        <tr class="tm_gray_bg">
+                            <td class="tm_width_3 tm_primary_color"><?=$invoice_tax["tax_name"]?><span class="tm_ternary_color"> (<?=$invoice_tax["tax_value"]?>%)</span></td>
+                            <td class="tm_width_3 tm_primary_color tm_text_right"><?=$invoice_tax["tax_total"]?>€</td>
+                        </tr>
+
+                    <?php } ?>
+
 
                     <tr class="tm_accent_bg">
                       <td class="tm_width_3 tm_border_top_0 tm_bold tm_f16 tm_white_color">Total	</td>
@@ -2802,8 +2827,8 @@
           </div>
           <div class="tm_note tm_text_center tm_font_style_normal">
             <hr class="tm_mb15">
-            <p class="tm_mb2"><b class="tm_primary_color">Terminos y Condiciones:</b></p>
-            <p class="tm_m0"><?=$factura["invoice_terms"]?></p>
+                <p class="tm_mb2"><b class="tm_primary_color">Terminos y Condiciones:</b></p>
+                <p class="tm_m0"><?=$factura["invoice_terms"]?></p>
         </div>
       </div>
 

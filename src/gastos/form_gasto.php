@@ -90,7 +90,7 @@ if ($item){
                 <!-- Modal content -->
                 <div class="relative bg-white rounded-lg shadow dark:bg-gray-700">
                     <div class="flex items-start justify-between p-4 border-b rounded-t dark:border-gray-600">
-                        <h2 class="mb-2  font-[600] col-span-2 text-[20px]">Datos del receptor</h2>
+                        <h2 class="mb-2 font-[600] col-span-2 text-[20px]">Datos del receptor</h2>
                         <button type="button" class="text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm w-8 h-8 ml-auto inline-flex justify-center items-center dark:hover:bg-gray-600 dark:hover:text-white" data-modal-hide="modal-contact">
                             <svg class="w-3 h-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 14 14">
                                 <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m1 1 6 6m0 0 6 6M7 7l6-6M7 7l-6 6" />
@@ -138,8 +138,8 @@ if ($item){
                                 <input <?php if ($customer) { echo ' value="' . $customer["phone"] . '" '; } ?> type="tel" name="phone" id="phone" class="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full py-1.5 px-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="000-000-000" >
                             </div>
                             <div class="mb-2">
-                                <label for="address_1" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Dirección 1 *</label>
-                                <input <?php if ($customer) { echo ' value="' . $customer["address1"] . '" '; } ?> type="text" id="address_1" name="address_1" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full py-1.5 px-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="Direccion 1"  />
+                                <label for="address_1" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Dirección  *</label>
+                                <input <?php if ($customer) { echo ' value="' . $customer["address1"] . '" '; } ?> type="text" id="address_1" name="address_1" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full py-1.5 px-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="Direccion "  />
                             </div>
 
                             <div class="mb-2">
@@ -206,8 +206,8 @@ if ($item){
                   <label for="item"
                      class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Item</label>
                   <input type="text" id="autocomp-item" name="item" class="h-[40%] py-4 px-6 bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="Item" />
-                  <div class="absolute top- left-0">
-                     <ul id="lista-item" class="hidden w-60 text-sm font-medium text-gray-900 bg-white border border-gray-200 rounded-lg dark:bg-gray-700 dark:border-gray-600 dark:text-white">
+                  <div class="absolute top- left-0 w-full">
+                     <ul id="lista-item" class="hidden w-full text-sm font-medium text-gray-900 bg-white border border-gray-200 rounded-lg dark:bg-gray-700 dark:border-gray-600 dark:text-white">
                      </ul>
                   </div>
                </div>
@@ -227,7 +227,7 @@ if ($item){
                <div class="mb-5 flex flex-col w-full">
                <label  class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Impuestos</label>
 
-                <button id="boton-tax" data-modal-target="crud-modal" data-modal-toggle="crud-modal" class=" text-sm rounded-lg  py-1.5 px-6 bg-black text-white hover:bg-opacity-80 transition-all" type="button">
+                <button id="boton-tax" data-modal-target="crud-modal" data-modal-toggle="crud-modal" class=" text-[12px] rounded-lg  py-1.5 px-6 bg-black text-white hover:bg-opacity-80 transition-all" type="button">
                     Añadir 
                 </button>
                </div>
@@ -358,7 +358,6 @@ if ($item){
 <!-- ############################  MODAL ############################ -->
 
 
-
 <!-- Main modal -->
 
 <div id="crud-modal" tabindex="-1" aria-hidden="true"
@@ -411,19 +410,129 @@ if ($item){
 
                 <div class="flex items-center justify-center mt-5 gap-[10px] mb-5">
                     <label for="select_tax">Impuesto:</label>
-                    <select name="select_tax" id="select_tax"
+                    <select onchange="handleSelectChange()" name="select_tax" id="select_tax"
                         class="block  p-2 border border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500">
-                        <?php foreach ($allTax as $tax): ?>
-                        <option value="<?=$tax['type']?>/<?=$tax['name']?>/<?=$tax['value']?>/<?=$tax['id2']?>"
-                            class="py-2">
-                            <?=$tax['name']?> / <?=$tax['value']?>
-                        </option>
-                        <?php endforeach;?>
+
+                        <option  value="new" class="py-2 bg-gray-100 border-b-[1px] flex items-center text-center"><span class="">Crear +</span></option>
+
+                        <?php $index = 0; foreach ($allTax as $tax){ 
+                            $index++;
+                            ?>
+
+                            <option <?php if ($index == 1) {echo "selected";} ?>
+
+                            value="<?=$tax['type']?>/<?=$tax['name']?>/<?=$tax['value']?>/<?=$tax['id2']?>"
+                                class="py-2">
+                                <?=$tax['name']?> / <?=$tax['value']?>
+                            </option>
+
+
+                        <?php } ?>
+
+
                     </select>
                 </div>
 
-                <button onclick="addTax()"
-                    class=" text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg py-2 text-sm px-5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">
+
+                <script>
+                    function handleSelectChange() {
+                        var select = document.getElementById('select_tax');
+                        var value = select.value;
+
+                        if (value === 'new') {
+                            $("#modal-new-tax").removeClass("hidden")
+                            $("#modal-new-tax").addClass("flex")
+                            select.selectedIndex = 0;
+                        }
+                    }
+                </script>
+
+
+
+                <!-- Modal Impuestos -->
+
+                <div id="modal-new-tax" tabindex="-1" aria-hidden="true" class="hidden overflow-y-auto overflow-x-hidden fixed top-0 right-0 left-0 z-50 justify-center items-center w-full md:inset-0 h-[calc(100%-1rem)] max-h-full">
+                    <div class="relative p-4 w-full max-w-2xl max-h-full">
+                        <!-- Modal content -->
+                        <div class="relative bg-white rounded-lg shadow dark:bg-gray-700">
+                            <!-- Modal header -->
+                            <div class="flex items-center justify-between p-4 md:p-5 border-b rounded-t dark:border-gray-600">
+                                <h3 class="text-xl font-semibold text-gray-900 dark:text-white">
+                                    Crear nuevo impuesto
+                                </h3>
+                                <button onclick="closeCreateTax()" type="button" class="text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm w-8 h-8 ms-auto inline-flex justify-center items-center dark:hover:bg-gray-600 dark:hover:text-white" data-modal-hide="modal-new-tax">
+                                    <svg class="w-3 h-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 14 14">
+                                        <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m1 1 6 6m0 0 6 6M7 7l6-6M7 7l-6 6"/>
+                                    </svg>
+                                    <span class="sr-only">Close modal</span>
+                                </button>
+                            </div>
+                            <!-- Modal body -->
+                            <div class="p-4 md:p-5 space-y-4">
+                            <form id="form-new-tax" method="UPDATE" class="max-w-md mx-auto">
+                                <div class="flex flex-col gap-5">
+
+                                    <div class="relative">
+                                        <input type="text" id="name" name="name" 
+                                            class="block rounded-t-lg px-2.5 pb-2.5 pt-5 w-full text-sm text-gray-900 bg-gray-50 dark:bg-gray-700 border-0 border-b-2 border-gray-300 appearance-none dark:text-white dark:border-gray-600 dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-blue-600 peer"
+                                            placeholder=" " />
+                                        <label for="name"
+                                            class="absolute text-sm text-gray-500 dark:text-gray-400 duration-300 transform -translate-y-4 scale-75 top-4 z-10 origin-[0] start-2.5 peer-focus:text-blue-600 peer-focus:dark:text-blue-500 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-4 rtl:peer-focus:translate-x-1/4 rtl:peer-focus:left-auto">Nombre</label>
+                                    </div>
+
+                                    <div class="relative">
+                                        <input type="text" id="value" name="value"
+                                            class="block rounded-t-lg px-2.5 pb-2.5 pt-5 w-full text-sm text-gray-900 bg-gray-50 dark:bg-gray-700 border-0 border-b-2 border-gray-300 appearance-none dark:text-white dark:border-gray-600 dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-blue-600 peer"
+                                            placeholder="" />
+                                        <label for="value"
+                                            class="absolute text-sm text-gray-500 dark:text-gray-400 duration-300 transform -translate-y-4 scale-75 top-4 z-10 origin-[0] start-2.5 peer-focus:text-blue-600 peer-focus:dark:text-blue-500 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-4 rtl:peer-focus:translate-x-1/4 rtl:peer-focus:left-auto">Valor</label>
+                                    </div>
+
+                                    <div class="mb-5">
+
+                                        <label for="type" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Tipo</label>
+
+                                        <select name="type" id="type" class="block w-full p-2 border border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500" required>
+
+                                            <option value="1">IVA</option>
+
+                                            <option selected="selected" value="0">IRPF</option>
+
+                                        </select>
+
+                                    </div>
+
+
+
+                                    <input type="hidden" name="id2">
+
+                                    <div class="flex w-full items-end justify-end">
+                                        <button type="submit" class="bg-black text-white py-1 px-4 rounded-lg ">
+                                            Añadir
+                                        </button>
+                                    </div>
+
+                                </div>
+
+                            </form>
+
+
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+
+
+                
+
+
+                <!-- Fin modal -->
+
+
+
+
+                <button onclick="addTax()" class=" text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg py-2 text-sm px-5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">
                     Añadir +
                 </button>
             </div>
@@ -433,6 +542,11 @@ if ($item){
     </div>
 
 </div>
+
+
+<button data-modal-target="modal-new-tax" data-modal-toggle="modal-new-tax" class="hidden text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800" type="button">
+  Toggle modal
+</button>
 
 <!-- ############################################################################################################################################################################ -->
 
@@ -461,7 +575,62 @@ if ($item){
     -->
 
 
+<!-- ############################################################################################################################################################################ -->
 
+<!-- ############ NUEVO IMPUESTO ########################################################################################################################################################## -->
+
+<!-- ############################################################################################################################################################################ -->
+
+<script>
+function closeCreateTax(){
+    $("#select_tax").val("<?=$allTax[0]['type']?>/<?=$allTax[0]['name']?>/<?=$allTax[0]['value']?>/<?=$allTax[0]['id2']?>")
+}
+
+$(document).ready(function() {
+    $('#form-new-tax').submit(function(e) {
+        e.preventDefault();
+
+        var data = $(this).serializeJSON();
+        console.log(data);
+
+        $.ajax({
+            type: 'POST',
+            url: '/ajax/tax',
+            dataType: 'json',
+            contentType: 'application/json',
+            data: JSON.stringify(data),
+            success: function(d) {
+                if (d.success == true) {
+
+                    console.log("AÑADIRDO ",data," id2 ", d.id2_response)
+
+                    var newOption = document.createElement("option");
+
+                    newOption.value = `${data.type}/${data.name}/${data.value}/${d.id2_response}`;
+
+                    newOption.text = `${data.name} / ${data.value}`;
+                    
+                    newOption.className = "py-2";
+
+                    var select = document.getElementById('select_tax');
+                    select.add(newOption);
+                    select.value = newOption.value
+
+                    $("#modal-new-tax").addClass("hidden")
+                    document.getElementById('form-new-tax').reset();
+
+                }else{
+
+                    setNotification([{"error":"cant_create_tax","message":"Ha habido un error al crear el impuesto."}])
+
+                }
+            }
+        });
+
+
+    });
+});
+</script>
 <!-- ############################################################################################################################################################################ -->
 
 <!-- ############   FORMULARIO FACTURA ########################################################################################################################################################## -->
@@ -513,6 +682,8 @@ $(document).ready(function() {
             var data = $(this).serializeJSON();
 
             console.log(data)
+
+            exit();
 
             data["invoice_total"] = invoice_total
 
@@ -1230,7 +1401,7 @@ function updateContact(){
     $("#email").val() +
     " <br> " +
     $("#phone").val());
-
+	$('#buscador-div').addClass("hidden");
 }
 
 

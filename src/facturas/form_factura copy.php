@@ -4,20 +4,6 @@ Intratum\Facturas\Util::checkSession();
 
 $user = Intratum\Facturas\Util::getSessionUser();
 $profile = Intratum\Facturas\User::getUserAccount($user["id"]);
-
-
-$allSerials = Intratum\Facturas\Serial::all();
-$allTax = Intratum\Facturas\Tax::all();
-
-
-Intratum\Facturas\Environment::$db->where('type', 2);
-$allTaxs = Intratum\Facturas\Environment::$db->get('invoice');
-
-
-
-$deafault_num = count($allTaxs);
-
-$title = "Nueva presupuesto";
 $customer = false;
 
 if (isset($_GET['cust'])) {
@@ -32,15 +18,24 @@ if ($item){
     }
 }
 }
+$allSerials = Intratum\Facturas\Serial::all();
+$allTax = Intratum\Facturas\Tax::all();
+
+$title = "Nueva factura"
+
 ?>
 
 
 
+
+
 <form action="lib/add_producto.php" id="form" class=" bgmt-5" method="post">
-<div class="border-[1px] my-5 rounded-lg flex flex-col justify-center gap-[5%]  mx-[18%]">
-    <div class="grid grid-cols-3  pt-10 bg-gray-100 px-[35px] pb-5">
-        <div class="col-span-2">
-            <div class=" pl-10 flex flex-col justify-between h-full">
+<div class="border-[1px] my-5 rounded-lg flex flex-col justify-center gap-[5%]  mx-[20%]">
+    <div class="grid grid-cols-1  pt-10 bg-gray-100 px-[35px] pb-5">
+
+        <div class="grid grid-cols-3 mb-5">
+
+            <div class="col-span-2  flex flex-col justify-between h-full">
                 <div class=" flex  items-center  w-full">
                     <?php if ($_SERVER['SERVER_PORT'] == '80') { ?>
                         <img class="max-w-[300px] max-h-[70px] w-[50%] object-cover" src="http://<?= $_SERVER['HTTP_HOST'] ?>/static/images/<?php if ($profile["hash_logo"] != "") { echo $profile["hash_logo"]; } else { echo "default.png"; } ?>" alt="Logo" />
@@ -50,45 +45,84 @@ if ($item){
                         <img class="max-w-[300px] max-h-[70px] w-[50%] object-cover" src="http://<?= $_SERVER['HTTP_HOST'] ?>/static/images/<?php if ($profile["hash_logo"] != "") { echo $profile["hash_logo"]; } else { echo "default.png"; } ?>" alt="Logo" />
                     <?php } ?>
                 </div>
-                <div>
-                    <p class="text-[20px] font-[600]">Datos fiscales</p>
-                    <p><?= $profile["first_name"] ?>&nbsp;<?= $profile["last_name"] ?></p>
-                    <p><?= $profile["NIF"] ?></p>
-                    <p><?= $profile["address1"] ?></p>
-                    <p><?= $profile["country"] ?><?= ", " . $profile["state"] ?><?= ", " . $profile["city"] ?><?= " " . $profile["zip"] ?></p>
-                    <p><?= $profile["email"] ?></p>
-                    <p><?= $profile["phone"] ?></p>
+
+            </div>
+
+            <div class="flex flex-col justify-around ">
+                <div class="">
+                    <label for="message" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Serial y numero de factura</label>
+                    <div class="flex ">
+                    <select onchange="updateInvoiceNumber()" name="invoice_serial" id="select_serials" class="w-[30%] bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block  p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500">
+                        <?php foreach ($allSerials as $i) { ?>
+                        <option value="<?= $i["id"] ?>"><?= $i["serial_tag"] ?></option>
+                        <?php } ?>
+                    </select>
+                    <input type="number" name="invoice_number" id="invoice_number" class="w-full bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500
+                        dark:focus:border-blue-500">
+                    </div>
+                </div>
+                <div class="">
+                    <label for="message" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Fecha de
+                    facturación</label>
+                    <div class="relative max-w-sm">
+                    <div class="absolute inset-y-0 start-0 flex items-center ps-3 pointer-events-none">
+                        <svg class="w-4 h-4 text-gray-500 dark:text-gray-400" aria-hidden="true"
+                            xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 20 20">
+                            <path d="M20 4a2 2 0 0 0-2-2h-2V1a1 1 0 0 0-2 0v1h-3V1a1 1 0 0 0-2 0v1H6V1a1 1 0 0 0-2 0v1H2a2 2 0 0 0-2 2v2h20V4ZM0 18a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V8H0v10Zm5-8h10a1 1 0 0 1 0 2H5a1 1 0 0 1 0-2Z" />
+                        </svg>
+                    </div>
+                    <input datepicker datepicker-title="Fecha de facturación" value="<?php echo date('m-d-Y'); ?>"
+                        name="invoice_date" type="text" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full ps-10 p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="Selecciona una fecha">
+                    </div>
                 </div>
             </div>
+
         </div>
 
-        <div>
+
+
+
+        <div class="flex justify-between">
+
+
+            <div>
+                <p class="text-[20px] font-[600]">Datos fiscales</p>
+                <p><?= $profile["first_name"] ?>&nbsp;<?= $profile["last_name"] ?></p>
+                <p><?= $profile["NIF"] ?></p>
+                <p><?= $profile["address1"] ?></p>
+                <p><?= $profile["country"] ?><?= ", " . $profile["state"] ?><?= ", " . $profile["city"] ?><?= " " . $profile["zip"] ?></p>
+                <p><?= $profile["email"] ?></p>
+                <p><?= $profile["phone"] ?></p>
+            </div>
 
                     
-            <div class="relative">
-                <label id="buscador-contact"  class=" mb-2 text-sm font-medium text-gray-900 dark:text-white">Buscar cliente:</label>
-                <input type="text" id="searchAccount" autocomplete="off" class="!col-span-2 bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500  w-full py-1.5 px-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="Buscar..."  />
-                <div class=" w-full absolute top- left-0">
-                    <ul id="lista" class="hidden w-full text-sm font-medium text-gray-900 bg-white border border-gray-200 rounded-lg dark:bg-gray-700 dark:border-gray-600 dark:text-white">
-                    </ul>
+            <div>
+                <div id="buscador-div" class="relative">
+                    <label id="buscador-contact"  class=" mb-2 text-sm font-medium text-gray-900 dark:text-white">Buscar cliente:</label>
+                    <input type="text" id="searchAccount" autocomplete="off" class="!col-span-2 bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500  w-full py-1.5 px-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="Buscar..."  />
+                    <div class=" w-full absolute top- left-0">
+                        <ul id="lista" class="hidden w-full text-sm font-medium text-gray-900 bg-white border border-gray-200 rounded-lg dark:bg-gray-700 dark:border-gray-600 dark:text-white">
+                        </ul>
+                    </div>
+                </div>
+
+
+                
+                <div class="flex">
+
+                    <div id="cont_cliente" class="col-span-3">
+
+
+                    </div>
+
+                    <div id="boton-cont" class="hidden  mt-5">
+                        <button  data-modal-target="modal-contact" data-modal-toggle="modal-contact" class="" type="button">
+                            <svg width="20px" height="20px" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M16.293 2.293a1 1 0 0 1 1.414 0l4 4a1 1 0 0 1 0 1.414l-13 13A1 1 0 0 1 8 21H4a1 1 0 0 1-1-1v-4a1 1 0 0 1 .293-.707l10-10 3-3zM14 7.414l-9 9V19h2.586l9-9L14 7.414zm4 1.172L19.586 7 17 4.414 15.414 6 18 8.586z" fill="#0D0D0D"/></svg>
+                        </button>
+                    </div>
                 </div>
             </div>
 
-
-            <h2 class=" font-[600] col-span-2 text-[20px]">Datos del cliente</h2>
-            
-            <div class="grid grid-cols-4">
-
-                <div id="cont_cliente" class="col-span-3">
-
-                </div>
-
-                <div id="boton-cont" class="hidden  ">
-                    <button  data-modal-target="modal-contact" data-modal-toggle="modal-contact" class="" type="button">
-                        <svg width="20px" height="20px" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M16.293 2.293a1 1 0 0 1 1.414 0l4 4a1 1 0 0 1 0 1.414l-13 13A1 1 0 0 1 8 21H4a1 1 0 0 1-1-1v-4a1 1 0 0 1 .293-.707l10-10 3-3zM14 7.414l-9 9V19h2.586l9-9L14 7.414zm4 1.172L19.586 7 17 4.414 15.414 6 18 8.586z" fill="#0D0D0D"/></svg>
-                    </button>
-                </div>
-            </div>
         </div>
 
         <!-- Cotact modal -->
@@ -107,15 +141,19 @@ if ($item){
                     </div>
                     <div>
                         <div class="grid grid-cols-3 gap-5 p-5">
+
+
                             <div id="div-responsive-1" class="mb-2 ">
                                 <!-- nombre particular -->
                                 <label id="nombre-particular" for="first_name" class=" mb-2 text-sm font-medium text-gray-900 dark:text-white">Nombre</label>
                                 <!-- nombre fiscal -->
                                 <label for="first_name" id="nombre-fiscal" class=" hidden !col-span-2  mb-2 text-sm font-medium text-gray-900 dark:text-white">Nombre Fiscal</label>
                                 <input <?php if ($customer) { echo ' value="' . $customer["first_name"] . '" '; } ?> type="text" id="first_name" name="first_name" class="!col-span-2 bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500  w-full py-1.5 px-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="Nombre"  />
-
+                        
                             </div>
-                            <input type="hidden" id="cust-id" name="cust-id">
+
+                            <input type="hidden" id="cust-id" name="cust-id" <?php if ($customer) { echo ' value="' . $customer["id"] . '" '; } ?>>
+
                             <div id="campo-apellidos" class="mb-2">
                                 <label for="last_name" class=" mb-2 text-sm font-medium text-gray-900 dark:text-white">Apellidos</label>
                                 <input <?php if ($customer) { echo ' value="' . $customer["last_name"] . '" '; } ?> type="text" id="last_name" name="last_name" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full py-1.5 px-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="Apellidos" />
@@ -165,7 +203,7 @@ if ($item){
                                 <label for="city" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Ciudad</label>
                                 <input <?php if ($customer) { echo ' value="' . $customer["city"] . '" '; } ?> type="text" id="city" name="city" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full py-1.5 px-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="Ciudad"  />
                             </div>
-                            <input type="hidden" name="type" value="2">
+                            <input type="hidden" name="type" value="1">
                             <input id="autoComp" type="hidden" name="autoComp" <?php if ($customer) { echo ' value="true" '; } ?>>
 
 
@@ -195,6 +233,7 @@ if ($item){
 
 
 
+
       <!-- ############################################################################################################################################################################ -->
       <!-- ############################################################################################################################################################################ -->
       <!-- ############################################################################################################################################################################ -->
@@ -211,30 +250,27 @@ if ($item){
                <input type="hidden" id="id-item">
                <div class="mb-5 w-full min-w-[10%] relative">
                   <label for="item"
-                     class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Item</label>
-                  <input type="text" id="autocomp-item" name="item" class="h-[40%] py-4 px-6 bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="Item" />
+                     class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Producto</label>
+                  <input type="text" id="autocomp-item" name="items[0][title]" class="item-input h-[40%] py-4 px-6 bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="Item" />
                   <div class="absolute top- left-0 w-full">
                      <ul id="lista-item" class="hidden w-full text-sm font-medium text-gray-900 bg-white border border-gray-200 rounded-lg dark:bg-gray-700 dark:border-gray-600 dark:text-white">
                      </ul>
                   </div>
                </div>
-               <div class="mb-5 min-w-[35%]">
-                  <label for="description" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Descripción</label>
-                  <input type="text" id="description" name="description" class="h-[40%] py-4 px-6 bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="Descripción del producto">
-               </div>
                <div class="mb-5 min-w-[10%]">
                   <label for="price"
                      class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Precio</label>
-                  <input type="number" id="price" name="price" class="h-[40%] py-4 px-6 bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="0.00" step="0.01" />
+                  <input type="number" id="price" name="items[0][price]" class="item-input h-[40%] py-4 px-6 bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="0.00" step="0.01" />
                </div>
                <div class="mb-5 min-w-[10%]">
                   <label for="quantity" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Cantidad</label>
-                  <input type="number" id="quantity" name="quantity" class="h-[40%] py-4 px-6 bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="X" value="" />
+                  <input type="number" id="quantity" name="items[0][quantity]" class="item-input h-[40%] py-4 px-6 bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="X" value="" />
                </div>
+
                <div class="mb-5 flex flex-col w-full">
                <label  class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Impuestos</label>
 
-                <button id="boton-tax" data-modal-target="crud-modal" data-modal-toggle="crud-modal" class=" text-[12px] rounded-lg  py-1.5 px-6 bg-black text-white hover:bg-opacity-80 transition-all" type="button">
+                <button id="boton-tax" onClick="openItemTaxs(0)" class=" text-[12px] rounded-lg  py-1.5 px-6 bg-black text-white hover:bg-opacity-80 transition-all" type="button">
                     Añadir 
                 </button>
                </div>
@@ -247,9 +283,9 @@ if ($item){
                     </button>
 
                </div>
-               <div id="lineitems">
-               </div>
+
             </div>
+            <div id="lineitems" class="hidden"></div>
 
 
 
@@ -259,15 +295,8 @@ if ($item){
             
 
             <div id="itemTable" class="flex flex-col w-full mt-5">
-        <div class="font-[600] grid grid-cols-7 border-[1px] rounded-lg py-2 px-5 gap-5 w-full mt-5 justify-around">
-            <p class="w-full">Item</p>
-            <p class="w-full">Descripción</p>
-            <p class="w-full">Precio</p>
-            <p class="w-full">Cantidad</p>
-            <p class="w-full">Subtotal</p>
-            <p class="w-full">Impuestos</p>
-            <p class="w-full">Eliminar</p>
-        </div>
+
+
     <div class="flex flex-col w-full mt-5" id="itemTableBody">
         <!-- ELEMENTOS DE LA TALBA -->
     </div>
@@ -296,41 +325,13 @@ if ($item){
       <div class="min-w-[15%] bg-gray-100 px-[35px] pb-5">
          <h2 class="pt-10  font-[600] text-[20px] mb-5">Detalles</h2>
             <div class="flex  gap-5 w-full mb-10">
-                <div class="w-[60%]">
+                <div class="w-full">
                     <label for="message" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Terminos y
                     condiciones</label>
                     <textarea name="terms" id="message" rows="4" class="block p-2.5 w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500
                     dark:focus:border-blue-500" placeholder="Escriba aquí..."></textarea>
                 </div>
-                <div class="flex flex-col justify-around w-[40%]">
-                    <div class="">
-                    <label for="name" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Numero
-                        de presupuesto</label>
-                    <div class="flex">
 
-
-                        <input type="text" name="name"  id="name" required value="<?= $deafault_num + 1 ?>"
-                            class="w-full bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
-                    </div>
-
-                    <input type="hidden" name="invoice_serial" value="0">
-                    <input type="hidden" name="invoice_number" value="0">
-                    </div>
-                    <div class="">
-                        <label for="message" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Fecha de
-                        facturación</label>
-                        <div class="relative max-w-sm">
-                        <div class="absolute inset-y-0 start-0 flex items-center ps-3 pointer-events-none">
-                            <svg class="w-4 h-4 text-gray-500 dark:text-gray-400" aria-hidden="true"
-                                xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 20 20">
-                                <path d="M20 4a2 2 0 0 0-2-2h-2V1a1 1 0 0 0-2 0v1h-3V1a1 1 0 0 0-2 0v1H6V1a1 1 0 0 0-2 0v1H2a2 2 0 0 0-2 2v2h20V4ZM0 18a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V8H0v10Zm5-8h10a1 1 0 0 1 0 2H5a1 1 0 0 1 0-2Z" />
-                            </svg>
-                        </div>
-                        <input datepicker datepicker-title="Fecha de facturación" value="<?php echo date('m-d-Y'); ?>"
-                            name="invoice_date" type="text" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full ps-10 p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="Selecciona una fecha">
-                        </div>
-                    </div>
-                </div>
 
 
             </div>
@@ -365,10 +366,12 @@ if ($item){
 <!-- ############################  MODAL ############################ -->
 
 
+
 <!-- Main modal -->
 
-<div id="crud-modal" tabindex="-1" aria-hidden="true"
-    class="hidden overflow-y-auto overflow-x-hidden fixed top-0 right-0 left-0 z-50 justify-center items-center w-full md:inset-0 h-[calc(100%-1rem)] max-h-full">
+
+
+<div id="crud-modal" tabindex="-1" aria-hidden="true" class="hidden flex bg-black bg-opacity-30 overflow-y-auto overflow-x-hidden fixed top-0 right-0 left-0 z-50 justify-center items-center w-full md:inset-0 h-[calc(100%-1rem)] max-h-full">
 
     <div class="relative p-4 w-full max-w-md max-h-full">
 
@@ -388,9 +391,9 @@ if ($item){
 
                 <button type="button"
                     class="text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm w-8 h-8 ms-auto inline-flex justify-center items-center dark:hover:bg-gray-600 dark:hover:text-white"
-                    data-modal-toggle="crud-modal">
+                   onClick="closeItemTaxs()">
 
-                    <svg class="w-3 h-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none"
+                    <svg class="w-3 h-3"  xmlns="http://www.w3.org/2000/svg" fill="none"
                         viewBox="0 0 14 14">
 
                         <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
@@ -458,7 +461,7 @@ if ($item){
 
                 <!-- Modal Impuestos -->
 
-                <div id="modal-new-tax" tabindex="-1" aria-hidden="true" class="hidden overflow-y-auto overflow-x-hidden fixed top-0 right-0 left-0 z-50 justify-center items-center w-full md:inset-0 h-[calc(100%-1rem)] max-h-full">
+                <div id="modal-new-tax" tabindex="-1" aria-hidden="true" class="hidden   overflow-y-auto overflow-x-hidden fixed top-0 right-0 left-0 z-50 justify-center items-center w-full md:inset-0 h-[calc(100%-1rem)] max-h-full">
                     <div class="relative p-4 w-full max-w-2xl max-h-full">
                         <!-- Modal content -->
                         <div class="relative bg-white rounded-lg shadow dark:bg-gray-700">
@@ -539,7 +542,7 @@ if ($item){
 
 
 
-                <button onclick="addTax()" class=" text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg py-2 text-sm px-5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">
+                <button id="boton-value-tax" item-value="" onclick="addTax(this)" class=" text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg py-2 text-sm px-5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">
                     Añadir +
                 </button>
             </div>
@@ -552,6 +555,10 @@ if ($item){
 
 
 <button data-modal-target="modal-new-tax" data-modal-toggle="modal-new-tax" class="hidden text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800" type="button">
+  Toggle modal
+</button>
+
+<button data-modal-target="crud-modal" data-modal-toggle="crud-modal" class="hidden text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800" type="button">
   Toggle modal
 </button>
 
@@ -580,6 +587,8 @@ if ($item){
    *
 
     -->
+
+
 
 <!-- ############################################################################################################################################################################ -->
 
@@ -623,6 +632,7 @@ $(document).ready(function() {
                     select.value = newOption.value
 
                     $("#modal-new-tax").addClass("hidden")
+
                     document.getElementById('form-new-tax').reset();
 
 
@@ -644,6 +654,7 @@ $(document).ready(function() {
 <!-- ############   FORMULARIO FACTURA ########################################################################################################################################################## -->
 
 <!-- ############################################################################################################################################################################ -->
+
 <style>
     @keyframes slideOutLeft {
         0% {
@@ -674,13 +685,18 @@ $(document).ready(function() {
         } ?>
     )
 
+    <?php if ($customer != false) {?>
+        updateContact();
+    <?php } ?>
+
     updateInvoiceNumber()
 
     $('#form').submit(function(e) {
-
         e.preventDefault();
 
+
         if(addCustInfo()){
+        
 
             var data = $(this).serializeJSON();
 
@@ -709,9 +725,8 @@ $(document).ready(function() {
 
                     if (d.success == true) {
 
-                        window.location.href = '/presupuestos/?success=true';
+                        window.location.href = '/facturas/';
 
-                        
 
                     }else if (d.success == false && d.errors) {
 
@@ -720,8 +735,7 @@ $(document).ready(function() {
                     }}
 
             });
-        }
-
+    }
     });
 
 });
@@ -785,7 +799,6 @@ function setNotification(errors) {
 }
 
 
-
 function selectCategory(option) {
     console.log(option)
     if (option == 'f') {
@@ -826,31 +839,125 @@ var invoice_total = 0;
 
 var calcTaxs = []
 
-function addTax() {
+function openItemTaxs(item_num){
+
+    
+    $("#boton-value-tax").attr('item-value', item_num);
+
+    $("#crud-modal").removeClass("hidden")
+    $("#crud-modal").addClass("flex")
+
+
+
+}
+
+function closeItemTaxs(){
+
+    $("#crud-modal").removeClass("flex")
+    $("#crud-modal").addClass("hidden")
+
+
+
+}
+
+$('.item-input').on('change', function() {
+        let keyitems = $(this).attr('name').match(/\d+/)[0]; 
+        let title = $(`input[name='items[${keyitems}][title]']`).val();
+        let price = $(`input[name='items[${keyitems}][price]']`).val();
+        let quantity = $(`input[name='items[${keyitems}][quantity]']`).val();
+
+
+        console.log("Producto:", title, "Precio:", price, "Cantidad:", quantity);
+
+        let subtotal =  price * quantity
+        
+        aftertax.forEach(element => {
+            let existe = calcTaxs.findIndex(elemento => elemento.id == element.id);
+            if (existe == -1) {
+                invoiceTax = {
+                    id: element.id,
+                    name: element.name,
+                    tax_value: element.value,
+                    tax_total: ((element.value / 100) * subtotal),
+                }
+                calcTaxs.push(invoiceTax)
+            } else {
+                calcTaxs[existe].tax_total = ((element.value / 100) * subtotal)
+            }
+        });
+
+        invoice_subtotal = subtotal
+        updateTotalMenu()
+
+    });
+
+function addTax(e) {
+
+    console.log($(e).attr('item-value'));
+
+    let keyitems = $(e).attr('item-value')
+
+
+    let price = $( `input[name='items[${keyitems}][price]']`).val();
+    
+    let quantity = $(`input[name='items[${keyitems}][quantity]']`).val();
+
+    let subtotal = price * quantity
+
 
     let tax = $("#select_tax").val().split("/");
+
 
     let itemTax = {
         name: tax[1],
         type: tax[0],
         value: tax[2],
         id: tax[3],
-
     }
 
-    let taxValid = checkTaxs(itemTax.type);
-    console.log(aftertax)
+    console.log("1",itemTax)
 
-    console.log(taxValid)
+    let taxValid = checkTaxs(itemTax.type);
+
+
 
     if (taxValid) {
 
         aftertax.push(itemTax)
 
         console.log("Tax", tax)
+
+
+
         console.log("AfterTax", aftertax)
 
-        addTaxText()
+
+        
+    
+        aftertax.forEach(element => {
+                $('#lineitems').append('<input class="hidden_item_' + keyitems + '" type="hidden" name="items[' +
+                    keyitems + '][tax_' + element.type + ']" value="' + element.type + "/" + element.name +
+                    "/" + element.value + "/" + element.id + '">');
+        });
+
+        aftertax.forEach(element => {
+            let existe = calcTaxs.findIndex(elemento => elemento.id == element.id);
+            if (existe == -1) {
+                invoiceTax = {
+                    id: element.id,
+                    name: element.name,
+                    tax_value: element.value,
+                    tax_total: ((element.value / 100) * subtotal),
+                }
+                calcTaxs.push(invoiceTax)
+            } else {
+                calcTaxs[existe].tax_total += ((element.value / 100) * subtotal)
+            }
+        });
+
+
+        addTaxText(keyitems)
+        updateTotalMenu()
     } else {
         errors = [{
             "error":"repeat_tax",
@@ -859,6 +966,8 @@ function addTax() {
         setNotification(errors)
 
     }
+
+
 
 
 }
@@ -876,7 +985,7 @@ function checkTaxs(type) {
 }
 
 
-function addTaxText() {
+function addTaxText(keyitems) {
     let boton = document.getElementById("boton-tax");
     let listaTax = document.getElementById("lista-modal-taxs");
 
@@ -897,7 +1006,7 @@ function addTaxText() {
         deleteButton.classList.add("bg-red-500", "text-white", "px-4", "py-1", "rounded", "hover:bg-red-600",
             "focus:outline-none", "focus:ring-2", "focus:ring-red-600", "focus:ring-opacity-50");
         deleteButton.addEventListener("click", function() {
-            deleteItemTax(listItem);
+            deleteItemTax(keyitems);
         });
 
         listItem.appendChild(deleteButton);
@@ -915,7 +1024,10 @@ function addTaxText() {
 
 }
 
+// CAMBIO LISTA PRODUCTOS
+
 function deleteItemTax(e) {
+
     console.log("AfterTax", aftertax)
 
     let itemId = e.id
@@ -933,6 +1045,8 @@ function deleteItemTax(e) {
         }
 
     });
+
+    
 
     console.log("AfterTax", aftertax)
     addTaxText()
@@ -1015,11 +1129,7 @@ function addItem() {
         $('#lineitems').append('<input class="hidden_item_' + keyitems + '" type="hidden" name="items[' + keyitems +
             '][subtotal]" value="' + subtotal + '">');
 
-        aftertax.forEach(element => {
-            $('#lineitems').append('<input class="hidden_item_' + keyitems + '" type="hidden" name="items[' +
-                keyitems + '][tax_' + element.type + ']" value="' + element.type + "/" + element.name +
-                "/" + element.value + "/" + element.id + '">');
-        });
+
 
         $('#autocomp-item').val("");
 
@@ -1033,20 +1143,6 @@ function addItem() {
 
         keyitems++;
 
-        aftertax.forEach(element => {
-            let existe = calcTaxs.findIndex(elemento => elemento.id == element.id);
-            if (existe == -1) {
-                invoiceTax = {
-                    id: element.id,
-                    name: element.name,
-                    tax_value: element.value,
-                    tax_total: ((element.value / 100) * subtotal),
-                }
-                calcTaxs.push(invoiceTax)
-            } else {
-                calcTaxs[existe].tax_total += ((element.value / 100) * subtotal)
-            }
-        });
 
         console.log(calcTaxs)
 
@@ -1058,6 +1154,11 @@ function addItem() {
 
 function updateTotalMenu() {
 
+
+
+
+    console.log("updated")
+
     if ($("#total-div").hasClass("hidden")) {
 
         $("#total-div").removeClass("hidden")
@@ -1065,6 +1166,8 @@ function updateTotalMenu() {
     }
 
     $("#totalMenu").empty();
+
+    console.log("IMPUESTOS CALCULADO", calcTaxs)
 
     calcTaxs.forEach(element => {
 
@@ -1100,11 +1203,20 @@ function updateTotalMenu() {
 
     if (invoice_total == 0) {
 
+        
+
         $("#total-div").addClass("hidden")
 
     }
 
+    if (invoice_total == 0) {
+
+        invoice_taxs = [0]
+    }
+
 }
+
+
 
 function updateInvoiceNumber() {
 
@@ -1382,8 +1494,14 @@ function updateContact(){
 
     $('#boton-cont').removeClass('hidden');
 
+    $('#buscador-div').addClass('hidden');
+
+
+
+
 
     $("#cont_cliente").html(
+        "<h2 class='font-[600] col-span-2 text-[20px]'>Datos del cliente</h2>" +
         $("#first_name").val() +
     " <br> " +
     $("#NIF").val() +
@@ -1401,12 +1519,13 @@ function updateContact(){
     $("#email").val() +
     " <br> " +
     $("#phone").val());
-	$('#buscador-div').addClass("hidden");
+
 }
 
 
 
 </script>
+
 <!-- ############################################################################################################################################################################ -->
 
 <!-- ############ AUTOCOMPLETADO ITEMS ########################################################################################################################################################## -->
@@ -1494,6 +1613,7 @@ $(document).on('click', '.element-li-item', function() {
     });
 
 });
+
 
 
 function autocompleteFormItems(response) {

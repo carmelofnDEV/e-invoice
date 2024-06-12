@@ -369,6 +369,11 @@ class InvoiceSetting{
                 case "IS_RECURRING":
 
                     return 5;
+                case "DISCOUNT":
+
+                    return 6;
+
+                    
 
             }
 
@@ -403,6 +408,12 @@ class InvoiceSetting{
                 case 4:
 
                     return "REC_START_DATE";
+                case 5:
+
+                    return "IS_RECURRING";
+                case 6:
+
+                    return "DISCOUNT";
 
             }
 

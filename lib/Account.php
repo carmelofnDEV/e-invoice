@@ -10,18 +10,14 @@ class Account
     public static function update(array $data)
     {
 
-
         $db2 = Environment::$db;
-
-
-
 
 
         $newData=[
 
             "NIF" => $data["NIF"],
             "address1" => $data["address_1"],
-            "address2" => $data["address_2"],
+            "address2" => $data["address_2"] ?? "",
             "category" => $data["category"],
             "city" => $data["city"],
             "country" => $data["country"],

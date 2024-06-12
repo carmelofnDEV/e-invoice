@@ -40,22 +40,23 @@ class Traffic{
 			
 
 			'/gastos' => 'src/gastos/index.php',
-			'/gastos/nuevo' => 'src/gastos/form_gasto.php',
+
 			
 
 			'/facturas' => 'src/facturas/index.php',
-			'/facturas/nuevo' => 'src/facturas/form_factura.php',
-			'/facturas/ed' => 'src/facturas/edit_form_factura.php',
 
 
 			
-			'/facturas/del' => 'src/facturas/del_factura.php',
+			'/documento/nuevo' => 'src/facturas/form_factura.php',
+			'/documento/ed' => 'src/facturas/edit_form_factura.php',
+
+
+			
+			'/documento/del' => 'src/facturas/del_factura.php',
 
 
 			'/presupuestos' => 'src/presupuestos/index.php',
-			'/presupuestos/nuevo' => 'src/presupuestos/form_presupuesto.php',
-			'/presupuestos/ed' => 'src/facturas/edit_form_factura.php',
-			'/presupuestos/del' => 'src/presupuestos/del_presupuesto.php',
+
 			
 			'/register' => 'src/register/form_register.php',
 
