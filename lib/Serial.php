@@ -70,8 +70,14 @@ class Serial{
 
 		$db2 = Environment::$db;
 
-		$db2->where('id2', $parms['id2']);
+		if (!empty($parms['id2'])) {
+
+			$db2->where('id2', $parms['id2']);
+			
+		}
+
 		$all = $db2->getOne('serial');
+
 
 		return $all;
 	}

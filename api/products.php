@@ -39,15 +39,24 @@ switch($_SERVER["REQUEST_METHOD"]){
             $acc = Intratum\Facturas\User::getUserAccount($user["id"]);
             $data["acc_id"] = $acc["id"];
             $data = Intratum\Facturas\Product::all($data);
+
+			
+
             $data = Intratum\Facturas\Util::sanizeExitData($data);
 
             echo json_encode($data);
         } else {
             $data = Intratum\Facturas\Util::getID2ByUUID("prod",$urlExp[3]);
 
-			echo json_encode(Intratum\Facturas\Product::get([
-				'id2' => $data,
-			]));
+			$resp = Intratum\Facturas\Product::get(['id2' => $data,]);
+
+			if ($resp["default_tax"]) {
+
+				$tax=Intratum\Facturas\Tax::get(["id"=>$resp["default_tax"]]);
+
+				$resp["default_tax"] = $tax;
+			}
+			echo json_encode($resp);
         }
 
 

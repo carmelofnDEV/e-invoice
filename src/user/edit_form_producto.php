@@ -10,6 +10,7 @@ $title = "Editar producto";
 <hr class="w-48 h-1 mx-auto my-4 bg-gray-100 border-0 rounded md:my-10 dark:bg-gray-700">
 
 <form action="" id="form" method="post" class="max-w-md mx-auto">
+    
     <div class="mb-5">
         <label for="name" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Nombre</label>
         <input type="text" id="name" name="title" value="<?= $product['title']?>"
@@ -28,6 +29,30 @@ $title = "Editar producto";
         <input type="number" id="precio" name="price" step="0.01" value="<?= $product['price']/100?>"
             class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
             placeholder="0.00€" required />
+    </div>
+
+    
+    <div class="mb-5">
+
+        <label for="default_tax" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Impuesto predeterminado</label>
+
+        <select name="default_tax" id="default_tax" class="block w-full px-3 py-2 border rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 sm:text-sm">
+
+        <option value="0">Ninguno</option>
+
+        <?php foreach ($allTaxs as $tax) {
+        
+            if ($tax["id"] == $product["default_tax"]) {
+                echo ' <option selected value="'.$tax["id"].'">'.$tax["name"]." / ".$tax["value"].'</option>';
+                
+            }else{
+                echo ' <option value="'.$tax["id"].'">'.$tax["name"]." / ".$tax["value"].'</option>';
+
+            }
+        } ?>
+
+        </select>
+
     </div>
 
     <input type="hidden" id="id2" name="id2" value="<?= $product["id2"]?>" />

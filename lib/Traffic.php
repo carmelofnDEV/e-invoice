@@ -56,6 +56,9 @@ class Traffic{
 
 
 			'/presupuestos' => 'src/presupuestos/index.php',
+			
+			'/rectificativas' => 'src/rectificativas/index.php',
+
 
 			
 			'/register' => 'src/register/form_register.php',
@@ -116,6 +119,9 @@ class Traffic{
 
 		if($urlpath2[1] == 'pdf'){
 			$res  = './pdf/'.end($urlpath2);
+		}
+		if($urlpath2[1] == 'einvoices'){
+			$res  = './einvoices/'.end($urlpath2);
 		}
 
 		if($urlpath2[1] == 'html'){

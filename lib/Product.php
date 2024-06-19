@@ -22,6 +22,7 @@ class Product{
 			'description'=> $data["description"] ?? '',
 			'price'=> floatVal($data["price"]) * 100 ?? 0,
 			'state'=> 1,
+			'default_tax'=>$data['default_tax'] ?? 0,
 		];
 		
 
@@ -63,6 +64,36 @@ class Product{
 		return ['success' => true];
 	}
 
+	public static function getAll($parms = []){
+		
+		$db2 = Environment::$db;
+		
+
+        if (!empty($parms['q'] )) {
+            $db2->where('search', '%' . $parms['q'] . '%', 'LIKE');
+        }
+
+		if (!empty($parms['desde'])) {
+			$db2->where('price', ($parms['desde']*100), ">=");
+        }
+
+		
+		if (!empty($parms['hasta'])) {
+			$db2->where('price', ($parms['hasta']*100), "<=");
+        }
+
+
+		$db2->where('account_id', $parms['acc_id']);
+		$db2->where('state', 1);
+
+        $all = $db2->get('product');
+
+
+
+        return $all;
+	}
+
+	// Esta es para la query del ayax 
 	public static function all($parms = []){
 		
 		$db2 = Environment::$db;
@@ -70,6 +101,17 @@ class Product{
         if (!empty($parms['q'] )) {
             $db2->where('search', '%' . $parms['q'] . '%', 'LIKE');
         }
+
+		if (!empty($parms['desde'])) {
+			echo $parms['desde'];
+			$db2->where('price', 50, "<=");
+        }
+
+		
+		if (!empty($parms['hasta'])) {
+			$db2->where('price', 50, ">=");
+        }
+
 
 		$db2->where('account_id', $parms['acc_id']);
 		$db2->where('state', 1);
@@ -79,11 +121,8 @@ class Product{
             $all[$k]['_id'] = ['prod', 0, $a['_id']];
         }
 
-        $res = [
-            'data' => $all,
-        ];
 
-        return $res["data"];
+        return $all;
 	}
 
 	public static function get(array $parms = []){

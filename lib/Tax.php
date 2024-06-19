@@ -34,6 +34,8 @@ class Tax
             'created' => Util::getDate(),
             "search" => $search,
             'name' => $data["name"],
+            'state' => 1,
+
             'value' => floatVal($data["value"]),
         ];
 
@@ -68,11 +70,12 @@ class Tax
 
     public static function delete(array $data)
     {
+        $state = [
+            "state"=>2
+        ];
         $db2 = Environment::$db;
-        $db2->where('id2', $id2);
-        if ($db2->delete('tax')) {
-            echo 'successfully deleted';
-        }
+        $db2->where('id2', $data["id2"]);
+        $db2->update('tax',$state);
 
         return ['success' => true];
     }
@@ -85,6 +88,7 @@ class Tax
         $user = Util::getSessionUser();
 		$acc = User::getUserAccount($user["id"]);
 		$db2->where('account_id', $acc["id"]);
+        $db2->where('state', 1);
 		$res = $db2->get('tax');
 
         return $res;
@@ -95,7 +99,15 @@ class Tax
 
         $db2 = Environment::$db;
 
-        $db2->where('id2', $parms['id2']);
+        if (!empty($parms['id2'])) {
+            $db2->where('id2', $parms['id2']);
+        }
+        
+        if (!empty($parms['id'])) {
+            $db2->where('id', $parms['id']);
+        }
+
+        $db2->where('state', 1);
         $all = $db2->getOne('tax');
 
         return $all;

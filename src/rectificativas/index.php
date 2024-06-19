@@ -1,7 +1,7 @@
 <?php
 
 Intratum\Facturas\Util::checkSession();
-$title = 'Presupuestos';
+$title = 'Rectificativa';
 
 ?>
 
@@ -16,7 +16,7 @@ $title = 'Presupuestos';
 $db2 = Intratum\Facturas\Environment::$db;
 $acc_id = Intratum\Facturas\Util::getUserAccountID();
 Intratum\Facturas\Environment::$db->where('account_id',$acc_id);
-$db2->where('type', 2 );
+$db2->where('type', 3 );
 
 if(!empty($_GET['q']))
     $db2->where('search', '%'.$_GET['q'].'%', 'LIKE');
@@ -56,7 +56,7 @@ $all = array_reverse($all)
         <div class="flex ">
             <label for="searchInput" class="sr-only">Search</label>
             <div class="relative w-full">
-                    <input type="text" id="searchInput" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full ps p-2.5  dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="Buscar presupuestos..." required />
+                    <input type="text" id="searchInput" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full ps p-2.5  dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="Buscar rectificativa..." required />
             </div>
             <button onclick="buscar()" class="p-2.5 ms-2 text-sm font-medium text-white bg-blue-700 rounded-lg border border-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">
                 <svg class="w-4 h-4" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 20 20">
@@ -72,13 +72,13 @@ $all = array_reverse($all)
         <div class="flex gap-10">
             <div class="flex gap-3 justify-center items-center">
 
-                <div class="bg-[#C9D4D5] bg-opacity-50 p-3 rounded-lg">
-                    <svg fill="#000000" width="20px" height="20px" viewBox="-3.5 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="m16.64 20.097.597 2.71c.011.039.017.084.017.13 0 .093-.025.18-.07.255l.001-.002c-.064.114-.164.201-.286.246l-.004.001-.086.017c-.051.025-.111.045-.174.059l-.005.001q-.11.026-.273.08t-.366.094q-.205.042-.434.086t-.511.086-.571.08-.622.051q-.333.017-.656.017c-.066.001-.144.002-.223.002-2.542 0-4.888-.836-6.779-2.248l.03.021c-1.952-1.467-3.387-3.529-4.039-5.914l-.018-.077h-1.619c-.3-.004-.542-.246-.546-.545v-1.927c.004-.3.246-.542.545-.546h1.125q-.034-.971.017-1.79h-1.142c-.006 0-.014 0-.021 0-.29 0-.525-.235-.525-.525 0-.007 0-.015 0-.022v.001-1.943c0-.006 0-.014 0-.021 0-.29.235-.525.525-.525h.022-.001 1.67c.748-2.379 2.204-4.356 4.118-5.738l.033-.022c1.851-1.368 4.179-2.19 6.698-2.19.044 0 .088 0 .132.001h-.007.066c1.151 0 2.268.143 3.335.412l-.094-.02c.142.046.26.136.339.254l.001.002c.043.078.069.17.069.269 0 .05-.006.098-.019.144l.001-.004-.733 2.71c-.03.143-.118.261-.238.331l-.002.001c-.071.043-.158.069-.25.069-.057 0-.111-.01-.162-.028l.003.001-.068-.017q-.068-.017-.196-.042l-.298-.06-.383-.06-.443-.051-.494-.042-.503-.017c-.03 0-.065-.001-.1-.001-1.393 0-2.69.407-3.78 1.109l.028-.017c-1.127.726-2.008 1.748-2.543 2.957l-.017.043h7.978c.306.004.553.253.553.56 0 .031-.003.062-.007.091v-.003l-.409 1.943c-.028.252-.239.446-.496.446-.018 0-.035-.001-.052-.003h.002-8.32c-.017.267-.026.58-.026.895s.009.627.028.937l-.002-.043h7.824.007c.17 0 .321.08.419.204l.001.001c.072.093.116.211.116.339 0 .043-.005.085-.014.125l.001-.004-.409 1.909c-.051.25-.267.437-.527.443h-.001-6.593c1.036 2.558 3.5 4.33 6.378 4.33h.069-.003q.307 0 .614-.026t.571-.06.503-.08.418-.086l.315-.08.205-.051.086-.034c.055-.022.119-.035.186-.035.095 0 .183.026.259.071l-.002-.001c.134.077.23.208.258.362v.003z"/></svg>
+                <div class="bg-[#ffad51] bg-opacity-50 p-3 rounded-lg">
+                    <svg width="25px" height="25px" viewBox="0 0 64 64" xmlns="http://www.w3.org/2000/svg" stroke-width="3" stroke="#000" fill="none"><path d="M55.47 31.14A23.51 23.51 0 0 1 12.69 45.6M8.46 32.74a24 24 0 0 1 .42-5 23.51 23.51 0 0 1 42.29-9.14" stroke-linecap="round"/><path stroke-linecap="round" d="m40.6 17.6 10.85 1.27 1.08-10.18M23.05 46.33l-10.84-1.27-1.09 10.18"/><path d="M39 25.57a7.09 7.09 0 0 0-6.65-4.29c-6 0-6.21 4.29-6.21 4.29s-.9 5.28 6.43 5.85C40.18 32 39 37.26 39 37.26s-.78 4.58-6.43 4.87-7.41-5.65-7.41-5.65m7.17-19v29.04"/></svg>
                 </div>
 
                 <div>
                     <p class="text-[20px] font-[700]"><?=$pagado/100?>€</p>
-                    <p class="text-[16px] text-gray-400 font-[500]">Estimados</p>
+                    <p class="text-[16px] text-gray-400 font-[500]">Rectificativas</p>
 
                 </div>
 
@@ -87,10 +87,10 @@ $all = array_reverse($all)
 
         </div>
 
-        <a href="/documento/nuevo?doc=presupuesto" class="flex gap-2 items-center py-2 px-8 rounded-full bg-black text-white font-[600] hover:bg-[#707070] transition-colors duration-400"> 
+        <a href="/documento/nuevo?doc=rectificativa" class="flex gap-2 items-center py-2 px-8 rounded-full bg-black text-white font-[600] hover:bg-[#707070] transition-colors duration-400"> 
 
             <svg fill="#fff" width="18px" height="18px" viewBox="0 0 35 35" data-name="Layer 2" id="ab635b81-4e6c-4835-8954-fd99216bc317" xmlns="http://www.w3.org/2000/svg"><path d="M33.5,18.75H1.5a1.25,1.25,0,0,1,0-2.5h32a1.25,1.25,0,0,1,0,2.5Z"/><path d="M17.5,34.75a1.25,1.25,0,0,1-1.25-1.25V1.5a1.25,1.25,0,0,1,2.5,0v32A1.25,1.25,0,0,1,17.5,34.75Z"/></svg>
-            <span>Crear presupuesto</span>
+            <span>Crear rectificativa</span>
 
         </a>
 
@@ -100,9 +100,10 @@ $all = array_reverse($all)
 
 
     <div class="w-full ">
-        <div class="mb-3 grid grid-cols-4 bg-[#ffffff] border-[1px] p-2 font-[700]">
+        <div class="mb-3 grid grid-cols-5 bg-[#ffffff] border-[1px] p-2 font-[700]">
             <h2>Nombre</h2>
             <h2>Número</h2>
+            <h2>Referencia</h2>
             <h2>Fechas</h2>
             <h2>Importe</h2>
             <h2></h2>
@@ -111,14 +112,17 @@ $all = array_reverse($all)
 
         <?php
 
-            foreach ($all as $i) {
+        foreach ($all as $i) {
+            $invoice_ref = Intratum\Facturas\InvoiceSetting::checkIfExistSetting($i["id"],$params = ["OPTION" => "RECT_REF",]);
 
-                $is_paid = Intratum\Facturas\InvoiceSetting::checkIfExistSetting($i["id"],$params = ["OPTION" => "PAYMENT_DATE",])
+            $is_paid = Intratum\Facturas\InvoiceSetting::checkIfExistSetting($i["id"],$params = ["OPTION" => "PAYMENT_DATE",])
+
         ?>
-            <div data-url="/documento/ed?doc=presupuesto&item=<?=Intratum\Facturas\Util::getUUIDByID2('inv', $i["id2"]);?>" class="p-3 db_div cursor-pointer hover:bg-[#eee] bg-[#ffffff] border-[1px] mb-1 grid grid-cols-4 items-center p-2 rounded-xl">
+            <div data-url="/documento/ed?doc=rectificativa&item=<?=Intratum\Facturas\Util::getUUIDByID2('inv', $i["id2"]);?>" class="p-3 db_div cursor-pointer hover:bg-[#eee] bg-[#ffffff] border-[1px] mb-1 grid grid-cols-5 items-center p-2 rounded-xl">
 
                 <h2 ><?= $i["first_name"]?></h2>
-                <h2><?= $i["name"]?></h2>
+                <h2>R-<?= $i["name"]?></h2>
+                <h2><span  class="flex justify-center w-32 py-1  text-center font-[600] bg-black text-white rounded-md">Nº: <?= $invoice_ref[0]["value"]?></span></h2>
                 <h2><?= $i["invoice_date"]?></h2>
 
 
@@ -137,7 +141,7 @@ $all = array_reverse($all)
 
                                     <li class="w-full flex gap-3 p-2 hover:bg-[#fafafafa] rounded-md text-[#000000]">
                                         <svg width="20px" height="20px" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><g id="SVGRepo_bgCarrier" stroke-width="0"></g><g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g><g id="SVGRepo_iconCarrier"> <path fill-rule="evenodd" clip-rule="evenodd" d="M21.1213 2.70705C19.9497 1.53548 18.0503 1.53547 16.8787 2.70705L15.1989 4.38685L7.29289 12.2928C7.16473 12.421 7.07382 12.5816 7.02986 12.7574L6.02986 16.7574C5.94466 17.0982 6.04451 17.4587 6.29289 17.707C6.54127 17.9554 6.90176 18.0553 7.24254 17.9701L11.2425 16.9701C11.4184 16.9261 11.5789 16.8352 11.7071 16.707L19.5556 8.85857L21.2929 7.12126C22.4645 5.94969 22.4645 4.05019 21.2929 2.87862L21.1213 2.70705ZM18.2929 4.12126C18.6834 3.73074 19.3166 3.73074 19.7071 4.12126L19.8787 4.29283C20.2692 4.68336 20.2692 5.31653 19.8787 5.70705L18.8622 6.72357L17.3068 5.10738L18.2929 4.12126ZM15.8923 6.52185L17.4477 8.13804L10.4888 15.097L8.37437 15.6256L8.90296 13.5112L15.8923 6.52185ZM4 7.99994C4 7.44766 4.44772 6.99994 5 6.99994H10C10.5523 6.99994 11 6.55223 11 5.99994C11 5.44766 10.5523 4.99994 10 4.99994H5C3.34315 4.99994 2 6.34309 2 7.99994V18.9999C2 20.6568 3.34315 21.9999 5 21.9999H16C17.6569 21.9999 19 20.6568 19 18.9999V13.9999C19 13.4477 18.5523 12.9999 18 12.9999C17.4477 12.9999 17 13.4477 17 13.9999V18.9999C17 19.5522 16.5523 19.9999 16 19.9999H5C4.44772 19.9999 4 19.5522 4 18.9999V7.99994Z" fill="#000000"></path> </g></svg>
-                                        <a href="/documento/ed?doc=presupuesto&item=<?=Intratum\Facturas\Util::getUUIDByID2('inv', $i["id2"]);?>" class="">Editar</a>    
+                                        <a href="/documento/ed?doc=rectificativa&item=<?=Intratum\Facturas\Util::getUUIDByID2('inv', $i["id2"]);?>" class="">Editar</a>    
                                     </li>
 
                                     <li class="w-full ">
@@ -151,7 +155,7 @@ $all = array_reverse($all)
 
                                         <?php }else{ ?>
 
-                                            <a href="/pdf/<?= hash("sha256",$i["id2"]."50E7RQwnF050")?>.pdf" download="Presupuesto - <?= $i["name"]?>.pdf" class="popover-link w-full flex gap-3 p-2 hover:bg-[#fafafafa] text-[#000000] rounded-md">
+                                            <a href="/pdf/<?= hash("sha256",$i["id2"]."50E7RQwnF050")?>.pdf" download="Rectificativa - <?= $i["name"]?>.pdf" class="popover-link w-full flex gap-3 p-2 hover:bg-[#fafafafa] text-[#000000] rounded-md">
                                                 <svg width="22px" height="22px" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><g id="SVGRepo_bgCarrier" stroke-width="0"></g><g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g><g id="SVGRepo_iconCarrier"> <g id="Interface / Download"> <path id="Vector" d="M6 21H18M12 3V17M12 17L17 12M12 17L7 12" stroke="#000000" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path> </g> </g></svg>
                                                 <p>Descargar PDF</p>
                                             </a> 
@@ -220,7 +224,7 @@ if ($(this).hasClass("popover-link")) {
             success: function(d) {
 
                 if (d["success"] == true) {
-                    window.location.href = '/presupuestos/?success=true';
+                    window.location.href = '/rectificativas/?success=true';
                 }
 
             }
@@ -246,7 +250,7 @@ if ($(this).hasClass("popover-link")) {
             success: function(d) {
 
                 if (d["success"] == true) {
-                    window.location.href = '/facturas/';
+                    window.location.href = '/rectificativas/';
                 }
 
             }
@@ -273,7 +277,7 @@ if ($(this).hasClass("popover-link")) {
             success: function(d) {
                 console.log(d)
                 if(d.content == 1){
-                   window.location.href = "/presupuestos/?success=true";
+                   window.location.href = "/rectificativas/?success=true";
                 }
             }
         });

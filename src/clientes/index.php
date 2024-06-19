@@ -7,6 +7,10 @@ $acc_id = Intratum\Facturas\Util::getUserAccountID();
 
 if(!empty($_GET['q']))
     Intratum\Facturas\Environment::$db->where('search', '%'.$_GET['q'].'%', 'LIKE');
+if(!empty($_GET['type']))
+    Intratum\Facturas\Environment::$db->where('type', $_GET['type'] );
+
+
 Intratum\Facturas\Environment::$db->where('account_id',$acc_id);
 $all = Intratum\Facturas\Environment::$db->get('customer');
 $all = array_reverse($all)
@@ -58,6 +62,60 @@ $all = array_reverse($all)
 </div>
 
 <div class="w-full ">
+
+    <div class="w-full flex mb-2 ">
+
+        <a href="/contactos/" class="py-2 px-4 text-black text-[20px] font-[600] border-b-[3px] <?php if (empty($_GET['type']) ) { echo "border-black "; }?>"> Todos </a>
+
+        <a href=" <?php
+             if (!empty($_GET['q'])) {
+
+                if (empty($_GET['type'])) {
+             
+                    echo $_SERVER['REQUEST_URI']."&type=c"; 
+                    
+                }else{
+    
+                    echo "/contactos/?q=".$_GET['q']."&type=c";
+                }
+             
+
+            }else{
+
+                echo "/contactos/?type=c"; }
+             
+
+             ?>"   class="py-2 px-4 text-black border-b-[3px] text-[20px] font-[600] <?php if (!empty($_GET['type']) && $_GET['type'] == "c"   ) { echo " border-black "; }?>" >Clientes</a>
+
+
+            <a href=" <?php
+             if (!empty($_GET['q'])) {
+
+                if (empty($_GET['type'])) {
+             
+                    echo $_SERVER['REQUEST_URI']."&type=p"; 
+                    
+                }else{
+    
+                    echo "/contactos/?q=".$_GET['q']."&type=p";
+
+                }
+             
+
+            }else{
+
+                echo "/contactos/?type=p"; }
+             
+
+             ?>"   class="py-2 px-4 text-black border-b-[3px] text-[20px] font-[600]  <?php if (!empty($_GET['type']) && $_GET['type'] == "p"   ) { echo " border-black "; }?>" >Proveedor</a>
+        
+        
+
+
+
+
+    </div>
+
     <div class="mb-3 grid grid-cols-6 bg-[#ffffff] border-[1px] p-2 font-[700]">
         <h2>Nombre</h2>
         <h2>Tipo</h2>
@@ -74,7 +132,7 @@ $all = array_reverse($all)
             Intratum\Facturas\Environment::$db->where('recipient_id',$i["id"]);
             $all = Intratum\Facturas\Environment::$db->getOne('invoice','COUNT(id) AS total, SUM(total) AS totalsubtotal');?>
 
-            <div data-url="/contactos/single/?item=<?=Intratum\Facturas\Util::getUUIDByID2('cust', $i["id2"]);?>" class="p-3 db_div bg-[#ffffff] border-[1px] mb-1 grid grid-cols-6 items-center p-2 rounded-xl">
+            <div data-url="/contactos/single/?item=<?=Intratum\Facturas\Util::getUUIDByID2('cust', $i["id2"]);?>" class="p-3 db_div cursor-pointer hover:bg-[#eee] bg-[#ffffff] border-[1px] mb-1 grid grid-cols-6 items-center p-2 rounded-xl">
 
                 <h2><?= $i["first_name"]?> <?= $i["last_name"]?></h2>
 
@@ -157,17 +215,46 @@ $all = array_reverse($all)
 
 <script>
 
-    $(document).ready(function(){
-        $('.db_div').on('dblclick', function() {
+    $('.db_div, .popover-link').on('click', function() {
+
+        console.log($(this))
+
+        if ($(this).hasClass("popover-link")) {
+            event.stopPropagation();
+            
+        }else{
+
             var id = $(this).data('id');
             var url = $(this).data('url');
             window.location.href = url;
-        });
+            
+        }
+
+
+
     });
 
+
     function buscar(){
+
+        let c = "type=c";
+        let p = "type=p";
+
+
+        let type = <?= $_GET['type'] ?? "false" ?>;
+
+
         let busqueda = `?q=${$('#searchInput').val()}`
-        window.location.href = busqueda;
+
+        if (type) {
+            window.location.href = busqueda+"&"+type;
+
+            
+        }else{
+            window.location.href = busqueda;
+
+
+        } 
     }
 
 </script>

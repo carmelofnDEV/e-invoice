@@ -1,7 +1,6 @@
 <?php
 Intratum\Facturas\Util::checkSession();
 $title = 'Gastos';
-$add_link = "/gastos/nuevo";
 
 ?>
 
@@ -13,22 +12,112 @@ $acc_id = Intratum\Facturas\Util::getUserAccountID();
 Intratum\Facturas\Environment::$db->where('account_id',$acc_id);
 $db2->where('type', 0 );
 
-if(!empty($_GET['q']))
-    $db2->where('search', '%'.$_GET['q'].'%', 'LIKE');
+if (!empty($_GET['q'])) {
+    $db2->where('search', '%' . $_GET['q'] . '%', 'LIKE');
+}
+
+if (!empty($_GET['start_date']) && !empty($_GET['end_date'])) {
+
+    $start_date = DateTime::createFromFormat('Ymd', $_GET['start_date'])->format('Y/m/d');
+    $end_date = DateTime::createFromFormat('Ymd', $_GET['end_date'])->format('Y/m/d');
+    $db2->where('invoice_date', [$start_date, $end_date], 'BETWEEN');
+}
+
+
+
+$inv_settings = [];
 
 $all = $db2->get('invoice');
 
+
+if (!empty($_GET['is_recurring']) ) {
+
+   $recurringInvoices = [];
+
+    foreach ($all as $inv) {
+        
+        $recurring = Intratum\Facturas\InvoiceSetting::checkIfExistSetting($inv["id"], $params = ["OPTION" => "REC"]);
+
+        if ($recurring) {
+
+            $recurringInvoices[] = $inv;
+            
+        }
+    }
+
+    $all = $recurringInvoices;
+}
+
+$pagado = 0;
+$pendiente = 0;
+
+
+foreach ($all as $inv) {
+    
+    $is_paid = Intratum\Facturas\InvoiceSetting::checkIfExistSetting($inv["id"], $params = ["OPTION" => "PAYMENT_DATE"]);
+
+    if ($is_paid) {
+
+        $pagado += $inv["total"];
+
+    }else{
+
+        $pendiente += $inv["total"];
+
+    }
+}
+
+
+
+$all = array_reverse($all);
 ?>
 
 
 <div class="py-5 px-10">
 
 
-    <div class="w-full flex justify-end items-end mb-5">   
+	
+    <?php if(!empty($_GET['success'])){ ?>
+        <div class="p-4 mb-4 text-sm text-green-800 rounded-lg bg-green-50 dark:bg-gray-800 dark:text-green-400" role="alert">
+            <span class="font-medium">Cambios guardados correctamente.</span>
+        </div>
+    <?php } ?>
+
+    <div class="w-full flex justify-end items-end mb-5 gap-2">
+
+
+
+        <div date-rangepicker class="flex items-center">
+
+
+
+            <div class="relative">
+                <div class="absolute inset-y-0 start-0 flex items-center ps-3 pointer-events-none">
+                    <svg class="w-4 h-4 text-gray-500 dark:text-gray-400" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 20 20">
+                    <path d="M20 4a2 2 0 0 0-2-2h-2V1a1 1 0 0 0-2 0v1h-3V1a1 1 0 0 0-2 0v1H6V1a1 1 0 0 0-2 0v1H2a2 2 0 0 0-2 2v2h20V4ZM0 18a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V8H0v10Zm5-8h10a1 1 0 0 1 0 2H5a1 1 0 0 1 0-2Z"/>
+                    </svg>
+                </div>
+                <input  id="start_date" name="start" type="text" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full ps-10 p-2.5  dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="Fecha de inicio">
+            </div>
+
+            <span class="mx-4 text-gray-500 font-[700]">-</span>
+
+            <div class="relative">
+                <div class="absolute inset-y-0 start-0 flex items-center ps-3 pointer-events-none">
+                    <svg class="w-4 h-4 text-gray-500 dark:text-gray-400" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 20 20">
+                    <path d="M20 4a2 2 0 0 0-2-2h-2V1a1 1 0 0 0-2 0v1h-3V1a1 1 0 0 0-2 0v1H6V1a1 1 0 0 0-2 0v1H2a2 2 0 0 0-2 2v2h20V4ZM0 18a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V8H0v10Zm5-8h10a1 1 0 0 1 0 2H5a1 1 0 0 1 0-2Z"/>
+                    </svg>
+                </div>
+                <input onchange="" id="end_date" name="end" type="text" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full ps-10 p-2.5  dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="Fecha de fin">
+            </div>
+
+
+        </div>
+
         <div class="flex ">
             <label for="searchInput" class="sr-only">Search</label>
             <div class="relative w-full">
-                    <input type="text" id="searchInput" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full ps p-2.5  dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="Buscar gastos..." required />
+                    <input type="text" id="searchInput" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full ps p-2.5  dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="Buscar facturas..." required />
             </div>
             <button onclick="buscar()" class="p-2.5 ms-2 text-sm font-medium text-white bg-blue-700 rounded-lg border border-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">
                 <svg class="w-4 h-4" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 20 20">
@@ -37,10 +126,68 @@ $all = $db2->get('invoice');
                 <span class="sr-only">Search</span>
             </button>
         </div>
+
+    </div>
+
+    <div class="flex py-4 px-6 w-full justify-between rounded-xl border-[1px] bg-white">
+
+        <div class="flex gap-10">
+            <div class="flex gap-3 justify-center items-center">
+
+                <div class="bg-[#ff6969] bg-opacity-50 p-3 rounded-lg">
+                    <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" version="1.1" width="23px" height="23px" viewBox="0 0 1080 1080" xml:space="preserve"> <desc>Created with Fabric.js 5.2.4</desc> <defs> </defs> <rect x="0" y="0" width="100%" height="100%" fill="transparent"></rect> <g transform="matrix(1 0 0 1 540 540)" id="7cb4ecbe-bafa-48d1-9afc-70c9e7fc44c6"  > </g> <g transform="matrix(1 0 0 1 540 540)" id="90adc57b-a020-43e6-bd51-8c9b67991201"  > <rect style="stroke: none; stroke-width: 1; stroke-dasharray: none; stroke-linecap: butt; stroke-dashoffset: 0; stroke-linejoin: miter; stroke-miterlimit: 4; fill: rgb(255,255,255); fill-rule: nonzero; opacity: 1; visibility: hidden;" vector-effect="non-scaling-stroke"  x="-540" y="-540" rx="0" ry="0" width="1080" height="1080" /> </g> <g transform="matrix(4.69 0 0 -4.67 540 484.98)" id="Capa_1"  > <polygon style="stroke: none; stroke-width: 1; stroke-dasharray: none; stroke-linecap: butt; stroke-dashoffset: 0; stroke-linejoin: miter; stroke-miterlimit: 4; fill: rgb(0,0,0); fill-rule: nonzero; opacity: 1;"  points="61.94,-71.69 61.94,-56.69 89.62,-56.69 20.67,12.25 -22.87,-31.28 -115.23,61.09 -104.62,71.69 -22.87,-10.07 20.67,33.47 100.23,-46.09 100.23,-18.44 115.23,-18.44 115.23,-71.69 " /> </g> </svg>
+                </div>
+
+                <div>
+                    <p class="text-[20px] font-[700]"><?=$pagado/100?>€</p>
+                    <p class="text-[16px] text-gray-400 font-[500]">Gastados</p>
+
+                </div>
+
+            </div>
+
+            <div class="flex gap-3 justify-center items-center">
+
+                <div class="bg-[#ffc17a] bg-opacity-50 p-3 rounded-lg">
+                    <svg fill="#000000" width="23px" height="23px" viewBox="0 0 24 24" id="Layer_1" data-name="Layer 1" xmlns="http://www.w3.org/2000/svg"><path d="M15.09814,12.63379,13,11.42285V7a1,1,0,0,0-2,0v5a.99985.99985,0,0,0,.5.86621l2.59814,1.5a1.00016,1.00016,0,1,0,1-1.73242ZM12,2A10,10,0,1,0,22,12,10.01114,10.01114,0,0,0,12,2Zm0,18a8,8,0,1,1,8-8A8.00917,8.00917,0,0,1,12,20Z"/></svg>
+                </div>
+
+                <div>
+                    <p class="text-[20px] font-[700]"><?=$pendiente/100?>€</p>
+                    <p class="text-[16px] text-gray-400 font-[500]">Pendientes</p>
+
+                </div>
+
+            </div>
+
+        </div>
+
+        <a href="/documento/nuevo?doc=gasto" class="flex gap-2 items-center py-2 px-8 rounded-full bg-black text-white font-[600] hover:bg-[#707070] transition-colors duration-400"> 
+
+            <svg fill="#fff" width="18px" height="18px" viewBox="0 0 35 35" data-name="Layer 2" id="ab635b81-4e6c-4835-8954-fd99216bc317" xmlns="http://www.w3.org/2000/svg"><path d="M33.5,18.75H1.5a1.25,1.25,0,0,1,0-2.5h32a1.25,1.25,0,0,1,0,2.5Z"/><path d="M17.5,34.75a1.25,1.25,0,0,1-1.25-1.25V1.5a1.25,1.25,0,0,1,2.5,0v32A1.25,1.25,0,0,1,17.5,34.75Z"/></svg>
+            <span>Crear gasto</span>
+
+        </a>
+
     </div>
 
 
+
+
+
     <div class="w-full ">
+
+        <div class="w-full flex mb-2 ">
+
+            <a href="/gastos/" class="py-2 px-4 text-black text-[20px] font-[600] border-b-[3px] <?php if (empty($_GET['is_recurring']) ) { echo "border-black "; }?>"> Todas </a>
+            
+            <a class="py-2 px-4 text-black text-[20px] font-[600] border-b-[3px] <?php if (!empty($_GET['is_recurring']) ) { echo "border-black "; }?>" href=" <?php if (empty($_GET['is_recurring'])){ if (!empty(!empty($_GET['q']) || !empty($_GET['start_date'])) || !empty($_GET['end_date']) || !empty($_GET['success'])) { echo $_SERVER['REQUEST_URI']."&is_recurring=true"; }else{echo $_SERVER['REQUEST_URI']."?is_recurring=true"; }?>"   class="py-2 px-4 text-black border-b-[3px] text-[20px] font-[600] <?php if (!empty($_GET['is_recurring']) ) { echo " border-black "; }}?>" >Recurrentes</a>
+            
+            
+
+        </div>
+
+
         <div class="mb-3 grid grid-cols-5 bg-[#ffffff] border-[1px] p-2 font-[700]">
             <h2>Nombre</h2>
             <h2>Número</h2>
@@ -78,7 +225,7 @@ $all = $db2->get('invoice');
                 $is_paid = Intratum\Facturas\InvoiceSetting::checkIfExistSetting($i["id"],$params = ["OPTION" => "PAYMENT_DATE",]);
 
         ?>
-            <div data-url="/documento/ed?doc=gasto&item=<?=Intratum\Facturas\Util::getUUIDByID2('inv', $i["id2"]);?>" class="db_div bg-[#ffffff] border-[1px] mb-1 grid grid-cols-5 items-center p-2 rounded-xl">
+            <div data-url="/documento/ed?doc=gasto&item=<?=Intratum\Facturas\Util::getUUIDByID2('inv', $i["id2"]);?>" class="db_div cursor-pointer hover:bg-[#eee] bg-[#ffffff] border-[1px] mb-1 grid grid-cols-5 items-center p-2 rounded-xl">
 
                 <h2 ><?= $i["first_name"]?></h2>
                 <h2><?= $i["name"]?></h2>
@@ -87,7 +234,7 @@ $all = $db2->get('invoice');
                   
                     <?php if ($is_paid) {?>
 
-                        <button id="dropdownDefaul<?=$i["id2"]?>" data-dropdown-toggle="dropdown<?=$i["id2"]?>" class="rounded-xl flex items-center bg-[#effbf7] text-[#1dd2a2] opacity-80 p-2" type="button">
+                        <button id="dropdownDefaul<?=$i["id2"]?>" data-dropdown-toggle="dropdown<?=$i["id2"]?>" class="dropdownDefaul w-[115px] justify-between pr-2  rounded-xl flex items-center bg-[#effbf7] text-[#1dd2a2] opacity-80 p-2" type="button">
                             <p class="">Pagado</p>
                             <svg class="w-2.5 h-2.5 ms-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 10 6"><path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m1 1 4 4 4-4"/></svg>
                         </button>
@@ -95,7 +242,7 @@ $all = $db2->get('invoice');
 
                     <?php }else{ ?>
 
-                        <button id="dropdownDefaul<?=$i["id2"]?>" data-dropdown-toggle="dropdown<?=$i["id2"]?>" class="rounded-xl flex items-center bg-[#fff7ec] text-[#ffb145] opacity-80 p-2" type="button">
+                        <button id="dropdownDefaul<?=$i["id2"]?>" data-dropdown-toggle="dropdown<?=$i["id2"]?>" class="dropdownDefaul w-[115px] justify-between pr-2  rounded-xl flex items-center bg-[#fff7ec] text-[#ffb145] opacity-80 p-2" type="button">
                             <p class="">Pendiente</p>
                             <svg class="w-2.5 h-2.5 ms-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 10 6"><path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m1 1 4 4 4-4"/></svg>
                         </button>
@@ -104,7 +251,7 @@ $all = $db2->get('invoice');
 
 
                     <div id="dropdown<?=$i["id2"]?>" class="z-10 hidden bg-white divide-y divide-gray-100 rounded-lg shadow w-44 dark:bg-gray-700">
-                        <ul class="py-1 text-md text-gray-700 dark:text-gray-200" aria-labelledby="dropdownDefaultButton<?=$i["id2"]?>">
+                        <ul class=" dropdownDefaul py-1 text-md text-gray-700 dark:text-gray-200" aria-labelledby="dropdownDefaultButton<?=$i["id2"]?>">
 
                             <li class="border-l-4 border-[#1dd2a2]">
                                 <button onclick="setPaid('<?=$i['id2']?>')" class="p-3 w-full hover:bg-[#effbf7]">Pagada</button>
@@ -138,27 +285,31 @@ $all = $db2->get('invoice');
                             </div>
                         <?php }?>
 
-                        <div data-popover id="popover-<?=$i['id2']?>" role="tooltip" class="absolute z-10 invisible inline-block  text- text-gray-500 transition-opacity duration-300 bg-white border border-gray-200 rounded-lg shadow-sm opacity-0 dark:text-gray-400 dark:border-gray-600 dark:bg-gray-800">
+                        <div data-popover id="popover-<?=$i['id2']?>" role="tooltip" class="absolute  popover-link z-10 invisible inline-block  text- text-gray-500 transition-opacity duration-300 bg-white border border-gray-200 rounded-lg shadow-sm opacity-0 dark:text-gray-400 dark:border-gray-600 dark:bg-gray-800">
                             <div class="">
-                                <ul class="p-2 flex flex-col justify-center items-center">
+                                <ul class="p-2 flex flex-col justify-center items-center popover-link">
 
-                                    <li class="w-full flex gap-3 p-2 hover:bg-[#fafafafa] rounded-md text-[#000000]">
+                                    <li class="w-full ">
+                                        <a class="flex gap-3 p-2 hover:bg-[#fafafafa] rounded-md text-[#000000] popover-link" href="/documento/ed?doc=gasto&item=<?=Intratum\Facturas\Util::getUUIDByID2('inv', $i["id2"]);?>">
+
                                         <svg width="20px" height="20px" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><g id="SVGRepo_bgCarrier" stroke-width="0"></g><g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g><g id="SVGRepo_iconCarrier"> <path fill-rule="evenodd" clip-rule="evenodd" d="M21.1213 2.70705C19.9497 1.53548 18.0503 1.53547 16.8787 2.70705L15.1989 4.38685L7.29289 12.2928C7.16473 12.421 7.07382 12.5816 7.02986 12.7574L6.02986 16.7574C5.94466 17.0982 6.04451 17.4587 6.29289 17.707C6.54127 17.9554 6.90176 18.0553 7.24254 17.9701L11.2425 16.9701C11.4184 16.9261 11.5789 16.8352 11.7071 16.707L19.5556 8.85857L21.2929 7.12126C22.4645 5.94969 22.4645 4.05019 21.2929 2.87862L21.1213 2.70705ZM18.2929 4.12126C18.6834 3.73074 19.3166 3.73074 19.7071 4.12126L19.8787 4.29283C20.2692 4.68336 20.2692 5.31653 19.8787 5.70705L18.8622 6.72357L17.3068 5.10738L18.2929 4.12126ZM15.8923 6.52185L17.4477 8.13804L10.4888 15.097L8.37437 15.6256L8.90296 13.5112L15.8923 6.52185ZM4 7.99994C4 7.44766 4.44772 6.99994 5 6.99994H10C10.5523 6.99994 11 6.55223 11 5.99994C11 5.44766 10.5523 4.99994 10 4.99994H5C3.34315 4.99994 2 6.34309 2 7.99994V18.9999C2 20.6568 3.34315 21.9999 5 21.9999H16C17.6569 21.9999 19 20.6568 19 18.9999V13.9999C19 13.4477 18.5523 12.9999 18 12.9999C17.4477 12.9999 17 13.4477 17 13.9999V18.9999C17 19.5522 16.5523 19.9999 16 19.9999H5C4.44772 19.9999 4 19.5522 4 18.9999V7.99994Z" fill="#000000"></path> </g></svg>
-                                        <a href="/documento/ed?doc=gasto&item=<?=Intratum\Facturas\Util::getUUIDByID2('inv', $i["id2"]);?>" class="">Editar</a>    
+                                        <span>Editar</span>   
+                                        </a>
+
                                     </li>
 
                                     <li class="w-full ">
  
                                         <?php if ($i["invoice_state"] == 0) { ?>
 
-                                            <button onclick="publicar('<?=Intratum\Facturas\Util::getUUIDByID2('inv', $i['id2'])?>')" class="w-full flex gap-3 p-2 hover:bg-[#fafafafa] text-[#000000] rounded-md">
+                                            <button onclick="publicar('<?=Intratum\Facturas\Util::getUUIDByID2('inv', $i['id2'])?>')" class="popover-link w-full flex gap-3 p-2 hover:bg-[#fafafafa] text-[#000000] rounded-md">
                                                 <svg width="20px" height="20px" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16"><path style="line-height:normal;text-indent:0;text-align:start;text-decoration-line:none;text-decoration-style:solid;text-decoration-color:#000;text-transform:none;block-progression:tb;isolation:auto;mix-blend-mode:normal" d="M 2.5 2 C 2.0900381 2 1.6984009 2.1441855 1.421875 2.4199219 C 1.1453491 2.6956582 1 3.0876653 1 3.5 L 1 4.5 A 0.50005 0.50005 0 0 0 1.5 5 L 3 5 L 3 12.375 C 3 13.199669 3.6105159 14 4.5 14 L 7.7617188 14 C 8.5704696 15.204592 9.94479 16 11.5 16 C 13.979359 16 16 13.979359 16 11.5 C 16 9.5487862 14.741637 7.8970971 13 7.2753906 L 13 3.5 C 13 3.0876653 12.854651 2.6956582 12.578125 2.4199219 C 12.317203 2.1597448 11.952946 2.0211755 11.568359 2.0058594 A 0.50005 0.50005 0 0 0 11.5 2 L 2.5 2 z M 2.5 3 L 10.232422 3 C 10.144686 3.2093287 10 3.3950674 10 3.625 L 10 4 L 2 4 L 2 3.5 C 2 3.3093347 2.0551821 3.2024201 2.1289062 3.1289062 C 2.2026306 3.0553926 2.3109619 3 2.5 3 z M 11.5 3 C 11.689038 3 11.79737 3.0553932 11.871094 3.1289062 C 11.944818 3.2024201 12 3.3093347 12 3.5 L 12 7.0507812 C 11.833538 7.0319923 11.67136 7 11.5 7 C 10.439612 7 9.4752104 7.381117 8.7089844 8 L 5 8 L 5 9 L 7.7929688 9 C 7.5842039 9.3106797 7.4033096 9.6416499 7.2753906 10 L 5 10 L 5 11 L 7.0507812 11 C 7.0319923 11.166462 7 11.32864 7 11.5 C 7 12.028145 7.1071101 12.528582 7.2753906 13 L 4.5 13 C 4.1914841 13 4 12.756331 4 12.375 L 4 5 L 10.5 5 A 0.50005 0.50005 0 0 0 11 4.5 L 11 3.625 C 11 3.2436694 11.191484 3 11.5 3 z M 5 6 L 5 7 L 10 7 L 10 6 L 5 6 z M 11.5 8 C 13.438919 8 15 9.5610811 15 11.5 C 15 13.438919 13.438919 15 11.5 15 C 9.5610811 15 8 13.438919 8 11.5 C 8 9.5610811 9.5610811 8 11.5 8 z M 11 9 L 11 11 L 9 11 L 9 12 L 11 12 L 11 14 L 12 14 L 12 12 L 14 12 L 14 11 L 12 11 L 12 9 L 11 9 z"/></svg>
                                                 <p class="text-[#000000]">Generar PDF</p>
                                             </button> 
 
                                         <?php }else{ ?>
 
-                                            <a href="/pdf/<?= hash("sha256",$i["id2"]."50E7RQwnF050")?>.pdf" download class="w-full flex gap-3 p-2 hover:bg-[#fafafafa] text-[#000000] rounded-md">
+                                            <a href="/pdf/<?= hash("sha256",$i["id2"]."50E7RQwnF050")?>.pdf" download="Gasto - <?= $i["name"]?>.pdf" class="popover-link w-full flex gap-3 p-2 hover:bg-[#fafafafa] text-[#000000] rounded-md">
                                                 <svg width="22px" height="22px" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><g id="SVGRepo_bgCarrier" stroke-width="0"></g><g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g><g id="SVGRepo_iconCarrier"> <g id="Interface / Download"> <path id="Vector" d="M6 21H18M12 3V17M12 17L17 12M12 17L7 12" stroke="#000000" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path> </g> </g></svg>
                                                 <p>Descargar PDF</p>
                                             </a> 
@@ -175,7 +326,7 @@ $all = $db2->get('invoice');
                                             </button>
                                         <?php }?> 
 
-                                        <a href="/documento/del?item=<?=Intratum\Facturas\Util::getUUIDByID2('inv', $i["id2"]);?>" class="w-full flex gap-3 p-2 hover:bg-[#fafafafa] text-[#FE0000] rounded-md">
+                                        <a href="/documento/del?item=<?=Intratum\Facturas\Util::getUUIDByID2('inv', $i["id2"]);?>" class="popover-link w-full flex gap-3 p-2 hover:bg-[#fafafafa] text-[#FE0000] rounded-md">
                                             <svg width="20px" height="20px" viewBox="0 0 1024 1024" xmlns="http://www.w3.org/2000/svg" fill="#FE0000" stroke="#FE0000"><g id="SVGRepo_bgCarrier" stroke-width="0"></g><g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g><g id="SVGRepo_iconCarrier"><path fill="#FE0000" d="M160 256H96a32 32 0 0 1 0-64h256V95.936a32 32 0 0 1 32-32h256a32 32 0 0 1 32 32V192h256a32 32 0 1 1 0 64h-64v672a32 32 0 0 1-32 32H192a32 32 0 0 1-32-32V256zm448-64v-64H416v64h192zM224 896h576V256H224v640zm192-128a32 32 0 0 1-32-32V416a32 32 0 0 1 64 0v320a32 32 0 0 1-32 32zm192 0a32 32 0 0 1-32-32V416a32 32 0 0 1 64 0v320a32 32 0 0 1-32 32z"></path></g></svg>
                                             <p>Eliminar</p>
                                         </a> 
@@ -246,7 +397,7 @@ $all = $db2->get('invoice');
                                         <path d="M20 4a2 2 0 0 0-2-2h-2V1a1 1 0 0 0-2 0v1h-3V1a1 1 0 0 0-2 0v1H6V1a1 1 0 0 0-2 0v1H2a2 2 0 0 0-2 2v2h20V4ZM0 18a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V8H0v10Zm5-8h10a1 1 0 0 1 0 2H5a1 1 0 0 1 0-2Z"/>
                                         </svg>
                                     </div>
-                                   <input <?php if (!empty($settings_4) && $settings_4[0]["value"] != "" ) {?> value="<?php echo date("m-d-Y", strtotime( $settings_4[0]["value"] )) ?>" <?php } ?>   id="start_date" name="OPTION[REC_START_DATE]" type="text" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full ps-10 p-2.5  dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="Fecha de inicio">
+                                   <input <?php if (!empty($settings_4) && $settings_4[0]["value"] != "" ) {?> value="<?php echo date("m-d-Y", strtotime( $settings_4[0]["value"] )) ?>" <?php } ?>    name="OPTION[REC_START_DATE]" type="text" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full ps-10 p-2.5  dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="Fecha de inicio">
 
                                 </div>
         
@@ -258,7 +409,7 @@ $all = $db2->get('invoice');
                                         <path d="M20 4a2 2 0 0 0-2-2h-2V1a1 1 0 0 0-2 0v1h-3V1a1 1 0 0 0-2 0v1H6V1a1 1 0 0 0-2 0v1H2a2 2 0 0 0-2 2v2h20V4ZM0 18a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V8H0v10Zm5-8h10a1 1 0 0 1 0 2H5a1 1 0 0 1 0-2Z"/>
                                         </svg>
                                     </div>
-                                    <input <?php if (!empty($settings_3) && $settings_3[0]["value"] != "" ) {?> value="<?php echo date("m-d-Y", strtotime( $settings_3[0]["value"] )) ?>"  <?php }else{ ?> value="ss" <?php } ?>    onchange="" id="end_date" name="OPTION[REC_END_DATE]" type="text" class=" bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full ps-10 p-2.5  dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="Fecha de fin">
+                                    <input <?php if (!empty($settings_3) && $settings_3[0]["value"] != "" ) {?> value="<?php echo date("m-d-Y", strtotime( $settings_3[0]["value"] )) ?>"  <?php }else{ ?> value="ss" <?php } ?>    onchange="" id="" name="OPTION[REC_END_DATE]" type="text" class=" bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full ps-10 p-2.5  dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="Fecha de fin">
                                 </div>
                             </div>
                         </div>
@@ -325,10 +476,31 @@ $all = $db2->get('invoice');
 
 
     $(document).ready(function(){
-        $('.db_div').on('dblclick', function() {
-            var id = $(this).data('id');
-            var url = $(this).data('url');
-            window.location.href = url;
+
+        $('.dropdownDefaul, .popover-menu').click(function(e){
+            e.preventDefault();
+            
+            return false;
+            
+        });
+        
+        $('.db_div, .popover-link').on('click', function() {
+
+            console.log($(this))
+
+            if ($(this).hasClass("popover-link")) {
+                event.stopPropagation();
+                
+            }else{
+
+                var id = $(this).data('id');
+                var url = $(this).data('url');
+                window.location.href = url;
+
+            }
+
+
+
         });
 
 
@@ -489,13 +661,46 @@ $all = $db2->get('invoice');
         return `${year}${month}${day}`;
     }
 
-    function buscar(){
-        let busqueda = `?q=${$('#searchInput').val()}`
-        let fecha_inicio = `start_date=${convertDateFormat($('#start_date').val())}`
-        let fecha_final = `end_date=${convertDateFormat($('#end_date').val())}`
 
-        window.location.href = busqueda+"&"+fecha_inicio+"&"+fecha_final;
+
+    function buscar(){
+        let fecha_inicio=""
+        let fecha_final=""
+        let busqueda = ""
+        let has_filter= <?= $_GET['is_recurring'] ?? "false" ?>
+
+        if ($('#searchInput').val()) {
+            console.log($('#searchInput').val())
+
+            busqueda = `${$('#searchInput').val()}`
+        }
+
+        if ($('#start_date').val()) {
+            console.log($('#start_date').val())
+            fecha_inicio = `&start_date=${convertDateFormat($('#start_date').val())}`
+            
+        }
+
+        if ($('#end_date').val()) {
+            console.log($('#end_date').val())
+            fecha_final = `&end_date=${convertDateFormat($('#end_date').val())}`
+        }
+
+        if ((busqueda+fecha_inicio+fecha_final) != "") {
+
+            if (has_filter) {
+
+                window.location.href = "?is_recurring=true&q="+busqueda+fecha_inicio+fecha_final;
+                
+            }else{
+
+                window.location.href = "?q="+busqueda+fecha_inicio+fecha_final;
+
+            }
+        }
     }
+
+
 
     function publicar(id2){
        $.ajax({

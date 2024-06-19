@@ -12,8 +12,7 @@ use josemmo\Facturae\Common\FacturaeSigner;
 class Factura
 {
 
-    public static function insert(array $data)
-{
+    public static function insert(array $data){
         
         $subtotal = 0;
         $totaltaxs = 0;
@@ -64,6 +63,14 @@ class Factura
         //$all = Environment::$db->get('customer');
 
         $invoice_items = $data["items"];
+
+        if (!empty($data["invoice_ref"])) {
+
+            $invoice_ref = $data["invoice_ref"];
+
+            
+        }
+
 
         $search = $data['first_name'] . ' ' . $data['last_name'] . '
 ' . $data['email'] . '
@@ -116,6 +123,8 @@ class Factura
         ];
 
         $id_invoice = Environment::$db->insert('invoice', $data);
+
+        
 
         foreach ($invoice_items as $i) {
 
@@ -205,6 +214,14 @@ class Factura
             $parms["OPTIONS"] = [
                 ["VALUE" => $discount,
                     "OPTION" => "DISCOUNT"]
+                ];
+                InvoiceSetting::save($parent_id=$id_invoice,$params=$parms);
+        }
+        
+        if (isset($invoice_ref) && $invoice_ref != "") {
+            $parms["OPTIONS"] = [
+                ["VALUE" => $invoice_ref,
+                    "OPTION" => "RECT_REF"]
                 ];
                 InvoiceSetting::save($parent_id=$id_invoice,$params=$parms);
         }
@@ -299,6 +316,15 @@ class Factura
         }
 
         $main_id = $data["id_invoice"];
+                
+        if (!empty($data["invoice_ref"])) {
+
+            $invoice_ref = $data["invoice_ref"];
+
+            
+        }else{
+            $invoice_ref = "";
+        }
 
         $invoice_items = $data["items"];
         $invoice_id_items = $data["id_invoice"];
@@ -475,6 +501,15 @@ class Factura
 
         }
 
+        if ($invoice_ref != "") {
+            $parms["OPTIONS"] = [
+                ["VALUE" => $invoice_ref,
+                    "OPTION" => "RECT_REF"]
+                ];
+                InvoiceSetting::save($parent_id=$main_id,$params=$parms);
+        }
+
+
         return ['success' => true];
     }
 
@@ -502,6 +537,10 @@ class Factura
             echo "Factura no encontrada";
             return;
         }
+
+        if ($factura["type"] != 1) {
+            return true;
+        }
     
         $db2->where('id', $factura["serial_id"]);
         $serial = $db2->get('serial');
@@ -526,7 +565,9 @@ class Factura
         $buyer = $buyer[0];
     
         $fac = new Facturae();
+
         $fac->setNumber($serial[0]["serial_tag"], $factura["invoice_number"]);
+
         $fac->setIssueDate($factura["invoice_date"]);
     
 
@@ -550,6 +591,9 @@ class Factura
             "town"          => $buyer["city"],
             "province"      => $buyer["state"]
         ]));
+
+        $discount = InvoiceSetting::checkIfExistSetting($parent_id=$factura["id"],$params = ["OPTION" => "DISCOUNT",]);
+
     
         foreach ($items as $item) {
             $db2->where('id', $item["id_item"]);
@@ -568,10 +612,14 @@ class Factura
             foreach ($taxs as $i) {
                 $db2->where('id', $i["tax_id"]);
                 $tax = $db2->getOne('tax');
+
+                
+
                 if (!$tax) {
                     echo "Impuesto no encontrado para el tax_id " . $i["tax_id"];
                     continue;
                 }
+
                 if ($tax["type"] == 1) {
                  
                     $taxes[Facturae::TAX_IVA] = $i["tax_value"];
@@ -580,19 +628,55 @@ class Factura
                 }
     
                 if ($tax["type"] == 0) {
-                    $taxes[Facturae::TAX_IRPF] = $i["tax_value"];
+                    $taxes[Facturae::TAX_IRPF] = ($i["tax_value"] * (-1));
 
                 }
             }
 
 
-            $fac->addItem(new FacturaeItem([
-                "name" => $product["title"],
-                "description" => $product["description"],
-                "quantity" => $item["quantity"],
-                "unitPriceWithoutTax" => ($item["subtotal"] / $item["quantity"]),
-                "taxes" =>  $taxes,
-            ]));
+            if ($discount) {
+
+                $disc_rate = $discount[0]["value"];
+                $disc_reason = "Descuento del " . $disc_rate . "%";
+                
+                $unitPriceWithoutTax = $item["subtotal"] / $item["quantity"];
+
+                $discountAmount = $item["subtotal"] * ($disc_rate / 100);
+
+
+
+
+                
+                $facturaeItem = new FacturaeItem([
+                    "name" => $product["title"],
+                    "description" => $product["description"],
+                    "quantity" => $item["quantity"],
+                    "unitPriceWithoutTax" => $unitPriceWithoutTax,
+                    "taxes" => $taxes, // Deja que la librería maneje los cálculos del IVA
+                    "discounts" => [
+                        ["reason" => $disc_reason, "rate" => $disc_rate, "hasTaxes" => 0]
+                    ]
+                ]);
+
+                
+                $fac->addItem($facturaeItem);
+                
+                
+            }else{
+
+                $fac->addItem(new FacturaeItem([
+                    "name" => $product["title"],
+                    "description" => $product["description"],
+                    "quantity" => $item["quantity"],
+                    "unitPriceWithoutTax" => ($item["subtotal"] / $item["quantity"]),
+                    "taxes" =>  $taxes,
+                ]));
+
+            }
+
+
+
+
            
         }
 
@@ -607,12 +691,14 @@ class Factura
 
         $enc->setKey('private');
         $pass = $enc->decode($setting["value"]);
+        $pass = str_replace('"','',$pass);
 
-        $cert_file = ('assets/certs/'.$acc["hash_cert"]);
+        $cert_file = $_SERVER['DOCUMENT_ROOT'] ;
+
+        $cert_file = str_replace("index.php",('certs/' . $acc['hash_cert']),$cert_file);
+
         
         $resp = $fac->sign($storeOrCertificate = $cert_file, $privateKey=null, $passphrase=$pass);
-
-        $resp == false;
 
         $fac->export("einvoices/$hash.xsig");
     }
@@ -630,18 +716,27 @@ class Factura
 
 
 
-        $db2->where('id', $factura["serial_id"]);
-        $serial = $db2->get('serial');
+        if ($factura["type"] == 1 || $factura["type"] == 3  ) {
+
+            $db2->where('id', $factura["serial_id"]);
+            $serial = $db2->get('serial');
+        }
 
         $db2->where('invoice_id', $factura["id"]);
         $items = $db2->get('invoice_item');
 
         $discount = InvoiceSetting::checkIfExistSetting($parent_id=$factura["id"],$params = ["OPTION" => "DISCOUNT",]);
 
+        $invoice_ref = InvoiceSetting::checkIfExistSetting($parent_id=$factura["id"],$params = ["OPTION" => "RECT_REF",]);
+
+
         $db2->where('invoice_item_id', $factura["id"]);
         $taxs = $db2->get('invoice_item_tax');
 
         $hash = hash('sha256', $id2 . '50E7RQwnF050');
+
+        $allSettings = AccountSetting::all();
+
 
         $pdf = new \mikehaertl\wkhtmlto\Pdf([
             'no-outline',
@@ -651,8 +746,19 @@ class Factura
             'margin-left' => 0,
             'encoding' => 'UTF-8',
         ]);
+
         ob_start();
-        include "./templates/pdf/template_1.php";
+        
+
+        if (!empty($allSettings["DEFAULT_TEMPLATE"])) {
+
+            include ("./templates/pdf/".$allSettings["DEFAULT_TEMPLATE"].".php");
+
+        }else{
+
+            include "./templates/pdf/template_1.php";
+
+        }
         $template = ob_get_clean();
         $pdf->addPage($template);
         if (!$pdf->saveAs('./pdf/' . $hash . '.pdf')) {
@@ -665,12 +771,14 @@ class Factura
 
         $acc = User::getUserAccount(Util::getSessionUser()["id"]);
 
+
         if ($acc["hash_cert"] != "") {
             self::generarFacturae($id2,$acc);
         }
 
 
         self::generarPDF($id2);
+
         $db2 = Environment::$db;
 
         $db2->where('id2', $id2);

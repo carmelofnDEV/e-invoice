@@ -1,6 +1,9 @@
 <?php
 Intratum\Facturas\Util::checkSession();
-$title = "Crear producto"
+$title = "Crear producto";
+
+$allTaxs = Intratum\Facturas\Tax::all()
+
 ?>
 
 
@@ -28,6 +31,22 @@ $title = "Crear producto"
                 <input type="number" id="precio" name="price" step="0.01"
                     class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
                     placeholder="0.00€" required />
+            </div>
+
+            <div class="mb-5">
+
+                <label for="default_tax" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Impuesto predeterminado</label>
+
+                <select name="default_tax" id="default_tax" class="block w-full px-3 py-2 border rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 sm:text-sm">
+
+                    <option value="0">Ninguno</option>
+                    <?php foreach ($allTaxs as $tax) {
+                    echo ' <option value="'.$tax["id"].'">'.$tax["name"]." / ".$tax["value"].'</option>';
+
+                } ?>
+
+                </select>
+
             </div>
 
             <button type="submit"

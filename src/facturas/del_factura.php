@@ -78,7 +78,7 @@ $title = "Eliminar documento - ".$invoice["name"]
 
     <button type="sumbit" class="text-white bg-red-700 hover:bg-red-800 focus:ring-4 focus:outline-none focus:ring-red-300 font-medium rounded-lg text-sm w-full sm:w-auto px-5 py-2.5 text-center dark:bg-red-600 dark:hover:bg-red-700 dark:focus:ring-red-800">SI</button>
     
-    <a class="text-white bg-green-700 hover:bg-green-800 focus:ring-4 focus:outline-none focus:ring-red-300 font-medium rounded-lg text-sm w-full sm:w-auto px-5 py-2.5 text-center dark:bg-green-600 dark:hover:bg-green-700 dark:focus:ring-green-800" href="/facturas/">NO</a>
+    <a class="text-white bg-green-700 hover:bg-green-800 focus:ring-4 focus:outline-none focus:ring-red-300 font-medium rounded-lg text-sm w-full sm:w-auto px-5 py-2.5 text-center dark:bg-green-600 dark:hover:bg-green-700 dark:focus:ring-green-800" href="<?php if($invoice["type"] == 0){echo "/gastos/ ";}else if($invoice["type"] == 1){echo "/facturas/ ";}else if($invoice["type"] == 2){echo "/presupuestos/ ";}else if($invoice["type"] == 3){echo "/rectificativas/ ";} ?>">NO</a>
 
 </form>
 
@@ -114,16 +114,18 @@ $(document).ready(function(){
 
             success: function(d){
 
-                if(d.success == true){
-                   
-                    if (<?php echo $invoice["type"]; ?> == 0) {
+                if (d.success == true) {
+                    if (<?= $invoice["type"] ?> == 0) {
                         window.location.href = '/gastos/';
-                    } else if (<?php echo $invoice["type"]; ?> == 2) {
+                    } else if (<?= $invoice["type"] ?> == 2) {
                         window.location.href = '/presupuestos/';
+                    } else if (<?= $invoice["type"] ?> == 3) {
+                        window.location.href = '/rectificativas/';
                     } else {
                         window.location.href = '/facturas/';
                     }
                 }
+
 
             }
 
@@ -134,4 +136,3 @@ $(document).ready(function(){
 });
 
 </script>
-

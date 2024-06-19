@@ -46,6 +46,14 @@ require($Traffic);
     $buffer = ob_get_clean();
 
     echo $buffer;
+}else if($urlpath2[1] == 'einvoices'){
+    header('Content-Disposition: attachment' );
+ 
+    ob_start();
+    include $Traffic;
+    $buffer = ob_get_clean();
+
+    echo $buffer;
 }else if($urlpath2[1] == 'logout'){
 	Intratum\Facturas\Environment::connectDB();
 

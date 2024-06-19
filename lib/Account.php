@@ -71,42 +71,24 @@ class Account
 
         $id = $account["id"];
 
-        if(move_uploaded_file($data['tmp_name'], './assets/certs/'.self::setCert($id=$id,$extension=$file_info['extension']))) {
+        if(move_uploaded_file($data['tmp_name'], './certs/'.self::setCert($id=$id,$extension=$file_info['extension']))) {
             
             $cert_pass = $pass;
 
             $enc = new \Intratum\Facturas\Encryption();
             $enc->setKey('private');
             $codi = $enc->encode(json_encode($cert_pass));
-    
-            $db2 = Environment::$db;
 
-            $acc_id= User::getUserAccount(Util::getSessionUser()["id"])["id"];
 
-            $newData = [
+            $acc_id= User::getUserAccount($id)["id"];
 
-                "setting" => 1,
-                "value"=>$codi,
-                'id2' => Util::genUUID(),
-                'account_id' => $acc_id,
-                'target_account_id' =>$acc_id,
-                'user_id' => Util::getSessionUser()["id"],
-                'created' => Util::getDate(),
-                'updated' => null,
-    
-            ];
-
-            $db2->where('target_account_id', $acc_id);
-            $db2->where('setting',1);
-            $exist=$db2->get('account_setting');
-
-            if($exist){
-                $db2->update('account_setting', $newData);
-            }else{
-                $db2->insert('account_setting', $newData);
-
-            }
-
+            $parms["OPTIONS"] = [
+                ["VALUE" => $codi,
+                    "OPTION" => "CERT_PASS"]
+                ];
+                
+            AccountSetting::save($parent_id=$acc_id,$params=$parms);
+            
 
             $response = true;
 
@@ -166,6 +148,77 @@ class Account
         $all = $db2->getOne('account');
 
         return $all;
+    }
+
+    public static function setPreferencies($data){
+        $user = Util::getSessionUser();
+        $acc = User::getUserAccount($user["id"]);
+
+
+        foreach ($data as $pref => $val) {
+
+
+            switch ($pref) {
+                case 'terms':
+
+                    $parms["OPTIONS"] = [
+                        ["VALUE" => $val,
+                            "OPTION" => "TERMS"]
+                        ];
+                        
+                    AccountSetting::save($parent_id=$acc["id"],$params=$parms);
+
+                    break;
+
+                case 'def-iva':
+                    $parms["OPTIONS"] = [
+                        ["VALUE" => $val,
+                            "OPTION" => "DEF_IVA"]
+                        ];
+                        
+                    AccountSetting::save($parent_id=$acc["id"],$params=$parms);
+
+                    break;
+
+                case 'def-irpf':
+                    
+                    $parms["OPTIONS"] = [
+                        ["VALUE" => $val,
+                            "OPTION" => "DEF_IRPF"]
+                        ];
+                        
+                    AccountSetting::save($parent_id=$acc["id"],$params=$parms);
+
+                    break;
+                
+                case 'def-iva-expense':
+                    $parms["OPTIONS"] = [
+                        ["VALUE" => $val,
+                            "OPTION" => "DEF_IVA_EXPENSE"]
+                        ];
+                        
+                    AccountSetting::save($parent_id=$acc["id"],$params=$parms);
+
+                    break;
+    
+                case 'def-irpf-expense':
+                    
+                    $parms["OPTIONS"] = [
+                        ["VALUE" => $val,
+                            "OPTION" => "DEF_IRPF_EXPENSE"]
+                        ];
+                        
+                    AccountSetting::save($parent_id=$acc["id"],$params=$parms);
+
+                    break;
+                
+                default:
+                    break;
+            }
+        
+        }
+        return true;
+
     }
 
 }

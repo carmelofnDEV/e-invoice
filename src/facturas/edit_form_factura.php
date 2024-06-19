@@ -7,7 +7,7 @@ Intratum\Facturas\Util::checkSession();
 
 if (isset($_GET['doc'])) {
     $doc = $_GET['doc'];
-    if ($doc != 'factura' && $doc != 'presupuesto' && $doc != 'gasto' ) {
+    if ($doc != 'factura' && $doc != 'rectificativa' && $doc != 'presupuesto' && $doc != 'gasto' ) {
         $doc="factura";
     }
 }else{
@@ -15,17 +15,20 @@ if (isset($_GET['doc'])) {
 
 }
 
-
 if ($doc == 'gasto') {
     $title = "Editar gasto";
     
 }else if ($doc == 'presupuesto'){
     $title = "Editar presupuesto";
 
+}else if ($doc == 'rectificativa'){
+
+    $title = "Editar factura rectificativa";
 }else{
     $title = "Editar factura";
 
 }
+
 
 $allSerials = Intratum\Facturas\Serial::all();
 
@@ -41,9 +44,73 @@ $db2 = Intratum\Facturas\Environment::$db;
 $customer = false;
 
 $discount = Intratum\Facturas\InvoiceSetting::checkIfExistSetting($invoice["id"],$params = ["OPTION" => "DISCOUNT",]);
+$invoice_ref = Intratum\Facturas\InvoiceSetting::checkIfExistSetting($invoice["id"],$params = ["OPTION" => "RECT_REF",]);
+
 if ($discount) {
     $discount=$discount[0];
 }
+$allSettings = Intratum\Facturas\AccountSetting::all();
+
+
+
+$def_irpf  = false;
+$def_iva = false;
+
+
+if ($doc == "gasto") {
+
+                                        
+    foreach ($allTax as $tax) {
+
+        if (!empty($allSettings["DEF_IVA_EXPENSE"])) {
+
+            if ($allSettings["DEF_IVA_EXPENSE"] == $tax["id2"]) {
+                
+                $def_iva = $tax;
+
+            }
+            
+        }
+
+        if (!empty($allSettings["DEF_IRPF_EXPENSE"])) {
+
+            if ($allSettings["DEF_IRPF_EXPENSE"] == $tax["id2"]) {
+
+                $def_irpf = $tax;
+
+            }
+        }
+
+        
+    }
+
+}else{
+    
+    foreach ($allTax as $tax) {
+
+        if (!empty($allSettings["DEF_IVA"])) {
+
+            if ($allSettings["DEF_IVA"] == $tax["id2"]) {
+                
+                $def_iva = $tax;
+
+            }
+            
+        }
+
+        if (!empty($allSettings["DEF_IRPF"])) {
+
+            if ($allSettings["DEF_IRPF"] == $tax["id2"]) {
+
+                $def_irpf = $tax;
+
+            }
+        }
+
+        
+    }
+}
+
 
 ?>
 
@@ -105,6 +172,37 @@ if ($discount) {
                             <input type="hidden" name="invoice_serial" value="0" />
 
                             <input type="hidden" name="invoice_number" value="0" />
+                        <?php }else if ($doc == "rectificativa") { ?>
+
+                            <label for="message" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Serial y número de factura</label>
+
+                            <div class="flex mb-3">
+
+
+                                <?php if(count($allSerials) > 1){ ?>
+
+                                    <select onchange="updateInvoiceNumber()" name="invoice_serial" id="select_serials" class="w-[30%] bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500">
+                                        <?php foreach ($allSerials as $i) { 
+                                            if(empty($i["serial_tag"]))
+                                                $i["serial_tag"] = 'Sin prefijo';
+                                        ?>
+                                        <option <?php if ($invoice['serial_id'] == $i["id"]) {echo ' selected ';}?> value="<?= $i["id"] ?>"><?= $i["serial_tag"] ?></option>
+                                        <?php } ?>
+                                    </select>
+                                <?php }else{ ?>
+                                    <label for="message" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Número de factura</label>
+
+                                    <input type="hidden" name="invoice_serial" value="<?= $invoice['serial_id'] ?>" />
+
+                                <?php } ?>
+
+                                <input type="number" name="invoice_number" id="invoice_number" value="<?= $invoice['invoice_number'] ?>" class="w-full bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
+
+                            </div>
+
+                            <label for="invoice_ref" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Rectifica la factura No:</label>
+                            <input type="text" name="invoice_ref" required value="<?=$invoice_ref[0]["value"]?>"  class="w-full bg-gray-50 h-[30px] border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
+
 
                         <?php } else{ ?>
 
@@ -246,7 +344,7 @@ if ($discount) {
 
                             <div>
                                 <label for="email" class=" mb-2 text-sm font-medium text-gray-900 dark:text-white">Correo</label>
-                                <input  value="<?=$invoice["email"]?>" <?php if ($customer) { echo ' value="' . $customer["email"] . '" '; } ?> type="email" name="email" id="email" class="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full py-1.5 px-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="correo@email.com" >
+                                <input  value="<?=$invoice["email"]?>" <?php if ($customer) { echo ' value="' . $customer["email"] . '" '; } ?> type="text" name="email" id="email" class="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full py-1.5 px-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="correo@email.com" >
                             </div>
                             <div>
                                 <label for="phone" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Teléfono</label>
@@ -382,7 +480,7 @@ if ($discount) {
                         <div class="mb-5 flex flex-col w-full">
 
 
-                            <button id="boton-tax-'.$indexItems.'" onClick="openItemTaxs('.$indexItems.')" class="flex gap-1 items-center justify-center text-[12px] rounded-lg  py-1.5 px-6 bg-black text-white hover:bg-opacity-80 transition-all" type="button">
+                            <button id="boton-tax-'.$indexItems.'" onClick="openItemTaxs('.$indexItems.')" class="add-tax-btn flex gap-1 items-center justify-center text-[12px] rounded-lg  py-1.5 px-6 bg-black text-white hover:bg-opacity-80 transition-all" type="button">
                             '.$button_tax.'
                             </button>
 
@@ -487,8 +585,8 @@ if ($discount) {
                 <div class="w-full">
                     <label for="message" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Terminos y
                     condiciones</label>
-                    <textarea name="terms" id="message" rows="4" class="block p-2.5 w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500
-                    dark:focus:border-blue-500" placeholder="Escriba aquí..."></textarea>
+                    <textarea name="terms" id="terms" rows="4" class="block p-2.5 w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500
+                    dark:focus:border-blue-500" placeholder="Escriba aquí..."><?=$invoice["invoice_terms"]?></textarea>
                 </div>
 
 
@@ -887,13 +985,24 @@ $(document).ready(function() {
 
                     if (d.success == true) {
 
-                        if (<?php echo $invoice["type"]; ?> == 0) {
-                            window.location.href = '/gastos/?success=true';
-                        } else if (<?php echo $invoice["type"]; ?> == 2) {
-                            window.location.href = '/presupuestos/?success=true';
-                        } else {
-                            window.location.href = '/facturas/?success=true';
-                        }
+
+                        <?php if ($doc=="gasto") {
+
+                            echo "window.location.href = '/gastos/';";
+
+                            }else if($doc=="presupuesto"){
+
+                            echo "window.location.href = '/presupuestos/';";
+
+                            }else if($doc=="rectificativa"){
+
+                            echo "window.location.href = '/rectificativas/';";
+
+                            }else{
+
+                            echo "window.location.href = '/facturas/';";
+
+                        }?>
 
 
 
@@ -1026,14 +1135,17 @@ function deleteItem(key){
 }
 
 
-
 function addItemRow() {
+
+    const default_iva = <?php if ($def_iva) { echo '{"name":"'.$def_iva["name"].'","value":'.$def_iva["value"].',"id":"'.$def_iva["id2"].'"}';}else{echo 'false';}?>;
+    const default_irpf = <?php if ($def_irpf) { echo '{"name":"'.$def_irpf["name"].'","value":'.$def_irpf["value"].',"id":"'.$def_irpf["id2"].'"}';}else{echo 'false';}?>;
+
 
     $('.lista-item').addClass("hidden"); 
 
     var newItemGroup = $('.item-group').first().clone();
-    
-    
+
+
     qItems++
 
     var newIndex = qItems
@@ -1049,6 +1161,7 @@ function addItemRow() {
         }
 
         var name = $(this).attr('name');
+
         if (name) {
             $(this).attr('name', name.replace(/\[\d+\]/, '[' + newIndex + ']'));
         }
@@ -1065,7 +1178,7 @@ function addItemRow() {
         var value = $(this).val();
         if (value != "") {
 
-             $(this).val("")
+            $(this).val("")
         }
 
 
@@ -1075,16 +1188,54 @@ function addItemRow() {
 
             $(this).attr('onClick', onClick.replace(/\d+/, newIndex));
 
-            if (!$(this).hasClass('delete_button')) {
+            if ($(this).hasClass('add-tax-btn')) {
 
-                $(this).text('Añadir');
+                if (!default_iva && !default_irpf) {
+
+                    $(this).html('<span>Añadir impuesto</span>');
+                    
+                }else{
+
+                    let text_irpf = ""
+                    let text_iva = "";
+
+                    if (default_irpf) {
+                        text_irpf = `<span>${default_irpf.name} / ${default_irpf.value}</span>`
+                    }
+
+                    if (default_iva) {
+                        text_iva = `<span>${default_iva.name} / ${default_iva.value}</span>`
+                    }
+
+
+
+                    $(this).html(text_iva+text_irpf);
+
+
+                }
                 
             }
         }
+
     });
 
     $('#items_container').append(newItemGroup);
     newItemGroup.find('*[data-key]').attr('data-key', newIndex);
+
+    if (default_irpf) {
+
+        $("#itemsTaxes").append(`<input type="hidden"  name="items[${newIndex}][tax_0]" value="0/${default_irpf.name}/${default_irpf.value}/${default_irpf.id}" />`)
+
+    }
+
+    if (default_iva) {
+
+        $("#itemsTaxes").append(`<input type="hidden"  name="items[${newIndex}][tax_1]" value="1/${default_iva.name}/${default_iva.value}/${default_iva.id}" />`)
+        
+    }
+
+
+    updateTotalMenu()
 
 }
 
@@ -1361,190 +1512,207 @@ function checkDiscount(){
     updateTotalMenu()
 
 }
+
 function updateTotalMenu() {
 
     
 
-let total = 0
+    let total = 0
 
-let subtotal = 0
-let totalTaxs = 0
-let discTotal = 0;
+    let subtotal = 0
+    let totalTaxs = 0
+    let discTotal = 0;
 
-let taxes = [];
-
-
+    let taxes = [];
 
 
-const values = {};
 
-$('input[name^="items"]').each(function () {
-const name = $(this).attr('name');
-const match = name.match(/items\[(\d+)\]\[(price|quantity|subtotal|tax_0|tax_1)\]/);
 
-if (match) {
-    const index = match[1];
-    const field = match[2];
+    const values = {};
 
-    if (!values[index]) {
-        values[index] = {};
+    $('input[name^="items"]').each(function () {
+    const name = $(this).attr('name');
+    const match = name.match(/items\[(\d+)\]\[(price|quantity|subtotal|tax_0|tax_1)\]/);
+
+    if (match) {
+        const index = match[1];
+        const field = match[2];
+
+        if (!values[index]) {
+            values[index] = {};
+        }
+
+        const valor = $(this).val().trim() !== '' ? $(this).val() : 0;
+        values[index][field] = valor;
     }
+    });
 
-    const valor = $(this).val().trim() !== '' ? $(this).val() : 0;
-    values[index][field] = valor;
-}
-});
+    console.log(values)
+    $.each(values, function(index, item) {
 
-console.log(values)
-$.each(values, function(index, item) {
+        console.log("---------------------------------------- SUB",item.subtotal);
 
-    console.log("---------------------------------------- SUB",item.subtotal);
-    if (item.subtotal > 0) {
+        if (item.subtotal > 0) {
 
-        subtotal += parseFloat(item.subtotal)
+            subtotal += parseFloat(item.subtotal)
 
-        // aplico el descuento al subtotal de cada item 
-        if ($("#discount").val() > 0) {
+            // aplico el descuento al subtotal de cada item 
+            if ($("#discount").val() > 0) {
 
-            discTotal = discTotal +  (item.subtotal * ($("#discount").val()/100))
-
-
-        }
-
-            console.log("+++++++++++++++++++++ ITESM TAX",item.tax_1);
-
-
-
-
-
-        if (item.tax_0 != undefined) {
-            
-            let tax0 = item.tax_0.split("/");
-
-            let itemTax0 = {
-                name: tax0[1],
-                type: tax0[0],
-                value: tax0[2],
-                id: tax0[3],
-            }
-
-            addedTax = {
-                name: itemTax0.name,
-                value: itemTax0.value,
-                total: ((parseFloat(item.subtotal))*(itemTax0.value /100))
+                discTotal = discTotal +  (item.subtotal * ($("#discount").val()/100))
 
 
             }
 
-            updateOrAddTax(itemTax0, item.subtotal);
+                console.log("+++++++++++++++++++++ ITESM TAX",item.tax_1);
 
 
-            
-
-            
-        }
 
 
-        if (item.tax_1 != undefined) {
-            console.log("ENTRA",item.tax_1 );
-            let tax_1 = item.tax_1.split("/");
 
-            let itemTax1 = {
-                name: tax_1[1],
-                type: tax_1[0],
-                value: tax_1[2],
-                id: tax_1[3],
-            }
+            if (item.tax_0 != undefined) {
+
+                let imp_sub = item.subtotal
+
+                if ($("#discount").val() > 0) {
+
+                    imp_sub = item.subtotal - (item.subtotal * ($("#discount").val()/100))
 
 
-            
-            addedTax = {
-
-                name: itemTax1.name,
-                value: itemTax1.value,
-                total: ((parseFloat(item.subtotal))*(itemTax1.value /100))
-            }
-
-            updateOrAddTax(itemTax1, item.subtotal);
-            
-            
-            
-        }
-
-
-        if (item.tax_1 != undefined || item.tax_0 != undefined) {
-            totalTaxs= 0
-            taxes.forEach(element => {
-                console.log("elemento",element)
-                totalTaxs += element.total
+                }
                 
+                let tax0 = item.tax_0.split("/");
+
+                let itemTax0 = {
+                    name: tax0[1],
+                    type: tax0[0],
+                    value: tax0[2],
+                    id: tax0[3],
+                }
+
+                addedTax = {
+                    name: itemTax0.name,
+                    value: itemTax0.value,
+                    total: ((parseFloat(imp_sub))*(itemTax0.value /100))
+
+
+                }
+
+                updateOrAddTax(itemTax0, imp_sub);
+
+
+                
+
+                
+            }
+
+
+            if (item.tax_1 != undefined) {
+
+                let imp_sub = item.subtotal
+
+                if ($("#discount").val() > 0) {
+
+                    imp_sub = item.subtotal - (item.subtotal * ($("#discount").val()/100))
+
+
+                }
+
+                let tax_1 = item.tax_1.split("/");
+
+                let itemTax1 = {
+                    name: tax_1[1],
+                    type: tax_1[0],
+                    value: tax_1[2],
+                    id: tax_1[3],
+                }
+
+
+                
+                addedTax = {
+
+                    name: itemTax1.name,
+                    value: itemTax1.value,
+                    total: ((parseFloat(imp_sub))*(itemTax1.value /100))
+                }
+
+                updateOrAddTax(itemTax1, imp_sub);
+                
+                
+                
+            }
+
+
+            if (item.tax_1 != undefined || item.tax_0 != undefined) {
+                totalTaxs= 0
+                taxes.forEach(element => {
+                    console.log("elemento",element)
+                    totalTaxs += element.total
+                    
+                });
+            }
+
+            console.log("taxes -",totalTaxs)
+
+
+
+            invoice_subtotal = subtotal
+            
+            
+            invoice_total =  (invoice_subtotal + totalTaxs) - discTotal;
+
+
+
+
+        }
+    });
+
+
+    function updateOrAddTax(tax, subtotal) {
+
+
+        let found = false;
+
+
+        for (let i = 0; i < taxes.length; i++) {
+            if (taxes[i].name === tax.name && taxes[i].value === tax.value) {
+                taxes[i].total += (parseFloat(subtotal) * (tax.value / 100));
+                found = true;
+                break;
+            }
+        }
+
+        if (!found) {
+            taxes.push({
+                name: tax.name,
+                value: tax.value,
+                total: (parseFloat(subtotal) * (tax.value / 100))
             });
         }
-
-        console.log("taxes -",totalTaxs)
-
-
-
-        invoice_subtotal = subtotal
-        
-        
-        invoice_total =  (invoice_subtotal + totalTaxs) - discTotal;
-
-
-
-
-    }
-});
-
-
-function updateOrAddTax(tax, subtotal) {
-
-
-    let found = false;
-
-
-    for (let i = 0; i < taxes.length; i++) {
-        if (taxes[i].name === tax.name && taxes[i].value === tax.value) {
-            taxes[i].total += (parseFloat(subtotal) * (tax.value / 100));
-            found = true;
-            break;
-        }
     }
 
-    if (!found) {
-        taxes.push({
-            name: tax.name,
-            value: tax.value,
-            total: (parseFloat(subtotal) * (tax.value / 100))
+    if (parseFloat(subtotal) > 0) {
+
+        $("#subtotal").text(`${parseFloat(invoice_subtotal).toFixed(2)}€`)
+        $("#total").text(`${parseFloat(invoice_total).toFixed(2)}€`)
+
+
+        $("#totalMenu").empty()
+        taxes.forEach(element => {
+            $("#totalMenu").append(`<li>${element.name} - ${element.value}%  =  ${parseFloat(element.total).toFixed(2)}€`)
+            console.log(element)
         });
+        
+    }else{
+        
+
+        
+        $("#subtotal").text(`0€`)
+        $("#total").text(`0€`)
     }
 }
 
-if (parseFloat(subtotal) > 0) {
 
-    $("#subtotal").text(`${parseFloat(invoice_subtotal).toFixed(2)}€`)
-    $("#total").text(`${parseFloat(invoice_total).toFixed(2)}€`)
-
-
-    $("#totalMenu").empty()
-    taxes.forEach(element => {
-        $("#totalMenu").append(`<li>${element.name} - ${element.value}%  =  ${parseFloat(element.total).toFixed(2)}€`)
-        console.log(element)
-    });
-    
-}else{
-    
-
-    
-    $("#subtotal").text(`0€`)
-    $("#total").text(`0€`)
-}
-
-
-
-
-
-}
 
 
 
@@ -1552,25 +1720,37 @@ if (parseFloat(subtotal) > 0) {
 
 function updateInvoiceNumber() {
 
-    var serial_id = $("#select_serials").val()
+<?php if(count($allSerials) > 1){ ?>
 
-    $.ajax({
+    let serial_id = $("#select_serials").val()
 
-        type: 'GET',
+<?php }else{  ?>
 
-        url: '/html/invoice_number/?id=' + serial_id,
+    let serial_id = <?= $allSerials[0]['id'] ?>;
 
-        dataType: 'json',
+<?php  }?>
 
-        contentType: 'application/json',
 
-        success: function(d) {
 
-            $("#invoice_number").val(parseInt(d.content) + 1)
 
-        }
 
-    });
+$.ajax({
+
+    type: 'GET',
+
+    url: '/html/invoice_number/?id=' + serial_id+'&type=<?php if($doc == 'rectificativa'){echo "3";}else{echo "1";}?>',
+
+    dataType: 'json',
+
+    contentType: 'application/json',
+
+    success: function(d) {
+
+        $("#invoice_number").val(parseInt(d.content) + 1)
+
+    }
+
+});
 
 }
 
@@ -1787,17 +1967,34 @@ function autocompleteForm(response) {
   updateContact();
 
 }
+function validarFormatoEmail(email) {
+    var re = /\S+@\S+\.\S+/;
+    return re.test(email);
+}
 
 function addCustInfo(){
 
     var camposVacios = $('#first_name, #email, #phone, #address_1, #zip, #country, #state, #city, #NIF').filter(function() {
             return $(this).val().trim() === '';
         });
+        console.log("entra")
+
+        if ($("#terms").val() == "Factura anulada nº [Numero de factura] de fecha [Dia] de [Mes] de [Año].") {
+            setNotification([{"error":"bad_terms","message":"Debes completar los terminos de la factura."}])
+            return false
+        }
+
 
         if (camposVacios.length > 0) {
             setNotification([{"error":"bad_contact_info","message":"Debes completar los datos del cliente."}])
             return false
         }else{
+            var email = $('#email').val();
+
+            if (!validarFormatoEmail(email)) {
+                setNotification([{"error":"bad_contact_mail","message":"El correo del cliente no es un correo valido."}])
+                return false
+            } 
             return true
 
         }
@@ -1982,44 +2179,77 @@ $(document).on('click', '.element-li-item', function() {
 
 function autocompleteFormItems(parent,response) {
 
-    console.log("PADREee",parent)
+console.log("response",response)
 
-    var inputs = parent.find('input');
+var inputs = parent.find('input');
 
-    console.log("PADREee",inputs)
+console.log("PADREee",inputs)
+
+let numero;
+
+inputs.each(function() {
+    var input = $(this);
+    if (input.hasClass('price')) {
+      input.val((response.price/100))
+      var regex = /\[(\d+)\]/;
+
+      numero = regex.exec(input.attr('name'))[1];
+      console.log(numero)
+      
+       
+      console.log(numero,"¿¿¿¿¿¿¿¿¿¿¿¿¿¿¿¿¿")
+
+    }
+    if (input.hasClass('quantity')) {
+      input.val(1)
+
+    }
+    if (input.hasClass('title')) {
+      input.val(response.title)
+
+    }
+    if (input.hasClass('id-item')) {
+      input.val(response.id)
+
+    }
+
+    if (input.hasClass('subtotal')) {
+
+      input.val((response.price/100))
+
+    }
+
+});
+
+if (response.default_tax != null) {
+
+    let tax0 = "";
+    let tax1 = "";
+
+    if (response.default_tax.type == 0) {
+
+        console.log(response.default_tax)
+
+        tax0 =  $("#itemsTaxes input[name='items\\[" + numero + "\\]\\[tax_0]']").val((response.default_tax.type+"/"+response.default_tax.name+"/"+response.default_tax.value+"/"+response.default_tax.id2));
+        $("#itemsTaxes input[name='items\\[" + numero + "\\]\\[tax_1]']").remove()
+        $(`#boton-tax-${numero}`).html(`<span>${response.default_tax.name} / ${response.default_tax.value}</span>`)
+    }else if(response.default_tax.type == 1){
+
+        console.log(response.default_tax)
 
 
-    inputs.each(function() {
-        var input = $(this);
-        if (input.hasClass('price')) {
-          input.val((response.price/100))
-        }
-        if (input.hasClass('quantity')) {
-          input.val(1)
-
-        }
-        if (input.hasClass('title')) {
-          input.val(response.title)
-
-        }
-        if (input.hasClass('id-item')) {
-          input.val(response.id)
-
-        }
-
-        if (input.hasClass('subtotal')) {
-
-          input.val((response.price/100))
-
-        }
-    });
-
-    updateTotalMenu()
-
-
+        tax1 =  $("#itemsTaxes input[name='items\\[" + numero + "\\]\\[tax_1]']").val((response.default_tax.type+"/"+response.default_tax.name+"/"+response.default_tax.value+"/"+response.default_tax.id2));
+        $("#itemsTaxes input[name='items\\[" + numero + "\\]\\[tax_0]']").remove()
+        $(`#boton-tax-${numero}`).html(`<span>${response.default_tax.name} / ${response.default_tax.value}</span>`)
+        
+    }
 
 }
 
+updateTotalMenu()
+
+
+}
 
 
 </script>

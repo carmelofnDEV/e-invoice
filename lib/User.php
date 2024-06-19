@@ -92,7 +92,9 @@ class User
             'name' => "IVA",
             'value' => "21",
             'search' => "IVA 21",
-            'type' => 1
+            'type' => 1,
+            'state' => 1,
+
 
         ];
 

@@ -3,6 +3,7 @@ $data = Intratum\Facturas\Traffic::getEntryGET();
 $db2 = Intratum\Facturas\Environment::$db;
 
 $db2->where('serial_id', $data["id"]);
+$db2->where('type', $data["type"]);
 $results = $db2->get('invoice');
 
 $db2->where('id', $data["id"]);

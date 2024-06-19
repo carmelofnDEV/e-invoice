@@ -372,6 +372,9 @@ class InvoiceSetting{
                 case "DISCOUNT":
 
                     return 6;
+                case "RECT_REF":
+
+                    return 7;
 
                     
 
@@ -414,6 +417,9 @@ class InvoiceSetting{
                 case 6:
 
                     return "DISCOUNT";
+                case 7:
+
+                    return "RECT_REF";
 
             }
 

@@ -2667,9 +2667,15 @@
           <div class="tm_invoice_info tm_mb25">
             <div class="tm_invoice_info_list tm_white_color">
             <?php if ($factura["type"] == 1) {?>
-                <p class="tm_invoice_number tm_m0">Num Factura: <b><?=$serial[0]["serial_tag"]?>-<?=$factura["invoice_number"]?></b></p>
+
+                <p class="tm_invoice_number tm_m0">Num Factura: <b><?php if(strlen($serial[0]["serial_tag"]) != 0){ echo $serial[0]["serial_tag"]."-";} ?><?=$factura["invoice_number"]?></b></p>
             <?php }else if ($factura["type"] == 2) {?>
                 <p class="tm_invoice_number tm_m0">Num Presupuesto: <b><?=$factura["name"]?></b></p>
+            <?php }else if ($factura["type"] == 3) {?>
+
+                <p class="tm_invoice_number tm_m0">Rectifica la factura: <b><?=$invoice_ref[0]["value"]?></b></p>
+                <p class="tm_invoice_number tm_m0">Num Factura: <b>R<?php if(strlen($serial[0]["serial_tag"]) != 0){ echo $serial[0]["serial_tag"]."-";} ?><?=$factura["invoice_number"]?></b></p>
+
             <?php }?>
               <p class="tm_invoice_date tm_m0">Fecha: <b><?=DateTime::createFromFormat('Y-m-d H:i:s', $factura["created"])->format('Y-m-d')?></b></p>
             </div>
@@ -2677,21 +2683,21 @@
           </div>
           <div class="tm_invoice_head tm_mb10">
             <div class="tm_invoice_left">
-              <p class="tm_mb2"><b class="tm_primary_color">Receptor:</b></p>
+              <p class="tm_mb2"><b class="tm_primary_color">Emisor:</b></p>
               <p>
-              <?=$acc["first_name"]?>, <?=$acc["last_name"]?><br>
+              <?=$acc["first_name"]?> <?php if(!empty($acc["last_name"])){echo ", ".$acc["last_name"];}?><br>
               <?=$acc["address1"]?>,<?=$acc["zip"]?><br><?=$acc["state"]?> <br>
-              <?=$acc["email"]?>
+              <?=$acc["NIF"]?>
               </p>
             </div>
             <br>
             <hr>
             <div class="tm_invoice_right tm_text_right">
-              <p class="tm_mb2"><b class="tm_primary_color">Emisor:</b></p>
+              <p class="tm_mb2"><b class="tm_primary_color">Receptor:</b></p>
               <p>
-              <?=$factura["first_name"]?>, <?=$factura["last_name"]?><br>
+              <?=$factura["first_name"]?> <?php if(!empty($acc["last_name"])){echo ", ".$factura["last_name"];}?><br>
               <?=$factura["address1"]?>,<?=$factura["zip"]?><br><?=$factura["state"]?> <br>
-              <?=$factura["email"]?>
+              <?=$factura["NIF"]?>
               </p>
             </div>
           </div>
@@ -2734,6 +2740,7 @@
                             foreach ($taxs as $tax) {
 
                                 $db2->where('id', $tax["tax_id"]);
+                                $db2->where('state', 1);
                                 $tax_name = $db2->get('tax');
                                 $tax_name = $tax_name[0]["name"]; 
 
@@ -2764,9 +2771,9 @@
                     <tr>
                       <td class="tm_width_3"><?= $item["title"]?></td>
                       <td class="tm_width_4"><?= $item["description"]?></td>
-                      <td class="tm_width_2"><?= $key["subtotal"] / $key["quantity"]?></td>
+                      <td class="tm_width_2"><?= ($key["subtotal"] / $key["quantity"])*(-1)?></td>
                       <td class="tm_width_1"><?= $key["quantity"]?></td>
-                      <td class="tm_width_2 tm_text_right"><?= $key["subtotal"] ?></td>
+                      <td class="tm_width_2 tm_text_right"><?= $key["subtotal"] * (-1)?></td>
                     </tr>
 
                     <?php } ?>
@@ -2783,7 +2790,7 @@
                   
                     <tr class="tm_gray_bg ">
                       <td class="tm_width_3 tm_primary_color tm_bold">Subtotal</td>
-                      <td class="tm_width_3 tm_primary_color tm_bold tm_text_right"><?=$factura["subtotal"]/100?>€</td>
+                      <td class="tm_width_3 tm_primary_color tm_bold tm_text_right"><?=($factura["subtotal"]/100 )*(-1)?>€</td>
                     </tr>
 
                   
@@ -2792,7 +2799,7 @@
 
                         <tr class="tm_gray_bg">
                             <td class="tm_width_3 tm_primary_color">Descuento<span class="tm_ternary_color"> (<?=$discount[0]["value"]?>%)</span></td>
-                            <td class="tm_width_3 tm_primary_color tm_text_right">- <?=($subtotalWithoutDisc * ($discount[0]["value"]/100))?>€</td>
+                            <td class="tm_width_3 tm_primary_color tm_text_right">- <?=($subtotalWithoutDisc * ($discount[0]["value"]/100))*(-1)?>€</td>
                         </tr>
 
                     <?php } ?>
@@ -2809,7 +2816,7 @@
 
                         <tr class="tm_gray_bg">
                             <td class="tm_width_3 tm_primary_color"><?=$invoice_tax["tax_name"]?><span class="tm_ternary_color"> (<?=$invoice_tax["tax_value"]?>%)</span></td>
-                            <td class="tm_width_3 tm_primary_color tm_text_right"><?=$invoice_tax["tax_total"]?>€</td>
+                            <td class="tm_width_3 tm_primary_color tm_text_right"><?=($invoice_tax["tax_total"])*(-1)?>€</td>
                         </tr>
 
                     <?php } ?>
@@ -2817,7 +2824,7 @@
 
                     <tr class="tm_accent_bg">
                       <td class="tm_width_3 tm_border_top_0 tm_bold tm_f16 tm_white_color">Total	</td>
-                      <td class="tm_width_3 tm_border_top_0 tm_bold tm_f16 tm_white_color tm_text_right"><?=$factura["total"]/100?>€</td>
+                      <td class="tm_width_3 tm_border_top_0 tm_bold tm_f16 tm_white_color tm_text_right"><?=($factura["total"]/100)*(-1)?>€</td>
                     </tr>
                   </tbody>
                 </table>

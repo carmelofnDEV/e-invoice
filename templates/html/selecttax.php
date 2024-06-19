@@ -1,5 +1,6 @@
 <?php
 $all=["1"=>1];
+Intratum\Facturas\Environment::$db->where('state',1);
 $allTaxs = Intratum\Facturas\Environment::$db->get('tax');
 
 ?>
